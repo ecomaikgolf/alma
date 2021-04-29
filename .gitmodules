@@ -1,0 +1,6 @@
+[submodule "bootloader/edk2"]
+	path = bootloader/edk2
+	url = https://github.com/tianocore/edk2.git
+[submodule "bootloader/posix-uefi"]
+	path = bootloader/posix-uefi
+	url = https://gitlab.com/bztsrc/posix-uefi.git
