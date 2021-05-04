@@ -4,3 +4,9 @@
 [submodule "bootloader/posix-uefi"]
 	path = bootloader/posix-uefi
 	url = https://gitlab.com/bztsrc/posix-uefi.git
+[submodule "toolchain/gcc"]
+	path = toolchain/gcc
+	url = https://github.com/gcc-mirror/gcc
+[submodule "toolchain/binutils-gdb"]
+	path = toolchain/binutils-gdb
+	url = git://sourceware.org/git/binutils-gdb.git
