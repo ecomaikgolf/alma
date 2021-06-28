@@ -3,13 +3,18 @@ CFLAGS= -ffreestanding
 LD=ld
 LDFLAGS= -nostdlib -static #-Bsymbolic
 
+BUILDDIR=../build
+
 all: link
 
-kernel.o: kernel.c
-	$(CC) $(CFLAGS) -o kernel.o -c kernel.c
+$(BUILDDIR)/kernel.o: kernel.c
+	$(CC) $(CFLAGS) -o $(BUILDDIR)/kernel.o -c kernel.c
 
-link: kernel.o
-	$(LD) $(LDFLAGS) -o kernel.elf kernel.o -T kernel.ld
+link: $(BUILDDIR)/kernel.o
+	$(LD) $(LDFLAGS) -o $(BUILDDIR)/kernel.elf $(BUILDDIR)/kernel.o -T kernel.ld
+
+clean:
+	rm -f $(BUILDDIR)/kernel.o $(BUILDDIR)/kernel.elf
 
 # -ffreestanding
 #
@@ -29,3 +34,7 @@ link: kernel.o
 #  -Bsymbolic
 #
 #  https://flameeyes.blog/2012/10/07/symbolism-and-elf-files-or-what-does-bsymbolic-do/
+#
+#  -c 
+#
+#  The -c option says not to run the linker
