@@ -1,12 +1,12 @@
-[submodule "toolchain/gcc"]
-	path = toolchain/gcc
-	url = https://github.com/gcc-mirror/gcc
+[submodule "toolchain/posix-uefi"]
+	path = toolchain/posix-uefi
+	url = https://gitlab.com/bztsrc/posix-uefi.git
+[submodule "toolchain/edk2"]
+	path = toolchain/edk2
+	url = https://github.com/tianocore/edk2.git
 [submodule "toolchain/binutils-gdb"]
 	path = toolchain/binutils-gdb
 	url = git://sourceware.org/git/binutils-gdb.git
-[submodule "bootloader/edk2"]
-	path = bootloader/edk2
-	url = https://github.com/tianocore/edk2.git
-[submodule "bootloader/posix-uefi"]
-	path = bootloader/posix-uefi
-	url = https://gitlab.com/bztsrc/posix-uefi.git
+[submodule "toolchain/gcc"]
+	path = toolchain/gcc
+	url = https://github.com/gcc-mirror/gcc
