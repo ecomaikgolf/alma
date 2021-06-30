@@ -1,9 +1,11 @@
-CC=x86_64-elf-gcc
+CC=$(TOOLCHAINBIN)/x86_64-elf-gcc
 CFLAGS= -ffreestanding
-LD=ld
+LD=$(TOOLCHAINBIN)/x86_64-elf-ld
 LDFLAGS= -nostdlib -static #-Bsymbolic
 
 BUILDDIR=../build
+TOOLCHAINDIR=../toolchain
+TOOLCHAINBIN=$(TOOLCHAINDIR)/build/toolchain/bin
 
 all: link
 
