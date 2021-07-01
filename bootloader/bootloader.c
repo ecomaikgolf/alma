@@ -41,7 +41,7 @@ verify_elf_headers(Elf64_Ehdr *elf_header)
 	uint8_t elf_parse_flags = 0;
 
 	for(int i = 0 ; i < NUM_CHECKS ; i++) {
-		uint8_t check = -1;
+		uint8_t check = 255;
 		switch(i) {
 			case 0:
 				/* Magic header */
@@ -67,7 +67,7 @@ verify_elf_headers(Elf64_Ehdr *elf_header)
 				printf("(W) [bootloader]  verify_elf_headers(...) default switch case reached\n");
 		}
 
-		if(check != -1)
+		if(check == 255)
 			resolution(i, check);
 	}
 
