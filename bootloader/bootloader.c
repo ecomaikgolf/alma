@@ -5,74 +5,7 @@
  
 const char* kernel_file = "kernel.elf";
 
-/* Cannot be const char* const due to enviromenet restrictions */
-#define NUM_CHECKS 5
-static char verifymessages[NUM_CHECKS][2][STRING_SIZE] = {
-	{
-		"(I) [bootloader]  ELF magic number is correct",
-		"(E) [bootloader]  ELF magic number is incorrect",
-	},
-	{
-		"(I) [bootloader]  ELF is a executable object",
-		"(E) [bootloader]  ELF is not a executable object",
-	},
-	{
-		"(I) [bootloader]  ELF target arch is x86_64",
-		"(E) [bootloader]  ELF target arch is not x86_64",
-	},
-	{
-		"(I) [bootloader]  ELF target is 64 bits",
-		"(E) [bootloader]  ELF target is not 64 bits",
-	},
-	{
-		"(I) [bootloader]  ELF program header counter is non zero",
-		"(E) [bootloader]  ELF program header counter is zero", 
-	}
-};
-
-#define resolution(i, check) 	   			\
-	elf_parse_flags |= check << i; 			\
-	printf("%s\n", verifymessages[i][check]);
-
-uint8_t
-verify_elf_headers(Elf64_Ehdr *elf_header)
-{
-	#define EM_MACH 62 //x86_64 https://refspecs.linuxfoundation.org/elf/gabi4+/ch4.eheader.htm
-	uint8_t elf_parse_flags = 0;
-
-	for(int i = 0 ; i < NUM_CHECKS ; i++) {
-		uint8_t check = 255;
-		switch(i) {
-			case 0:
-				/* Magic header */
-				check = !(memcmp(elf_header->e_ident, ELFMAG, SELFMAG) == 0);
-				break;
-			case 1:
-				/* Executable ELF */
-				check = !(elf_header->e_type == ET_EXEC);
-				break;
-			case 2:
-				/* ELF Architecture */
-				check = !(elf_header->e_machine == EM_MACH);
-				break;
-			case 3:
-				/* ELF 64 bits target */
-				check = !(elf_header->e_ident[EI_CLASS] == ELFCLASS64);
-				break;
-			case 4:
-				/* ELF non empty program headers  */
-				check = !(elf_header->e_phnum > 0);
-				break;
-			default: 
-				printf("(W) [bootloader]  verify_elf_headers(...) default switch case reached\n");
-		}
-
-		if(check == 255)
-			resolution(i, check);
-	}
-
-	return elf_parse_flags;
-}
+uint8_t verify_elf_headers(Elf64_Ehdr *elf_header);
 
 int
 main(int argc, char *argv[]) 
@@ -116,12 +49,87 @@ main(int argc, char *argv[])
 
 	printf("(I) [bootloader]  parsing ELF data\n");
 
+	/* First data of ELF file is the ELF header */
 	Elf64_Ehdr *elf_header = (Elf64_Ehdr *)memory;
-
+	/* Check the header data is correct */
 	uint8_t elf_parse_flags = verify_elf_headers(elf_header);
 
 	printf("(I) [bootloader]  verify_elf_headers() code: %d\n", elf_parse_flags);
 
+	printf("(I) [bootloader]  jumping to kernel code at address: %p\n", elf_header->e_entry);
+
+	/*int (*_start)() = ((__attribute__((sysv_abi)) int (*)() ) elf_header->e_entry);*/
+
+	/*int return_code = _start();*/
+
+	/*printf("(I) [bootloader]  returned from kernel with code: %d\n", return_code);*/
 
 	return 0;
+}
+
+/* Cannot be const char* const due to enviromenet restrictions */
+#define NUM_CHECKS 5
+static char verifymessages[NUM_CHECKS][2][STRING_SIZE] = {
+	{
+		"(I) [bootloader]  ELF magic number is correct",
+		"(E) [bootloader]  ELF magic number is incorrect",
+	},
+	{
+		"(I) [bootloader]  ELF is a executable object",
+		"(E) [bootloader]  ELF is not a executable object",
+	},
+	{
+		"(I) [bootloader]  ELF target arch is x86_64",
+		"(E) [bootloader]  ELF target arch is not x86_64",
+	},
+	{
+		"(I) [bootloader]  ELF target is 64 bits",
+		"(E) [bootloader]  ELF target is not 64 bits",
+	},
+	{
+		"(I) [bootloader]  ELF program header counter is non zero",
+		"(E) [bootloader]  ELF program header counter is zero", 
+	}
+};
+
+uint8_t
+verify_elf_headers(Elf64_Ehdr *elf_header)
+{
+	#define EM_MACH 62 //x86_64 https://refspecs.linuxfoundation.org/elf/gabi4+/ch4.eheader.htm
+	uint8_t elf_parse_flags = 0;
+
+	for(int i = 0 ; i < NUM_CHECKS ; i++) {
+		uint8_t check = 255;
+		switch(i) {
+			case 0:
+				/* Magic header */
+				check = !(memcmp(elf_header->e_ident, ELFMAG, SELFMAG) == 0);
+				break;
+			case 1:
+				/* Executable ELF */
+				check = !(elf_header->e_type == ET_EXEC);
+				break;
+			case 2:
+				/* ELF Architecture */
+				check = !(elf_header->e_machine == EM_MACH);
+				break;
+			case 3:
+				/* ELF 64 bits target */
+				check = !(elf_header->e_ident[EI_CLASS] == ELFCLASS64);
+				break;
+			case 4:
+				/* ELF non empty program headers  */
+				check = !(elf_header->e_phnum > 0);
+				break;
+			default: 
+				printf("(W) [bootloader]  verify_elf_headers(...) default switch case reached\n");
+		}
+
+		if(check != 255) {
+			elf_parse_flags |= check << i; 
+			printf("%s\n", verifymessages[i][check]);
+		}
+	}
+
+	return elf_parse_flags;
 }
