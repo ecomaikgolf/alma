@@ -1,7 +1,7 @@
 CC=$(TOOLCHAINBIN)/x86_64-elf-gcc
-CFLAGS= -ffreestanding
+CFLAGS= -ffreestanding -fno-stack-protector -fno-stack-check -c
 LD=$(TOOLCHAINBIN)/x86_64-elf-ld
-LDFLAGS= -nostdlib -static #-Bsymbolic
+LDFLAGS= -T kernel.ld -nostdlib -static #-Bsymbolic
 
 BUILDDIR=../build
 TOOLCHAINDIR=../toolchain
@@ -10,10 +10,10 @@ TOOLCHAINBIN=$(TOOLCHAINDIR)/build/toolchain/bin
 all: link
 
 $(BUILDDIR)/kernel.o: kernel.c
-	$(CC) $(CFLAGS) -o $(BUILDDIR)/kernel.o -c kernel.c
+	$(CC) $(CFLAGS) -o $(BUILDDIR)/kernel.o kernel.c
 
 link: $(BUILDDIR)/kernel.o
-	$(LD) $(LDFLAGS) -o $(BUILDDIR)/kernel.elf $(BUILDDIR)/kernel.o -T kernel.ld
+	$(LD) $(LDFLAGS) -o $(BUILDDIR)/kernel.elf $(BUILDDIR)/kernel.o
 
 clean:
 	rm -f $(BUILDDIR)/kernel.o $(BUILDDIR)/kernel.elf
