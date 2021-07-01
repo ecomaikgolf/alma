@@ -1,5 +1,4 @@
 @echo -off
-mode 80 25
 
 cls
 echo "(I) [startup.nsh] bootloader.efi finding started"
