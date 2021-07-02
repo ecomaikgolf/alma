@@ -10,4 +10,4 @@ build:
 	make -C $(KERNELDIR)
 
 run-dev:
-	qemu-system-x86_64 -m 512 -bios $(BUILDDIR)/bios.bin -net none -hda fat:rw:$(FILESYSTEMDIR)
+	qemu-system-x86_64 -cpu qemu64 -m 512M -bios $(BUILDDIR)/bios.bin -net none -hda fat:rw:$(FILESYSTEMDIR)
