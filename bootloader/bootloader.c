@@ -56,13 +56,32 @@ main(int argc, char *argv[])
 
 	printf("(I) [bootloader]  verify_elf_headers() code: %d\n", elf_parse_flags);
 
-	printf("(I) [bootloader]  jumping to kernel code at address: %p\n", elf_header->e_entry);
+	printf("(I) [bootloader]  starting to load ELF program headers (total: %d)\n", elf_header->e_phnum);
 
-	/*int (*_start)() = ((__attribute__((sysv_abi)) int (*)() ) elf_header->e_entry);*/
+	int i;
+	for(int i = 0 ; i < elf_header->e_phnum; i++) {
+		Elf64_Phdr *prog_hdr = (Elf64_Phdr *)(memory + elf_header->e_phoff + elf_header->e_phentsize * i);
 
-	/*int return_code = _start();*/
+		/* if program segment is loadable */
+		if(prog_hdr->p_type == PT_LOAD) {
+			printf("(I) [bootloader]  loading program header %d at: 0x%p\n", i, prog_hdr->p_vaddr);
 
-	/*printf("(I) [bootloader]  returned from kernel with code: %d\n", return_code);*/
+			memcpy((void *)prog_hdr->p_vaddr, memory + prog_hdr->p_offset, prog_hdr->p_filesz);
+			memset((void*)(prog_hdr->p_vaddr + prog_hdr->p_filesz), 0, prog_hdr->p_memsz - prog_hdr->p_filesz);
+		} else {
+			printf("(I) [bootloader]  program header %d of type \n", i, prog_hdr->p_type);
+		}
+	}
+
+	printf("(I) [bootloader]  loading ELF program headers finished\n", elf_header->e_phnum);
+
+	printf("(I) [bootloader]  jumping to kernel code at address: 0x%p\n", elf_header->e_entry);
+
+	int (*_start)() = ((__attribute__((sysv_abi)) int (*)() ) elf_header->e_entry);
+
+	int return_code = _start();
+
+	printf("(I) [bootloader]  returned from kernel with code: %d\n", return_code);
 
 	return 0;
 }
