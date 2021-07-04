@@ -92,18 +92,18 @@ main(int argc, char *argv[])
 		printf("(E) [bootloader]  unable to locate/initialise GOP\n");
 	}
 
-	Framebuffer fr_buffer;
-	fr_buffer.base 		  = (void *)gop->Mode->FrameBufferBase;
-	fr_buffer.buffer_size = gop->Mode->FrameBufferSize;
-	fr_buffer.width       = gop->Mode->Information->HorizontalResolution;
-	fr_buffer.height      = gop->Mode->Information->VerticalResolution;
-	fr_buffer.ppscl 	  = gop->Mode->Information->PixelsPerScanLine;
+	Framebuffer fb;
+	fb.base 	   = (void *)gop->Mode->FrameBufferBase;
+	fb.buffer_size = gop->Mode->FrameBufferSize;
+	fb.width       = gop->Mode->Information->HorizontalResolution;
+	fb.height      = gop->Mode->Information->VerticalResolution;
+	fb.ppscl 	   = gop->Mode->Information->PixelsPerScanLine;
 
-	printf("(I) [bootloader]  GOP base: 0x%x\n", fr_buffer.base);
-	printf("(I) [bootloader]  GOP buffer size: 0x%x\n", fr_buffer.buffer_size);
-	printf("(I) [bootloader]  GOP width: %d\n", fr_buffer.width);
-	printf("(I) [bootloader]  GOP height: %d\n", fr_buffer.height);
-	printf("(I) [bootloader]  GOP pixels per scan line: %d\n", fr_buffer.ppscl);
+	printf("(I) [bootloader]  GOP base: 0x%x\n", fb.base);
+	printf("(I) [bootloader]  GOP buffer size: 0x%x\n", fb.buffer_size);
+	printf("(I) [bootloader]  GOP width: %d\n", fb.width);
+	printf("(I) [bootloader]  GOP height: %d\n", fb.height);
+	printf("(I) [bootloader]  GOP pixels per scan line: %d\n", fb.ppscl);
 
 	printf("(I) [bootloader]  jumping to kernel code at address: 0x%p\n", elf_header->e_entry);
 
