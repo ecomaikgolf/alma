@@ -9,10 +9,10 @@ uint8_t verify_elf_headers(Elf64_Ehdr *elf_header);
 
 typedef struct {
 	void* base;
-	size_t buffer_size;
-	uint32_t width;
-	uint32_t height;
-	uint32_t ppscl;
+	unsigned long long buffer_size;
+	unsigned int width;
+	unsigned int height;
+	unsigned int ppscl;
 } Framebuffer;
 
 int
