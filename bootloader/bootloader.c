@@ -107,11 +107,12 @@ main(int argc, char *argv[])
 
 	printf("(I) [bootloader]  jumping to kernel code at address: 0x%p\n", elf_header->e_entry);
 
-	int (*_start)() = ((__attribute__((sysv_abi)) int (*)() ) elf_header->e_entry);
+	void (*_start)() = ((__attribute__((sysv_abi)) void (*)(Framebuffer*) ) elf_header->e_entry);
 
-	int return_code = _start();
+	/* Call kernel */
+	_start(&fb);
 
-	printf("(I) [bootloader]  returned from kernel with code: %d\n", return_code);
+	printf("(I) [bootloader]  returned from kernel\n");
 
 	return 0;
 }
