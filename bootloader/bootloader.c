@@ -7,6 +7,14 @@ const char* kernel_file = "kernel.elf";
 
 uint8_t verify_elf_headers(Elf64_Ehdr *elf_header);
 
+typedef struct {
+	void* base;
+	size_t buffer_size;
+	uint32_t width;
+	uint32_t height;
+	uint32_t ppscl;
+} Framebuffer;
+
 int
 main(int argc, char *argv[]) 
 {
@@ -74,6 +82,28 @@ main(int argc, char *argv[])
 	}
 
 	printf("(I) [bootloader]  loading ELF program headers finished\n", elf_header->e_phnum);
+
+	/* Getting GOP */
+	printf("(I) [bootloader]  initialising Graphics Output Protocol (GOP)\n");
+	efi_gop_t *gop = NULL;
+	efi_guid_t gop_guid = EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID;
+	efi_status_t status = BS->LocateProtocol(&gop_guid, NULL, (void**)&gop);
+	if(gop == NULL || EFI_ERROR(status)) {
+		printf("(E) [bootloader]  unable to locate/initialise GOP\n");
+	}
+
+	Framebuffer fr_buffer;
+	fr_buffer.base 		  = (void *)gop->Mode->FrameBufferBase;
+	fr_buffer.buffer_size = gop->Mode->FrameBufferSize;
+	fr_buffer.width       = gop->Mode->Information->HorizontalResolution;
+	fr_buffer.height      = gop->Mode->Information->VerticalResolution;
+	fr_buffer.ppscl 	  = gop->Mode->Information->PixelsPerScanLine;
+
+	printf("(I) [bootloader]  GOP base: 0x%x\n", fr_buffer.base);
+	printf("(I) [bootloader]  GOP buffer size: 0x%x\n", fr_buffer.buffer_size);
+	printf("(I) [bootloader]  GOP width: %d\n", fr_buffer.width);
+	printf("(I) [bootloader]  GOP height: %d\n", fr_buffer.height);
+	printf("(I) [bootloader]  GOP pixels per scan line: %d\n", fr_buffer.ppscl);
 
 	printf("(I) [bootloader]  jumping to kernel code at address: 0x%p\n", elf_header->e_entry);
 
