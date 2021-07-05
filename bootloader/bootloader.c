@@ -8,7 +8,7 @@ const char* kernel_file = "kernel.elf";
 uint8_t verify_elf_headers(Elf64_Ehdr *elf_header);
 
 typedef struct {
-	void* base;
+	unsigned int* base;
 	unsigned long long buffer_size;
 	unsigned int width;
 	unsigned int height;

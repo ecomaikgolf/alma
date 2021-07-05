@@ -1,5 +1,5 @@
 typedef struct {
-	void* base;
+	unsigned int* base;
 	unsigned long long buffer_size;
 	unsigned int width;
 	unsigned int height;
@@ -7,5 +7,6 @@ typedef struct {
 } Framebuffer;
 
 void _start(Framebuffer *fb) {
+
 	return;
 }
