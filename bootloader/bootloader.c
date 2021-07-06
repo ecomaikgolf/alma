@@ -15,6 +15,20 @@ typedef struct {
 	unsigned int ppscl;
 } Framebuffer;
 
+#define PSF1_MAGIC0 0x36
+#define PSF1_MAGIC1 0x04
+
+typedef struct {
+	unsigned char magic[2];
+	unsigned char mode;
+	unsigned char charsize;
+} PSF1_Header;
+
+typedef struct {
+	PSF1_Header* header;
+	void* buffer;
+} PSF1_Font;
+
 int
 main(int argc, char *argv[]) 
 {
@@ -104,6 +118,29 @@ main(int argc, char *argv[])
 	printf("(I) [bootloader]  GOP width: %d\n", fb.width);
 	printf("(I) [bootloader]  GOP height: %d\n", fb.height);
 	printf("(I) [bootloader]  GOP pixels per scan line: %d\n", fb.ppscl);
+
+	/* Load PSF1 font */
+	printf("(I) [bootloader]  PSF1 loading font file\n");
+	FILE *font_file = fopen("zap-light16.psf", "r");
+	printf("(I) [bootloader]  PSF1 reading header\n");
+	PSF1_Header *fhead = malloc(sizeof(PSF1_Header));
+	fread((void *)fhead, sizeof(PSF1_Header), 1, font_file);
+	
+	if(fhead->magic[0] != PSF1_MAGIC0 || fhead->magic[1] != PSF1_MAGIC1) {
+		printf("(E) [bootloader]  PSF1 font incorrect magic header\n");
+	} else {
+		printf("(I) [bootloader]  PSF1 font correct magic header\n");
+	}
+
+	printf("(I) [bootloader]  PSF1 reading glyph data\n");
+	unsigned int glyph_buff_size = fhead->charsize * (fhead->mode == 1 ? 512 : 256);
+	PSF1_Header *font_glyph = malloc(glyph_buff_size);
+	fread((void *)font_glyph, glyph_buff_size, 1, font_file);
+	printf("(I) [bootloader]  PSF1 glyph size: %d (mode: %d)\n", glyph_buff_size, fhead->mode);
+
+	PSF1_Font *font = malloc(sizeof(PSF1_Font));
+	font->header = fhead;
+	font->buffer = font_glyph;
 
 	printf("(I) [bootloader]  jumping to kernel code at address: 0x%p\n", elf_header->e_entry);
 
