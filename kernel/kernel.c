@@ -38,9 +38,35 @@ put(Framebuffer *fb, PSF1_Font *font,
 	}
 }
 
+void
+print(Framebuffer *fb, PSF1_Font *font,
+		const char* str,
+		unsigned int x_offset, unsigned int y_offset,
+		unsigned int color)
+{
+	int i = 0;
+	while(str[i]) {
+		switch(str[i]) {
+			case '\n':
+				y_offset += 16;
+				x_offset = 0;
+				break;
+			default: {
+				  put(fb, font, color, (char)str[i], x_offset, y_offset);
+				  x_offset += 8;
+				  if(x_offset >= fb->width) {
+					  y_offset += 16;
+					  x_offset = 0;
+				  }
+		    }
+		}
+		i++;
+	}
+}
+
 void 
 _start(Framebuffer *fb, PSF1_Font *font) 
 {
-	put(fb, font, 0xffffffff, 'E', 10, 10);
+	print(fb, font, "Hello world", 10, 10, 0xffffffff);
 	return;
 }
