@@ -122,9 +122,17 @@ main(int argc, char *argv[])
 	/* Load PSF1 font */
 	printf("(I) [bootloader]  PSF1 loading font file\n");
 	FILE *font_file = fopen("zap-light16.psf", "r");
+	/* Move the file pointer to the end */
+	fseek(font_file, 0, SEEK_END);
+	/* Return current in bytes */
+	uint64_t font_size = ftell(font_file);
+	/* Move the file pointer to the start */
+	fseek(font_file, 0, SEEK_SET);
+	void* font_buffer = malloc(font_size);
+	fread((void *)font_buffer, font_size, 1, font_file);
+
 	printf("(I) [bootloader]  PSF1 reading header\n");
-	PSF1_Header *fhead = malloc(sizeof(PSF1_Header));
-	fread((void *)fhead, sizeof(PSF1_Header), 1, font_file);
+	PSF1_Header *fhead = (PSF1_Header *)font_buffer;
 	
 	if(fhead->magic[0] != PSF1_MAGIC0 || fhead->magic[1] != PSF1_MAGIC1) {
 		printf("(E) [bootloader]  PSF1 font incorrect magic header\n");
@@ -133,11 +141,11 @@ main(int argc, char *argv[])
 	}
 
 	printf("(I) [bootloader]  PSF1 reading glyph data\n");
-	unsigned int glyph_buff_size = fhead->charsize * (fhead->mode == 1 ? 512 : 256);
-	PSF1_Header *font_glyph = malloc(glyph_buff_size);
-	fread((void *)font_glyph, glyph_buff_size, 1, font_file);
-	printf("(I) [bootloader]  PSF1 glyph size: %d (mode: %d)\n", glyph_buff_size, fhead->mode);
 
+	/* Assume ignore unicode inf. */
+	PSF1_Header *font_glyph = (font_buffer + sizeof(PSF1_Header)); 
+
+	/* Create the font */
 	PSF1_Font *font = malloc(sizeof(PSF1_Font));
 	font->header = fhead;
 	font->buffer = font_glyph;
@@ -147,7 +155,7 @@ main(int argc, char *argv[])
 	void (*_start)() = ((__attribute__((sysv_abi)) void (*)(Framebuffer*, PSF1_Font*) ) elf_header->e_entry);
 
 	/* Call kernel */
-	_start(&fb, &font);
+	_start(&fb, font);
 
 	printf("(I) [bootloader]  returned from kernel\n");
 
