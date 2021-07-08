@@ -20,7 +20,7 @@ AlwaysBreakAfterReturnType: TopLevelDefinitions
 AlwaysBreakBeforeMultilineStrings: 'false'
 BinPackParameters: 'false'
 BreakBeforeTernaryOperators: 'true'
-ColumnLimit: '120'
+ColumnLimit: '100'
 FixNamespaceComments: 'true'
 IncludeBlocks: Regroup
 IndentCaseLabels: 'false'
