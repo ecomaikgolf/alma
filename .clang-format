@@ -22,8 +22,8 @@ BinPackParameters: 'false'
 BreakBeforeTernaryOperators: 'true'
 ColumnLimit: '100'
 FixNamespaceComments: 'true'
-IncludeBlocks: Regroup
-IndentCaseLabels: 'false'
+IncludeBlocks: Merge
+IndentCaseLabels: 'true'
 IndentWidth: '4'
 Language: Cpp
 MaxEmptyLinesToKeep: '1'
@@ -35,6 +35,6 @@ SpaceInEmptyParentheses: 'false'
 SpacesInParentheses: 'false'
 SpacesInSquareBrackets: 'false'
 TabWidth: '4'
-UseTab: Always
+UseTab: Never
 
 ...
