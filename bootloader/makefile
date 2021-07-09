@@ -1,9 +1,10 @@
 ARCH=x86_64
 TARGET = bootloader.efi
 USE_GCC = 1
-CFLAGS=
+CFLAGS=-I$(LIBDIR)
 LDFLAGS=
 LIBS= #static only .a
+LIBDIR=lib
 
 BUILDDIR=../build
 
