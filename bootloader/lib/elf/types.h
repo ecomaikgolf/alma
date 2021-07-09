@@ -4,9 +4,9 @@
 
 /* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
 
-#include <uefi.h>
-
 #pragma once
+
+#include <uefi.h>
 
 /* 32-bit ELF base types. */
 typedef int32_t  	Elf32_Addr;
