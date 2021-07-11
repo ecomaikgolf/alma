@@ -8,5 +8,5 @@
 
 #include <uefi.h>
 
-uint64_t file_size(FILE* file);
-void*  load_file(const char *const filename);
+uint64_t file_size(FILE *file);
+void *load_file(const char *const filename);

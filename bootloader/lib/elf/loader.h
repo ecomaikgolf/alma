@@ -8,7 +8,7 @@
 
 #include "elf/types.h"
 
-Elf64_Ehdr *load_elf(char *memory);
-Elf64_Ehdr *get_elf_header(char *memory);
-uint8_t verify_elf_headers(Elf64_Ehdr *elf_header);
-void load_phdrs(Elf64_Ehdr *elf_header, char *memory);
+Elf64_Ehdr *load_elf(const char *const);
+Elf64_Ehdr *get_elf_header(char *);
+uint8_t verify_elf_headers(const Elf64_Ehdr *const);
+void load_phdrs(const Elf64_Ehdr *const, const char *const);

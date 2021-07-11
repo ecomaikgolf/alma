@@ -5,6 +5,7 @@
  */
 
 #include "elf/loader.h"
+#include "io/file.h"
 #include "log/stdout.h"
 
 /** Machine type
@@ -19,8 +20,8 @@ const int NUM_CHECKS = 5;
 
 // clang-format off
 /** Info check messages */
-const char *verifymessages[] = {
-    "ELF magic number is correct",
+char verifymessages[][60] = {
+    "ELF magic number is correct\0",
     "ELF is a executable object",
     "ELF target arch is x86_64",
     "ELF target is 64 bits",
@@ -28,8 +29,8 @@ const char *verifymessages[] = {
 };
 
 /** Error check messages */
-const char *errormessages[] = {
-    "ELF magic number is incorrect",
+char errormessages[][60] = {
+    "ELF magic number is incorrect\0",
 	"ELF is not a executable object",
     "ELF target arch is not x86_64",
 	"ELF target is not 64 bits",
@@ -43,8 +44,13 @@ const char *errormessages[] = {
  * Parses, verifies, does the memory management, etc.
  */
 Elf64_Ehdr *
-load_elf(char *memory)
+load_elf(const char *const filename)
 {
+    char *memory = (char *)load_file(filename);
+
+    if (memory == NULL)
+        return NULL;
+
     Elf64_Ehdr *header = get_elf_header(memory);
     uint8_t flags      = verify_elf_headers(header);
 
@@ -82,7 +88,7 @@ get_elf_header(char *memory)
  * 	- Max 8 checks, increase return int size to add more flags
  */
 uint8_t
-verify_elf_headers(Elf64_Ehdr *elf_header)
+verify_elf_headers(const Elf64_Ehdr *const elf_header)
 {
     if (elf_header == NULL) {
         warning("elf_header parameter is null");
@@ -121,7 +127,8 @@ verify_elf_headers(Elf64_Ehdr *elf_header)
         if (check != 255) {
             /* Mark the bit with 1 to identify the check error */
             elf_parse_flags |= check << i;
-            i ? error("%s", verifymessages[check]) : info("%s", verifymessages[check]);
+
+            (check > 0) ? error("%s", errormessages[i]) : info("%s", verifymessages[i]);
         }
     }
 
@@ -134,7 +141,7 @@ verify_elf_headers(Elf64_Ehdr *elf_header)
  * @post Loaded program headers are in memory
  */
 void
-load_phdrs(Elf64_Ehdr *elf_header, char *memory)
+load_phdrs(const Elf64_Ehdr *const elf_header, const char *const memory)
 {
     int i;
     for (int i = 0; i < elf_header->e_phnum; i++) {

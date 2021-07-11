@@ -30,7 +30,7 @@ file_size(FILE *file)
     /* Return current in bytes */
     uint64_t size = ftell(file);
     /* Move the file reda pointer to the intial position*/
-    fseek(file, 0, initial);
+    fseek(file, initial, SEEK_SET);
 
     return size;
 }
@@ -73,8 +73,8 @@ load_file(const char *filename)
     fread((void *)memory, size, 1, file);
     info("copied %s contents to memory 0x%p (%d bytes)", filename, memory, size);
 
-    fclose(file);
-    info("closed %d", filename);
+    // fclose(file);
+    info("closed %s", filename);
 
     return memory;
 }
