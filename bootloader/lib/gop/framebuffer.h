@@ -13,7 +13,7 @@
  */
 typedef struct {
   /** Base address of the framebuffer */
-  unsigned int *base;
+  char *base;
   /** Total size */
   unsigned long long buffer_size;
   /** Screen width */

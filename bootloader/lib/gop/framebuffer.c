@@ -30,5 +30,8 @@ create_fb(const efi_gop_t *const gop)
     fb->width       = gop->Mode->Information->HorizontalResolution;
     fb->ppscl       = gop->Mode->Information->PixelsPerScanLine;
 
+	info("Window width: %d", fb->width);
+	info("Window height: %d", fb->height);
+
     return fb;
 }
