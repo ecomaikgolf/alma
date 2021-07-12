@@ -1,4 +1,4 @@
-CC=$(TOOLCHAINBIN)/x86_64-elf-gcc
+CC=$(TOOLCHAINBIN)/x86_64-elf-g++
 CFLAGS= -ffreestanding -fno-stack-protector -fno-stack-check -Wall -Wextra
 LD=$(TOOLCHAINBIN)/x86_64-elf-ld
 LDFLAGS= -T kernel.ld -nostdlib -z max-page-size=0x1000
@@ -8,16 +8,22 @@ BUILDDIR=../build
 TOOLCHAINDIR=../toolchain
 TOOLCHAINBIN=$(TOOLCHAINDIR)/build/toolchain/bin
 
+NAME=kernel.elf
+
+SRCS=$(wildcard *.cpp)
+TMP=$(SRCS:.cpp=.o)
+OBJS=$(patsubst %, $(BUILDDIR)/%, $(TMP))	
+
 all: link
 
-$(BUILDDIR)/kernel.o: kernel.c
-	$(CC) $(CFLAGS) -o $(BUILDDIR)/kernel.o -c kernel.c
+$(BUILDDIR)/%.o: %.cpp
+	$(CC) $(CFLAGS) -o $@ -c $<
 
-link: $(BUILDDIR)/kernel.o
-	$(LD) $(LDFLAGS) -o $(BUILDDIR)/kernel.elf $(BUILDDIR)/kernel.o
+link: $(OBJS)
+	$(LD) $(LDFLAGS) -o $(BUILDDIR)/kernel.elf $(OBJS)
 
 clean:
-	rm -f $(BUILDDIR)/kernel.o $(BUILDDIR)/kernel.elf
+	rm -f $(OBJS) $(BUILDDIR)/$(NAME).elf
 
 # -ffreestanding
 #
