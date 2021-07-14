@@ -1,5 +1,20 @@
+/**
+ * Class to output to the screen
+ *
+ * @author Ernesto Martínez García <me@ecomaikgolf.com>
+ */
+
 #include "renderer.h"
 
+/**
+ * Renderer constructor
+ *
+ * @param fb Framebuffer (GOP wrapper to print)
+ * @param font PSF1 bitmap font
+ * @param x_offset X **pixel** initial position
+ * @param y_offset Y **pixel** initial position
+ * @param color hex color (enum)
+ */
 Renderer::Renderer(Framebuffer *fb,
                    PSF1_Font *font,
                    unsigned int x_offset,
@@ -13,6 +28,13 @@ Renderer::Renderer(Framebuffer *fb,
     this->color    = color;
 }
 
+/**
+ * Draw a character to the screen
+ *
+ * Doesn't increase x_offset and y_offset, also does not recognise special chars
+ *
+ * @param character Char to print
+ */
 void
 Renderer::draw(const char character)
 {
@@ -34,13 +56,27 @@ Renderer::draw(const char character)
     }
 }
 
+/**
+ * Draw a character to the screen
+ *
+ * Increases x_ffset and y_offset, also recognises special chars as '\n'
+ *
+ * @param character Char to print
+ */
 void
 Renderer::put(const char character)
 {
-	char addterm[2] = {character, '\0'};
+    char addterm[2] = { character, '\0' };
     Renderer::print(addterm);
 }
 
+/**
+ * Print a string without default newline
+ *
+ * Increases x_offset and y_offset, also recognises special chars as '\n'
+ *
+ * @param str string to print
+ */
 void
 Renderer::print(const char *str)
 {
@@ -64,6 +100,13 @@ Renderer::print(const char *str)
     }
 }
 
+/**
+ * Print a string with a default newline
+ *
+ * Increases x_offset and y_offset, also recognises special chars as '\n'
+ *
+ * @param str string to print
+ */
 void
 Renderer::println(const char *str)
 {
@@ -71,6 +114,11 @@ Renderer::println(const char *str)
     Renderer::put('\n');
 }
 
+/**
+ * Sets a new char color to use
+ *
+ * @param color Color to use onwards
+ */
 void
 Renderer::setColor(Color color)
 {
