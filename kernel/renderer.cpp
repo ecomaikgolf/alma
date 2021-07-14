@@ -40,7 +40,8 @@ Renderer::draw(const char character)
 {
     /* Select character from glyph buffer (a character is composed by charsize
      * elements )*/
-    char *chr = (char *)this->font->buffer + (character * this->font->header->charsize);
+    char *chr = static_cast<char *>(this->font->buffer) +
+                (static_cast<unsigned char>(character) * this->font->header->charsize);
 
     /* Iterate bitmap "rectangle" (with offset as base) */
     for (unsigned long y = this->y_offset; y < this->y_offset + PSF1_Y; y++) {
@@ -48,8 +49,8 @@ Renderer::draw(const char character)
             /* Each Y from bitmap is a "flag number", check if corresponding
              * x bit is set */
             if ((*chr & (0b10000000 >> (x - this->x_offset)))) {
-                *(unsigned int *)(this->fb->base + x + (y * this->fb->ppscl)) =
-                  (unsigned int)this->color;
+                *(static_cast<unsigned int *>(this->fb->base + x + (y * this->fb->ppscl))) =
+                  static_cast<unsigned int>(this->color);
             }
         }
         chr++; /* increase char to iterate over entire charsize elements */
