@@ -16,12 +16,18 @@
 efi_gop_t *
 load_gop()
 {
-    efi_gop_t *gop      = NULL;
+    efi_gop_t *gop      = malloc(sizeof(efi_gop_t));
+
+	if(gop == NULL) {
+		error("cannot allocate memory for the GOP");
+		return NULL;
+	}
+
     efi_guid_t gop_guid = EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID;
     efi_status_t status = BS->LocateProtocol(&gop_guid, NULL, (void **)&gop);
 
-    if (gop == NULL || EFI_ERROR(status)) {
-        error("unable to locate/initialise GOP");
+    if (status < 0) {
+        error("unable to initialise GOP");
         return NULL;
     }
 
