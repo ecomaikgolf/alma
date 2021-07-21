@@ -1,11 +1,12 @@
 /**
  * Bootloader for UEFI x86_64 machines
- * @info Tested with TianoCore EDK2 Ovmf (make -C toolchain/ edk2)
+ * @info Tested with TianoCore EDK2 OVMF (make -C toolchain/ edk2)
  *
  * @author Ernesto Martínez García <me@ecomaikgolf.com>
  */
 
-#include "codes/values.h"
+#include "bootparams.h"
+#include "err_values.h"
 #include "elf/loader.h"
 #include "elf/types.h"
 #include "gop/font.h"
@@ -13,6 +14,7 @@
 #include "gop/gop.h"
 #include "io/file.h"
 #include "log/stdout.h"
+#include "memory/memory.h"
 #include <uefi.h>
 
 /**
@@ -57,6 +59,13 @@ main(int argc, char *argv[])
         return FRAMEBUFFER_FAILURE;
     }
 
+    /**
+     * Load UEFI memory map
+     *
+     * @warning Moving this function to other line breaks kernel printing
+     */
+    MapInfo *map = load_memmap();
+
     /* Load the PSF1 font */
     PSF1_Font *font = load_psf1_font("zap-light16.psf");
 
@@ -65,24 +74,32 @@ main(int argc, char *argv[])
         return PSF1_FAILURE;
     }
 
+    /* Check for suspicious values leading to errors */
     if (elf_header->e_entry == 0x0)
         warning("kernel entry point is 0x0");
-
     if (elf_header->e_entry < 0x100)
         warning("kernel entry point is less than 0x100");
-
-    info("jumping to kernel code at address: 0x%p", elf_header->e_entry);
 
     /* Define the kernel starting function
      * sysv_abi as UEFI uses cdecl for x86 and MS 64-bit convention for x86-64
      */
-    void (*_start)() =
-      ((__attribute__((sysv_abi)) void (*)(Framebuffer *, PSF1_Font *))elf_header->e_entry);
+    void (*_start)() = ((__attribute__((sysv_abi)) void (*)(BootArgs *))elf_header->e_entry);
+    info("jumping to kernel code at address: 0x%p", _start);
+
+    /* Exit UEFI Boot Services */
+    info("Exiting UEFI Boot Services before the jump");
+    if (exit_bs() > 0) {
+        error("error exiting UEFI boot services");
+        return UEFI_BS;
+    }
 
     /* Call the kernel */
-    _start(fb, font);
+    BootArgs args = { fb, font, map }; // with dynamic memory doesn't work, maybe due to exit_bs
+    _start(&args);
 
-    info("returned from the kernel");
+    /* _start shouldn't return */
+    while (1) {
+    }
 
     return 0;
 }
