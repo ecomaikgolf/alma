@@ -48,7 +48,7 @@ load_elf(const char *const filename)
 {
     char *memory = (char *)load_file(filename);
 
-    if (memory == NULL)
+    if(memory == NULL)
         return NULL;
 
     Elf64_Ehdr *header = get_elf_header(memory);
