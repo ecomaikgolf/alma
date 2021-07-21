@@ -58,9 +58,10 @@ load_memmap()
         return NULL;
     }
 
-    info("map: %p", map->map);
-    info("map_size: %d", map->map_size);
-    info("descriptor_size: %d", map->descriptor_size);
+	map->entries = map->map_size / map->descriptor_size;
+
+    if (map->entries == 0)
+        warning("memory map without entries");
 
     return map;
 }
