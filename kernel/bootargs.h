@@ -17,5 +17,5 @@ struct BootArgs
 {
     Framebuffer *fb;
     PSF1_Font *font;
-    MapInfo *map;
+	UEFIMMap::Map *map;
 };
