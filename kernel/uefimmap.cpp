@@ -1,8 +1,38 @@
+/**
+ * UEFI memory map utilities
+ *
+ * Memory map definition based on the posix-uefi definition
+ *
+ * @author Ernesto Martínez García <me@ecomaikgolf.com>
+ */
+
 #include "uefimmap.h"
 #include <stddef.h>
 #include <stdint.h>
 
 namespace UEFIMMap {
+
+// clang-format off
+const char desctypes[][27] = { 
+	"EfiReservedMemoryType",
+    "EfiLoaderCode",
+    "EfiLoaderData",
+    "EfiBootServicesCode",
+    "EfiBootServicesData",
+    "EfiRuntimeServicesCode",
+    "EfiRuntimeServicesData",
+    "EfiConventionalMemory",
+    "EfiUnusableMemory",
+    "EfiACPIReclaimMemory",
+    "EfiACPIMemoryNVS",
+    "EfiMemoryMappedIO",
+    "EfiMemoryMappedIOPortSpace",
+    "EfiPalCode" 
+};
+// clang-format on
+
+/** Storage for get_memsize (you only need to retrieve it once) */
+static size_t memsize = 0;
 
 /**
  * Get total memory size (RAM)
@@ -20,11 +50,11 @@ get_memsize(const UEFIMMap::Map *map)
     if (UEFIMMap::memsize > 0)
         return UEFIMMap::memsize;
 
-    for (int i = 0; i < map->entries; i++) {
+    for (uint64_t i = 0; i < map->entries; i++) {
         efi_memory_descriptor_t *descriptor =
           (efi_memory_descriptor_t *)((uint64_t)map->map + (i * map->descriptor_size));
 
-        memsize += descriptor->NumberOfPages * UEFIMMap::page_size;
+        UEFIMMap::memsize += descriptor->NumberOfPages * UEFIMMap::page_size;
     }
 
     return UEFIMMap::memsize;
