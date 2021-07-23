@@ -1,3 +1,11 @@
+/**
+ * Bitset class
+ *
+ * An "array of bits"
+ *
+ * @author Ernesto Martínez García <me@ecomaikgolf.com>
+ */
+
 #pragma once
 
 #include <stddef.h>
@@ -5,6 +13,14 @@
 
 namespace std {
 
+/**
+ * Class that manages a imaginary array of bits
+ *
+ * It's an array of uint8_t where you can access each bit with operator[]. Also you can set/unset
+ * bits
+ *
+ * @info You need to provide your own buffer
+ */
 class bitset
 {
   private:
@@ -16,16 +32,35 @@ class bitset
     void set(size_t);
     void unset(size_t);
 
-    inline size_t get_size()
+    /**
+     * Return buffer pointer
+     */
+    inline uint8_t *get_buffer()
     {
-        return this->size;
+        return this->buffer;
     }
 
+    /**
+     * Set buffer pointer
+     */
     inline void set_buffer(uint8_t *buffer)
     {
         this->buffer = buffer;
     }
 
+    /**
+     * Return number of bits
+     */
+    inline size_t get_size()
+    {
+        return this->size;
+    }
+
+    /**
+     * Set number of bits
+     *
+     * @warning Not used to check correct access
+     */
     inline void set_size(size_t size)
     {
         this->size = size;
