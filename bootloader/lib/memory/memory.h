@@ -8,6 +8,9 @@
 
 #include <uefi.h>
 
+/** num of tries to get correct memory size */
+static const uint8_t RETRIES = 5;
+
 typedef struct
 {
 	/** Array of memory descriptors */

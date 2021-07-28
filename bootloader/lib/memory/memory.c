@@ -39,26 +39,40 @@ load_memmap()
          * Check if map->map_size is a reasonable number
          * View page 164 of UEFI Specification 2.8
          */
-        error("memory map info retrieval error");
+        warning("memory map info retrieval error");
         return NULL;
     }
 
-    map->map = malloc(map->map_size);
+    /* Retry to get correct size, not needed but sometimes it randomly faults and this patches it */
+    for (int i = 0; i < RETRIES; i++) {
 
-    if (map->map == NULL) {
-        error("can't allocate memory for UEFI memory map info");
-        return NULL;
+        map->map = malloc(map->map_size);
+
+        if (map->map == NULL) {
+            error("can't allocate memory for UEFI memory map info");
+            return NULL;
+        }
+
+        status =
+          BS->GetMemoryMap(&map->map_size, map->map, &map->map_key, &map->descriptor_size, NULL);
+
+        if (status == 0) {
+            break;
+        } else {
+            if (i != 0)
+                warning("Memory map size try number %d", i);
+            free(map->map);
+        }
     }
-
-    status = BS->GetMemoryMap(&map->map_size, map->map, &map->map_key, &map->descriptor_size, NULL);
 
     if (status > 0) {
         /* Possible errors: view page 164 of UEFI Specification 2.8 */
+        error("Status error: %d", status);
         error("memory map retrieval error");
         return NULL;
     }
 
-	map->entries = map->map_size / map->descriptor_size;
+    map->entries = map->map_size / map->descriptor_size;
 
     if (map->entries == 0)
         warning("memory map without entries");
