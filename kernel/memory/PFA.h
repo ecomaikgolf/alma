@@ -60,3 +60,5 @@ class PFA
     size_t reserved_mem;
     size_t used_mem;
 };
+
+extern PFA allocator;

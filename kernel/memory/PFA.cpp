@@ -7,6 +7,9 @@
 #include "PFA.h"
 #include "uefimmap.h"
 
+/* Uninitalised hotxix */
+PFA allocator((UEFIMMap::Map*)0x0);
+
 /**
  * Page Frame Allocator constructor
  *
@@ -25,6 +28,9 @@
  */
 PFA::PFA(const UEFIMMap::Map *map)
 {
+	if(map == NULL)
+		return;
+
     efi_memory_descriptor_t *largest = PFA::get_largest_segment(map);
 
     size_t memsize     = UEFIMMap::get_memsize(map);
