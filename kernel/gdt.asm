@@ -1,6 +1,15 @@
+;;
+; Global Descriptor Table managing
+;
+; @author Ernesto Martínez García <me@ecomaikgolf.com>
+;
+
 ; tell nasm we need 64 bit instructions
 [bits 64]
 
+;
+; void load_gdt(gdt_ptr*)
+;
 load_gdt:
 	lgdt [rdi] ; rdi contains first parameter passed to load_gdt
 	mov ax, 0x10 ; gdt kernel data segment

@@ -1,8 +1,19 @@
+/**
+ * Global Descriptor Table managing
+ *
+ * Creates the global descriptor table, also defines needed structures
+ *
+ * @author Ernesto Martínez García <me@ecomaikgolf.com>
+ */
+
 #pragma once
 
 #include "uefimmap.h"
 #include <stdint.h>
 
+/**
+ * GDT table entry
+ */
 struct gdt_entry
 {
     uint16_t limit_low;
@@ -13,6 +24,9 @@ struct gdt_entry
     uint8_t base_high;
 } __attribute__((packed));
 
+/**
+ * GDT
+ */
 struct gdt_ptr
 {
     uint16_t size;
@@ -26,6 +40,9 @@ struct gdt_ptr
  */
 
 // clang-format off
+/**
+ * Our GDT to load
+ */
 __attribute__((aligned(UEFIMMap::page_size))) 
 const gdt_entry table[] = { 
 	/** Kernel null descriptor */
@@ -103,4 +120,9 @@ const gdt_entry table[] = {
 };
 // clang-format off
 
+/**
+ * Load our GDT
+ *
+ * @see gdm.asm
+ */
 extern "C" void load_gdt(gdt_ptr*);
