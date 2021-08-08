@@ -1,6 +1,6 @@
 BOOTLOADERDIR = ../bootloader
 KERNELDIR = ../kernel
-FILESYSTEMDIR= ./filesystem
+FILESYSTEMDIR= ./system
 BUILDDIR = .
 QEMUPARAMS = -cpu qemu64 -m 256M -bios $(BUILDDIR)/bios.bin -net none -hda fat:rw:$(FILESYSTEMDIR)
 
