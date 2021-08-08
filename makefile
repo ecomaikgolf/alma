@@ -1,7 +1,9 @@
 BUILDDIR=build
 FILESYSTEMDIR=$(BUILDDIR)/filesystem
 
-all: dev-run 
+all: run 
 
-dev-run: 
+run: 
 	make -C $(BUILDDIR)
+debug: 
+	make -C $(BUILDDIR) debug
