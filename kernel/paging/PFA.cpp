@@ -5,10 +5,10 @@
  */
 
 #include "PFA.h"
-#include "uefimmap.h"
+#include "uefi/memory_map.h"
 
 /* Uninitalised hotxix */
-PFA allocator((UEFIMMap::Map*)0x0);
+PFA allocator((UEFIMMap::Map *)0x0);
 
 /**
  * Page Frame Allocator constructor
@@ -28,8 +28,8 @@ PFA allocator((UEFIMMap::Map*)0x0);
  */
 PFA::PFA(const UEFIMMap::Map *map)
 {
-	if(map == NULL)
-		return;
+    if (map == NULL)
+        return;
 
     efi_memory_descriptor_t *largest = PFA::get_largest_segment(map);
 

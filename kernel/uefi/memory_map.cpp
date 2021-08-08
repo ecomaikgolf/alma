@@ -6,7 +6,7 @@
  * @author Ernesto Martínez García <me@ecomaikgolf.com>
  */
 
-#include "uefimmap.h"
+#include "memory_map.h"
 #include <stddef.h>
 #include <stdint.h>
 

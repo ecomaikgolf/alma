@@ -1,10 +1,10 @@
 /**
- * String managing functions
+ * String conversion functions
  *
  * @author Ernesto Martínez García <me@ecomaikgolf.com>
  */
 
-#include "math.h"
+#include "libc/math.h"
 
 /**
  * Convert integer to string (provided buffer)

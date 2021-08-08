@@ -16,7 +16,7 @@
 
 #pragma once
 
-#include "uefimmap.h"
+#include "../uefi/memory_map.h"
 #include <stdint.h>
 
 /**
@@ -24,27 +24,27 @@
  */
 struct gdt_entry
 {
-	/** The lower 16 bits of the limit */
+    /** The lower 16 bits of the limit */
     uint16_t limit_low;
-	/** The lower 16 bits of the base */
+    /** The lower 16 bits of the base */
     uint16_t base_low;
-	/** The next 8 bits of the base */
+    /** The next 8 bits of the base */
     uint8_t base_middle;
-	/**
-	 *  7 6 5 4  3  0
-	 * ┌─┬───┬──┬────┐
-	 * │P│DPL│DT│Type│
-	 * └─┴───┴──┴────┘
-	 */
+    /**
+     *  7 6 5 4  3  0
+     * ┌─┬───┬──┬────┐
+     * │P│DPL│DT│Type│
+     * └─┴───┴──┴────┘
+     */
     uint8_t access;
-	/**
-	  *  7 6 5 4 3    0
-	  * ┌─┬─┬─┬─┬──────┐
-	  * │G│D│0│A│SegLen│
-	  * └─┴─┴─┴─┴──────┘
-	 */
+    /**
+     *  7 6 5 4 3    0
+     * ┌─┬─┬─┬─┬──────┐
+     * │G│D│0│A│SegLen│
+     * └─┴─┴─┴─┴──────┘
+     */
     uint8_t granularity;
-	/** The last 8 bits of the base */
+    /** The last 8 bits of the base */
     uint8_t base_high;
 } __attribute__((packed));
 
@@ -53,12 +53,12 @@ struct gdt_entry
  */
 struct gdt_ptr
 {
-	/** 
-	 * sizeof(gdt) - 1 
-	 * @warning Yes, it's -1 always (last valid address)
-	 */
+    /**
+     * sizeof(gdt) - 1
+     * @warning Yes, it's -1 always (last valid address)
+     */
     uint16_t size;
-	/** &gdt */
+    /** &gdt */
     uint64_t offset;
 } __attribute__((packed));
 

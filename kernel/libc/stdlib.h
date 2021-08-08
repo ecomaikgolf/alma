@@ -1,5 +1,5 @@
 /**
- * String managing functions
+ * Stdlib functions
  *
  * @author Ernesto Martínez García <me@ecomaikgolf.com>
  */

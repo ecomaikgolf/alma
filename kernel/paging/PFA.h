@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include "bitset.h"
-#include "uefimmap.h"
+#include "libstdc++/bitset.h"
+#include "uefi/memory_map.h"
 #include <stddef.h>
 #include <stdint.h>
 
@@ -31,19 +31,19 @@ class PFA
     void *request_page();
     std::bitset page;
 
-	/** Gets kernel's total free memory */
+    /** Gets kernel's total free memory */
     size_t get_free_mem()
     {
         return this->free_mem;
     }
 
-	/** Gets kernel's total reserved (UEFI, ACPI...) memory (unusable for the OS) */
+    /** Gets kernel's total reserved (UEFI, ACPI...) memory (unusable for the OS) */
     size_t get_reserved_mem()
     {
         return this->reserved_mem;
     }
 
-	/** Gets kernel's total used memory (OS's used mem, etc) */
+    /** Gets kernel's total used memory (OS's used mem, etc) */
     size_t get_used_mem()
     {
         return this->used_mem;

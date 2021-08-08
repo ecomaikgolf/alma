@@ -1,10 +1,4 @@
 /**
- * Math functions
- *
- * @author Ernesto Martínez García <me@ecomaikgolf.com>
- */
-
-/**
  * log10(n) integer result (quite bad but a hotfix)
  * https://helloacm.com/fast-integer-log10/
  */
@@ -21,21 +15,4 @@ int_log10(unsigned int number)
            : (number >= 100u)       ? 2
            : (number >= 10u)        ? 1u
                                     : 0u;
-}
-
-/* T abs(T) defined in math.h */
-
-/**
- * pow function
- */
-unsigned int
-pow(unsigned int base, unsigned int exponent)
-{
-    unsigned int res = 1;
-
-    while (exponent--) {
-        res *= base;
-    }
-
-    return res;
 }

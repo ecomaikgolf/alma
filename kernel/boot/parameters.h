@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include "font.h"
-#include "framebuffer.h"
-#include "uefimmap.h"
+#include "screen/font.h"
+#include "screen/framebuffer.h"
+#include "uefi/memory_map.h"
 
 /**
  * Struct to be received from the bootloader
@@ -17,5 +17,5 @@ struct BootArgs
 {
     Framebuffer *fb;
     PSF1_Font *font;
-	UEFIMMap::Map *map;
+    UEFIMMap::Map *map;
 };

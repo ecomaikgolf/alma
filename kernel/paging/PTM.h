@@ -10,10 +10,9 @@
 #pragma once
 
 #include "address.h"
-#include "memory.h"
+#include "libc/string.h"
 #include "pagetables.h"
-#include "uefimmap.h"
-#include "memory.h"
+#include "uefi/memory_map.h"
 
 /**
  * Trick to have the PGDT page aligned
@@ -26,7 +25,6 @@ struct PGDT_wrapper
     page_global_dir_entry_t PGDT[512];
 } __attribute__((aligned(UEFIMMap::page_size)));
 
-
 /**
  * Page table Manager
  */
@@ -38,9 +36,9 @@ class PTM
     static void parse(uint64_t, address_t *);
     static const uint16_t page_size = 512;
 
-	/**
-	 * Returns the PGDT (PML4 table)
-	 */
+    /**
+     * Returns the PGDT (PML4 table)
+     */
     page_global_dir_entry_t *get_PGDT()
     {
         return this->PGD_table.PGDT;

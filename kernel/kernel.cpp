@@ -4,15 +4,14 @@
  * @author Ernesto Martínez García <me@ecomaikgolf.com>
  */
 
-#include "bootargs.h"
-#include "cstr.h"
+#include "boot/parameters.h"
 #include "float.h"
-#include "framebuffer.h"
-#include "math.h"
-#include "memory/PFA.h"
-#include "memory/PTM.h"
-#include "renderer.h"
-#include "gdt.h"
+#include "libc/stdlib.h"
+#include "paging/PFA.h"
+#include "paging/PTM.h"
+#include "screen/framebuffer.h"
+#include "screen/renderer.h"
+#include "segmentation/gdt.h"
 #include <stddef.h>
 #include <stdint.h>
 
@@ -28,10 +27,10 @@ _start(BootArgs *args)
 {
     Renderer renderer(args->fb, args->font);
 
-	gdt_ptr gdt;
-	gdt.size = sizeof(table) - 1;
-	gdt.offset = (uint64_t)&table;
-	load_gdt(&gdt);
+    gdt_ptr gdt;
+    gdt.size   = sizeof(table) - 1;
+    gdt.offset = (uint64_t)&table;
+    load_gdt(&gdt);
 
     if (args->map == NULL)
         return;

@@ -13,9 +13,9 @@ TOOLCHAINBIN=$(TOOLCHAINDIR)/build/toolchain/bin
 
 NAME=kernel.elf
 
-SRCS=$(wildcard *.cpp */*.cpp)
-HDRS=$(wildcard *.h */*.h)
-ASMSRC=$(wildcard *.asm */*.asm)
+SRCS=$(shell find . -name "*.cpp")
+HDRS=$(shell find . -name "*.h")
+ASMSRC=$(shell find . -name "*.asm")
 TMP=$(SRCS:.cpp=.o)
 TMP+=$(ASMSRC:.asm=_asm.o)
 OBJS=$(patsubst %, $(BUILDDIR)/%, $(TMP))

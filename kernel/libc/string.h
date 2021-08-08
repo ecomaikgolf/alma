@@ -1,5 +1,5 @@
 /**
- * Memory auxiliary functions
+ * String functions
  *
  * @author Ernesto Martínez García <me@ecomaikgolf.com>
  */
@@ -8,4 +8,4 @@
 
 #include <stdint.h>
 
-void memset(void*, uint8_t, uint64_t);
+void memset(void *, uint8_t, uint64_t);
