@@ -10,6 +10,10 @@ BUILDDIR=../build
 
 bootloader: all
 	mv bootloader.efi $(BUILDDIR)
-	mv bootloader.o $(BUILDDIR)
+	mv bootloader.o $(BUILDDIR)/bootloader
 
 include uefi/Makefile
+
+clean:
+	$(MAKE) -f uefi/Makefile $@  # https://stackoverflow.com/a/1645087
+	rm -f $(BUILDDIR)/bootloader.efi $(BUILDDIR)/bootloader/*.o $(LIBDIR)/*.o $(LIBDIR)/*/*.o

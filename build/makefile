@@ -15,3 +15,7 @@ run:
 
 debug: build
 	qemu-system-x86_64 -s -S $(QEMUPARAMS)
+
+clean:
+	make -C $(BOOTLOADERDIR) clean
+	make -C $(KERNELDIR) clean

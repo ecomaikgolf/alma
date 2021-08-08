@@ -1,3 +1,4 @@
+#
 CC=$(TOOLCHAINBIN)/x86_64-elf-g++
 CFLAGS= -ffreestanding -fno-stack-protector -fno-stack-check -Wall -Wextra -I$(INCDIR) -g
 INCDIR=.
@@ -5,33 +6,33 @@ LD=$(TOOLCHAINBIN)/x86_64-elf-ld
 LDFLAGS= -T kernel.ld -nostdlib -z max-page-size=0x1000
 ASMC=nasm
 ASMFLAGS=
-#-static -Bsymbolic
 
-BUILDDIR=../build
+BUILDDIR=../build/kernel
 TOOLCHAINDIR=../toolchain
 TOOLCHAINBIN=$(TOOLCHAINDIR)/build/toolchain/bin
 
 NAME=kernel.elf
 
 SRCS=$(wildcard *.cpp */*.cpp)
+HDRS=$(wildcard *.h */*.h)
 ASMSRC=$(wildcard *.asm */*.asm)
 TMP=$(SRCS:.cpp=.o)
 TMP+=$(ASMSRC:.asm=_asm.o)
-OBJS=$(patsubst %, $(BUILDDIR)/%, $(TMP))	
+OBJS=$(patsubst %, $(BUILDDIR)/%, $(TMP))
 
-all: link
+all: link kernel.ld makefile
 
 $(BUILDDIR)/%.o: %.cpp
-	$(CC) $(CFLAGS) -o $@ -c $<
+	$(CC) $(CFLAGS) -o $(BUILDDIR)/$(notdir $@) -c $<
 
 $(BUILDDIR)/%_asm.o: %.asm
-	$(ASMC) $(ASMFLAGS) $^ -f elf64 -o $@
+	$(ASMC) $(ASMFLAGS) $^ -f elf64 -o $(BUILDDIR)/$(notdir $@)
 
 link: $(OBJS)
-	$(LD) $(LDFLAGS) -o $(BUILDDIR)/kernel.elf $(OBJS)
+	$(LD) $(LDFLAGS) -o $(BUILDDIR)/../kernel.elf $(patsubst %, $(BUILDDIR)/%, $(notdir $(OBJS)))
 
 clean:
-	rm -f $(OBJS) $(BUILDDIR)/$(NAME).elf
+	rm -f $(BUILDDIR)/*.o $(BUILDDIR)/../$(NAME)
 
 # -ffreestanding
 #
