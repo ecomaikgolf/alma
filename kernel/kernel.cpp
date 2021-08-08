@@ -27,24 +27,16 @@ extern "C" void
 _start(BootArgs *args)
 {
     Renderer renderer(args->fb, args->font);
-    renderer.println("Kernel");
 
     if (args->map == NULL)
         return;
 
     allocator = PFA(args->map);
 
-    uint64_t _kernel_size  = &_kernel_end - &_kernel_start;
+    uint64_t _kernel_size  = (size_t)&_kernel_end - (size_t)&_kernel_start;
     uint64_t _kernel_pages = _kernel_size / UEFIMMap::page_size + 1;
 
     allocator.lock_pages(&_kernel_start, _kernel_pages);
-
-    char buffer[120];
-    // renderer.println("PAGES: ");
-    for (int i = 0; i < 10; i++) {
-        hstr((uint64_t)allocator.request_page(), buffer);
-        // renderer.println(buffer);
-    }
 
     PTM page_table;
 
@@ -61,12 +53,9 @@ _start(BootArgs *args)
         page_table.map(i, i);
     }
 
-    page_table.map(UINT64_MAX, fbbase);
-
 	asm("mov %0, %%cr3" : : "r"(page_table.get_PGDT()));
 
-	uint16_t *a = (uint16_t *)UINT64_MAX;
-	*a = 0x1231;
+	memset(args->fb->base, 0, args->fb->buffer_size);
 
     renderer.println("Print con memoria virtual");
 
