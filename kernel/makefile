@@ -1,6 +1,6 @@
 #
 CC=$(TOOLCHAINBIN)/x86_64-elf-g++
-CFLAGS= -ffreestanding -fno-stack-protector -fno-stack-check -Wall -Wextra -I$(INCDIR) -g
+CFLAGS= -std=c++20 -ffreestanding -fno-stack-protector -fno-stack-check -Wall -Wextra -I$(INCDIR) -g
 INCDIR=.
 LD=$(TOOLCHAINBIN)/x86_64-elf-ld
 LDFLAGS= -T kernel.ld -nostdlib -z max-page-size=0x1000
