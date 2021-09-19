@@ -6,7 +6,6 @@ project(os-dev)
 set(TOOLCHAINDIR "${CMAKE_CURRENT_SOURCE_DIR}/toolchain")
 set(TOOLCHAINBIN "${TOOLCHAINDIR}/build/toolchain/bin")
 
-# Required sowftware
-find_program(NASM nasm REQUIRED)
-
+set(EXECUTABLE_OUTPUT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build")
 add_subdirectory(kernel)
+add_subdirectory(bootloader)

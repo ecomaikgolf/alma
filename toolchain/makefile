@@ -32,8 +32,6 @@ BUILD_DIR_UEFI=$(BUILD_DIR)/uefi
 USE_GCC=1
 BUILD_DIR_POSIX_UEFI=$(BUILD_DIR)/posix-uefi
 
-
-
 ################################
 ##### MAKEFILE DO NOT TOUCH ####
 ################################
@@ -60,7 +58,7 @@ binutils-build:
 	cd binutils-gdb; \
 	mkdir build; \
 	cd build; \
-	../configure --target=$(TARGET_BINUTILS) --prefix="$(BUILD_DIR_TOOLCHAIN)" --with-sysroot --disable-nls --disable-werror; \
+	../configure --target=$(TARGET_BINUTILS) --enable-targets=all --prefix="$(BUILD_DIR_TOOLCHAIN)" --with-sysroot --disable-nls --disable-werror; \
 	make -j$(THREADS); \
 	make install;
 	
