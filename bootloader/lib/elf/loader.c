@@ -143,7 +143,6 @@ verify_elf_headers(const Elf64_Ehdr *const elf_header)
 void
 load_phdrs(const Elf64_Ehdr *const elf_header, const char *const memory)
 {
-    int i;
     for (int i = 0; i < elf_header->e_phnum; i++) {
         Elf64_Phdr *prog_hdr =
           (Elf64_Phdr *)(memory + elf_header->e_phoff + elf_header->e_phentsize * i);
