@@ -35,3 +35,13 @@ cmake -B build  # Generate makefiles
 make -C build   # Compile project
 make -C qemu-fs # Run
 ```
+
+## Tinker source code
+
+### Fix LSP
+
+To get your LSP working with the project get the `compile_commands.json` from 
+the build directory (build the project once).
+
+You should know what to do with it, if it's not the case, try copying it to the 
+project root directory.
