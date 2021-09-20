@@ -26,7 +26,7 @@ load_gop()
     efi_guid_t gop_guid = EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID;
     efi_status_t status = BS->LocateProtocol(&gop_guid, NULL, (void **)&gop);
 
-    if (status < 0) {
+    if (EFI_ERROR(status)) {
         error("unable to initialise GOP");
         return NULL;
     }

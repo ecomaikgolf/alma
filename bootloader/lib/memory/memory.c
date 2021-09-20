@@ -84,7 +84,7 @@ void
 print_memmap(const MapInfo *map)
 {
     uint8_t *start = (uint8_t *)map->map;
-    for (int i = 0; i < (map->map_size / map->descriptor_size); i++) {
+    for (uint64_t i = 0; i < (map->map_size / map->descriptor_size); i++) {
         efi_memory_descriptor_t *descriptor =
           (efi_memory_descriptor_t *)((uint64_t)start + (i * map->descriptor_size));
         debug("Type %s", desctypes[descriptor->Type]);
