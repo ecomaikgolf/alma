@@ -144,7 +144,7 @@ set_target_properties(bootloader PROPERTIES
 )
 
 # Custom linker script
-set_target_properties(kernel PROPERTIES 
+set_target_properties(bootloader PROPERTIES 
 	LINK_DEPENDS ${LINKER_SCRIPT}
 )
 
