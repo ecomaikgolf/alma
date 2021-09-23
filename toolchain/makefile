@@ -39,6 +39,8 @@ BUILD_DIR_POSIX_UEFI=$(BUILD_DIR)/posix-uefi
 .PHONY: all update edk2 binutils binutils-build gcc gcc-build posix-uefi posix-uefi-build clean debug
 
 all: update edk2 binutils gcc posix-uefi
+skip_edk2: update binutils gcc posix-uefi
+
 edk2: update $(BUILD_DIR_UEFI)/bios.bin
 binutils: update binutils-build
 gcc: update gcc-build
