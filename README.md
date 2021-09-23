@@ -6,6 +6,14 @@
 
 > Note: It's a hard task to get a bulletproof script/makefile to compile the entire toolchain so I apply the "it works on my machine" law.
 
+Expected `toolchain/` size:
+ 
+* 12G with compiled **binaries** and **sources**
+* 3.8G with compiled **binaries**
+	* removed `toolchain/gcc`
+	* removed `toolchain/binutils-gdb`
+	* removed `toolchain/edk2`
+
 Install the following packages from your package manager of choice:
 
 * nasm
