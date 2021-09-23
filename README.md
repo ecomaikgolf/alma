@@ -12,9 +12,10 @@ Install the following packages from your package manager of choice:
 * qemu
 * qemu-arch-extra
 * acpica (`iasl` tool)
+* gcc-5 (you can skip it, read below)
 * cmake
 * make
-* gcc-5 (you can skip it, read below)
+* gcc (**warning**: i've encountered problems using other compilers like `tcc`)
 
 Then,
 
