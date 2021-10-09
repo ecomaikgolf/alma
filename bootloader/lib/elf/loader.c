@@ -20,7 +20,7 @@ const int NUM_CHECKS = 5;
 
 // clang-format off
 /** Info check messages */
-char verifymessages[][60] = {
+static char verifymessages[][60] = {
     "ELF magic number is correct\0",
     "ELF is a executable object",
     "ELF target arch is x86_64",
@@ -29,7 +29,7 @@ char verifymessages[][60] = {
 };
 
 /** Error check messages */
-char errormessages[][60] = {
+static char errormessages[][60] = {
     "ELF magic number is incorrect\0",
 	"ELF is not a executable object",
     "ELF target arch is not x86_64",
@@ -48,7 +48,7 @@ load_elf(const char *const filename)
 {
     char *memory = (char *)load_file(filename);
 
-    if(memory == NULL)
+    if (memory == NULL)
         return NULL;
 
     Elf64_Ehdr *header = get_elf_header(memory);
