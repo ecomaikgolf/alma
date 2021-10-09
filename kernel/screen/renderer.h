@@ -40,3 +40,5 @@ class Renderer
     /** color of next glyph */
     Color color;
 };
+
+extern Renderer *screen;

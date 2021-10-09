@@ -6,6 +6,8 @@
 
 #include "renderer.h"
 
+Renderer *screen;
+
 /**
  * Renderer constructor
  *
