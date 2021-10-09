@@ -1,2 +1,16 @@
-./bootloader/edk2
-./bootloader/posix-uefi
+# Toolchain
+toolchain/build
+toolchain/binutils-gdb
+toolchain/edk2
+toolchain/gcc
+toolchain/posix-uefi
+
+# Clang
+.cache
+compile_commands.json
+
+# Build files
+build
+*.elf
+*.efi
+*.o
