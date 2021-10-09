@@ -7,4 +7,4 @@ run:
 	qemu-system-x86_64 $(QEMUPARAMS)
 
 debug:
-	qemu-system-x86_64 -s -S $(QEMUPARAMS)
+	qemu-system-x86_64 -s -S $(QEMUPARAMS) #-serial stdio > log.txt
