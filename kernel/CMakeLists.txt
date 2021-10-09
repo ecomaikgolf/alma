@@ -28,12 +28,16 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-stack-check")     # Disable stack c
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")            # Disable C++ run-time type information
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions") 	   # Disable exceptions
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -nostdlib") 		   # Disable std lib
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mno-red-zone") 		   # Disable std lib
 
 # Extra compiler options
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wextra")
 
-# Set minimum CXX standard 
+# Special compile options for interrupts
+
+
+# Set minimum CXX standard
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
@@ -109,6 +113,12 @@ set(LIBSTDCXX_SOURCES
 	libstdc++/bitset.cpp
 )
 
+# interrupt sources
+set(INTERRUPT_SOURCES
+	interrupts/IDT.cpp
+	interrupts/page_fault.cpp
+)
+
 # kernel sources
 set(KERNEL_SOURCES
 	paging/PFA.cpp
@@ -116,6 +126,7 @@ set(KERNEL_SOURCES
 	screen/renderer.cpp
 	uefi/memory_map.cpp
 	segmentation/gdt.asm
+	${INTERRUPT_SOURCES}
 	kernel.cpp
 )
 
@@ -129,6 +140,8 @@ set(SOURCES
 ###############
 # Compilation #
 ###############
+
+set_source_files_properties(${INTERRUPT_SOURCES} PROPERTIES COMPILE_FLAGS "-mno-red-zone -mgeneral-regs-only -ffreestanding")
 
 # Final executable
 add_executable(kernel ${SOURCES})

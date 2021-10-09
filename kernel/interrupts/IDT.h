@@ -5,15 +5,29 @@
  */
 
 #pragma once
+#include "uefi/memory_map.h"
 #include <stdint.h>
 
 namespace interrupts {
 
 enum class gate_e
 {
-    interrupt = 0xe,
-    trap      = 0xf,
-    task      = 0x5,
+    task       = 0x5,
+    interrupt  = 0xf,
+    trap       = 0x7,
+    interrupt2 = 0xe,
+    trap2      = 0xf,
+};
+
+enum class status_e
+{
+    enabled  = 0x80,
+    disabled = 0x0,
+};
+
+enum class vector_e
+{
+    page_fault = 0x8,
 };
 
 /**
@@ -34,13 +48,14 @@ struct idt_ptr
 struct idt_entry
 {
     uint16_t offset_low;
-    uint16_t segment;
-    uint16_t bits;
+    uint16_t vector;
+    uint8_t ist;
+    uint8_t type_attr;
     uint16_t offset_middle;
     uint32_t offset_high;
     uint32_t reserved;
-    idt_entry(uint64_t, uint16_t, uint16_t);
     uint64_t get_offset();
+    void set_offset(uint64_t);
 } __attribute__((packed));
 
 namespace helper {
