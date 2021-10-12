@@ -11,7 +11,7 @@
  *
  * @see https://en.wikipedia.org/wiki/Web_colors
  */
-enum class Color
+enum class color_e
 {
     WHITE   = 0xFFFFFF,
     SILVER  = 0xC0C0C0,

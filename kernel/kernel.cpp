@@ -11,12 +11,18 @@
 #include "libc/stdlib.h"
 #include "paging/PFA.h"
 #include "paging/PTM.h"
+#include "screen/fonts/psf1.h"
 #include "screen/framebuffer.h"
 #include "screen/renderer.h"
 #include "segmentation/gdt.h"
 #include <stddef.h>
 #include <stdint.h>
 
+/**
+ * Size of the kernel
+ *
+ * Values set by the linker script
+ */
 extern uint64_t _kernel_start;
 extern uint64_t _kernel_end;
 
@@ -28,8 +34,7 @@ extern "C" [[noreturn]] void
 _start(BootArgs *args)
 {
     /* Main screen renderer */
-    Renderer aux(args->fb, args->font);
-    screen = &aux;
+    screen::psf1_renderer aux(args->fb, args->font);
 
     /* Global descriptor table */
     gdt_ptr gdt;
@@ -71,7 +76,7 @@ _start(BootArgs *args)
     /* Clean the screen */
     memset(args->fb->base, 0, args->fb->buffer_size);
 
-    screen->println("Hello from the kernel.");
+    aux.println("Hello from the kernel.");
 
     interrupts::idt_ptr idtr;
     interrupts::idt_entry *pagefault =

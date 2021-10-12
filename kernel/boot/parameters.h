@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "screen/font.h"
+#include "screen/fonts/psf1.h"
 #include "screen/framebuffer.h"
 #include "uefi/memory_map.h"
 
@@ -15,7 +15,7 @@
  */
 struct BootArgs
 {
-    Framebuffer *fb;
-    PSF1_Font *font;
+    screen::framebuffer *fb;
+    screen::fonts::psf1 *font;
     UEFIMMap::Map *map;
 };

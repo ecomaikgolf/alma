@@ -7,38 +7,36 @@
 #pragma once
 
 #include "colors.h"
-#include "font.h"
 #include "framebuffer.h"
 
+namespace screen {
+
 /**
- * Simple output to the screen
+ * Interface to output to the screen
  */
-class Renderer
+class renderer_i
 {
   public:
-    Renderer(Framebuffer *,
-             PSF1_Font *,
-             unsigned int x_offset = 0,
-             unsigned int y_offset = 0,
-             Color color           = Color::WHITE);
-
+    renderer_i() = default;
     void println(const char *);
     void print(const char *);
-    void draw(const char);
+    virtual void draw(const char) = 0;
     void put(const char);
-    void setColor(Color);
+    void setColor(color_e);
 
-  private:
+  protected:
     /** Framebuffer to use */
-    Framebuffer *fb;
-    /** PSF1 font to use */
-    PSF1_Font *font;
+    framebuffer *fb;
     /** x PIXEL offset of next glyph */
     unsigned int x_offset;
     /** y PIXEL offset of next glyph */
     unsigned int y_offset;
+    /** renderer glyph x size */
+    virtual unsigned int glyph_x() = 0;
+    /** renderer glyph y size */
+    virtual unsigned int glyph_y() = 0;
     /** color of next glyph */
-    Color color;
+    color_e color;
 };
 
-extern Renderer *screen;
+} // namespace screen

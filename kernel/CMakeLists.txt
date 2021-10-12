@@ -34,9 +34,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -nostdlib") 		   # Disable std lib
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wextra")
 
-# Special compile options for interrupts
-
-
 # Set minimum CXX standard
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -124,6 +121,7 @@ set(KERNEL_SOURCES
 	paging/PFA.cpp
 	paging/PTM.cpp
 	screen/renderer.cpp
+	screen/fonts/psf1.cpp
 	uefi/memory_map.cpp
 	segmentation/gdt.asm
 	${INTERRUPT_SOURCES}
@@ -141,6 +139,7 @@ set(SOURCES
 # Compilation #
 ###############
 
+# Special compile options for interrupts
 set_source_files_properties(${INTERRUPT_SOURCES} PROPERTIES COMPILE_FLAGS "-mno-red-zone -mgeneral-regs-only -ffreestanding")
 
 # Final executable

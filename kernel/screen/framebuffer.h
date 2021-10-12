@@ -6,12 +6,14 @@
 
 #pragma once
 
+namespace screen {
+
 /**
  * Framebuffer struct
  *
  * Wrapper of the GOP to print to the screen
  */
-struct Framebuffer
+struct framebuffer
 {
     unsigned int *base;
     unsigned long long buffer_size;
@@ -19,3 +21,5 @@ struct Framebuffer
     unsigned int height;
     unsigned int ppscl;
 };
+
+} // namespace screen
