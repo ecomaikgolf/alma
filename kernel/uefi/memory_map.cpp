@@ -44,7 +44,7 @@ static size_t memsize = 0;
 size_t
 get_memsize(const UEFIMMap::Map *map)
 {
-    if (map == NULL)
+    if (map == nullptr)
         return 0;
 
     if (UEFIMMap::memsize > 0)
