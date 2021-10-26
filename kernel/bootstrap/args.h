@@ -10,12 +10,16 @@
 #include "screen/framebuffer.h"
 #include "uefi/memory_map.h"
 
+namespace bootstrap {
+
 /**
  * Struct to be received from the bootloader
  */
-struct BootArgs
+struct bootloader_args
 {
     screen::framebuffer *fb;
     screen::fonts::psf1 *font;
     UEFIMMap::Map *map;
 };
+
+} // namespace bootstrap
