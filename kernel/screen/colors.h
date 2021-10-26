@@ -6,6 +6,8 @@
 
 #pragma once
 
+namespace screen {
+
 /**
  * Color enum. Colors are hex values
  *
@@ -30,3 +32,5 @@ enum class color_e
     FUCHSIA = 0xFF00FF,
     PURPLE  = 0x800080,
 };
+
+} // namespace screen

@@ -4,23 +4,11 @@
  * @author Ernesto Martínez García <me@ecomaikgolf.com>
  */
 
-#include "renderer.h"
+#include "screen/renderer.h"
 
 // screen::renderer_i *global;
 
 namespace screen {
-
-/**
- * Draw virtual definition
- *
- * Not meant to be used, just specifies the interface to use
- * Compiler error if removed
- *
- * @param character to draw
- */
-// void
-// renderer_i::draw(char)
-//{}
 
 /**
  * Draw a character to the screen
