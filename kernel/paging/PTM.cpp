@@ -7,8 +7,12 @@
  * @author Ernesto Martínez García <me@ecomaikgolf.com>
  */
 
-#include "PTM.h"
-#include "PFA.h"
+#include "paging/PTM.h"
+#include "paging/PFA.h"
+
+namespace paging {
+
+namespace translator {
 
 /**
  * Page table manager constructor
@@ -17,7 +21,7 @@
  */
 PTM::PTM()
 {
-    memset(this->get_PGDT(), 0, UEFIMMap::page_size);
+    memset(this->get_PGDT(), 0, uefi::page_size);
 }
 
 /**
@@ -52,7 +56,7 @@ PTM::map(uint64_t virt, uint64_t phys)
     page_upper_dir_entry_t *PUDT;
     if (!PGD->present) {
         PUDT = (page_upper_dir_entry_t *)allocator.request_page();
-        memset(PUDT, 0, UEFIMMap::page_size);
+        memset(PUDT, 0, uefi::page_size);
         PGD->page_ppn    = (uint64_t)PUDT >> 12;
         PGD->present     = true;
         PGD->writeable   = true;
@@ -68,7 +72,7 @@ PTM::map(uint64_t virt, uint64_t phys)
     page_mid_dir_entry_t *PMDT;
     if (!PUD->present) {
         PMDT = (page_mid_dir_entry_t *)allocator.request_page();
-        memset(PMDT, 0, UEFIMMap::page_size);
+        memset(PMDT, 0, uefi::page_size);
         PUD->page_ppn    = (uint64_t)PMDT >> 12;
         PUD->present     = true;
         PUD->writeable   = true;
@@ -84,7 +88,7 @@ PTM::map(uint64_t virt, uint64_t phys)
     page_table_entry_t *PTDT;
     if (!PMD->present) {
         PTDT = (page_table_entry_t *)allocator.request_page();
-        memset(PTDT, 0, UEFIMMap::page_size);
+        memset(PTDT, 0, uefi::page_size);
         PMD->page_ppn    = (uint64_t)PTDT >> 12;
         PMD->present     = true;
         PMD->writeable   = true;
@@ -102,3 +106,6 @@ PTM::map(uint64_t virt, uint64_t phys)
     PTD->writeable   = true;
     PTD->user_access = true;
 }
+
+} // namespace translator
+} // namespace paging

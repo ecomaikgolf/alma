@@ -7,9 +7,13 @@
 #pragma once
 
 #include "libstdc++/bitset.h"
-#include "uefi/memory_map.h"
+#include "uefi/memory.h"
 #include <stddef.h>
 #include <stdint.h>
+
+namespace paging {
+
+namespace allocator {
 
 /**
  * Page Frame Allocator class
@@ -23,7 +27,7 @@
 class PFA
 {
   public:
-    PFA(const UEFIMMap::Map *);
+    PFA(const uefi::memory::map *);
     void free_page(void *);
     void free_pages(void *, uint64_t);
     void lock_page(void *);
@@ -55,10 +59,13 @@ class PFA
     void release_page(void *);
     void release_pages(void *, uint64_t);
     void zero_bitset();
-    efi_memory_descriptor_t *get_largest_segment(const UEFIMMap::Map *);
+    uefi::memory::efi_memory_descriptor_t *get_largest_segment(const uefi::memory::map *);
     size_t free_mem;
     size_t reserved_mem;
     size_t used_mem;
 };
 
 extern PFA allocator;
+
+} // namespace allocator
+} // namespace paging
