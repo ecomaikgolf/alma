@@ -6,7 +6,7 @@
  * @author Ernesto Martínez García <me@ecomaikgolf.com>
  */
 
-#include "memory.h"
+#include "uefi/memory.h"
 #include <stddef.h>
 #include <stdint.h>
 
