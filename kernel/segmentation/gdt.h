@@ -16,8 +16,10 @@
 
 #pragma once
 
-#include "../uefi/memory_map.h"
+#include "uefi/memory.h"
 #include <stdint.h>
+
+namespace segmentation {
 
 /**
  * GDT table entry
@@ -78,7 +80,7 @@ struct gdt_ptr
  * We deal with the GDT for ring sizes and Interrupt Descriptor Tables (segmentation has been
  * replaced (for memory control) with paging)
  */
-__attribute__((aligned(UEFIMMap::page_size))) 
+__attribute__((aligned(uefi::page_size)))
 const gdt_entry table[] = { 
 	/** Kernel null descriptor */
 	{ 0, 0, 0, 0, 0, 0 },
@@ -161,3 +163,5 @@ const gdt_entry table[] = {
  * @see gdm.asm
  */
 extern "C" void load_gdt(gdt_ptr*);
+
+}
