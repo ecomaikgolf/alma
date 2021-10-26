@@ -13,8 +13,11 @@
 
 namespace uefi {
 
-/** Size of a page in bytes */
-const size_t page_size = 4096;
+/**
+ * Size of a page in bytes
+ * Up to 32.767 bytes due to uint16_t
+ */
+const uint16_t page_size = 4096;
 
 namespace memory {
 
