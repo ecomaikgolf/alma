@@ -14,6 +14,11 @@ if(CCACHE_FOUND)
     set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
 endif(CCACHE_FOUND)
 
+# no debug build check
+if(CMAKE_BUILD_TYPE MATCHES "Debug")
+	message(AUTHOR_WARNING "README!!! cmake debug builds are known to break the kernel, if you want to debug plesase use -g manually")
+endif(CMAKE_BUILD_TYPE MATCHES "Debug")
+
 #############
 # Toolchain #
 #############
@@ -34,7 +39,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-stack-check")     # Disable stack c
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")            # Disable C++ run-time type information
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions") 	   # Disable exceptions
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -nostdlib") 		   # Disable std lib
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mno-red-zone") 		   # Disable std lib
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mno-red-zone") 	   # Disable red zone
 
 # Extra compiler options
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
