@@ -14,9 +14,6 @@ namespace allocator {
 
 using namespace uefi::memory;
 
-/* Uninitalised hotxix */
-PFA allocator((map *)0x0);
-
 /**
  * Page Frame Allocator constructor
  *

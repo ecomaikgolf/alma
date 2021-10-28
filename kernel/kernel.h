@@ -16,9 +16,10 @@ extern uint64_t _kernel_end;
 
 namespace kernel {
 
-extern paging::allocator::PFA allocator;
-extern paging::translator::PTM translator;
-extern screen::psf1_renderer tty;
-extern segmentation::gdt_ptr gdt;
+static paging::allocator::PFA *allocator;
+static paging::translator::PTM *translator;
+static screen::psf1_renderer *tty;
+static segmentation::gdt_ptr *gdt;
+const auto page_size = uefi::page_size;
 
 } // namespace kernel

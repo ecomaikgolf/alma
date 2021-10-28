@@ -65,7 +65,5 @@ class PFA
     size_t used_mem;
 };
 
-extern PFA allocator;
-
 } // namespace allocator
 } // namespace paging

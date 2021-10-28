@@ -8,6 +8,7 @@
  */
 
 #include "paging/PTM.h"
+#include "kernel.h"
 #include "paging/PFA.h"
 
 namespace paging {
@@ -55,7 +56,7 @@ PTM::map(uint64_t virt, uint64_t phys)
     /** Get the page upper dir table from the PGD or create & link a new one if needed */
     page_upper_dir_entry_t *PUDT;
     if (!PGD->present) {
-        PUDT = (page_upper_dir_entry_t *)allocator.request_page();
+        PUDT = (page_upper_dir_entry_t *)kernel::allocator->request_page();
         memset(PUDT, 0, uefi::page_size);
         PGD->page_ppn    = (uint64_t)PUDT >> 12;
         PGD->present     = true;
@@ -71,7 +72,7 @@ PTM::map(uint64_t virt, uint64_t phys)
     /** Get the page mid dir table from the PUD or create & link a new one if needed */
     page_mid_dir_entry_t *PMDT;
     if (!PUD->present) {
-        PMDT = (page_mid_dir_entry_t *)allocator.request_page();
+        PMDT = (page_mid_dir_entry_t *)kernel::allocator->request_page();
         memset(PMDT, 0, uefi::page_size);
         PUD->page_ppn    = (uint64_t)PMDT >> 12;
         PUD->present     = true;
@@ -87,7 +88,7 @@ PTM::map(uint64_t virt, uint64_t phys)
     /** Get the page table dir table from the PMD or create & link a new one if needed */
     page_table_entry_t *PTDT;
     if (!PMD->present) {
-        PTDT = (page_table_entry_t *)allocator.request_page();
+        PTDT = (page_table_entry_t *)kernel::allocator->request_page();
         memset(PTDT, 0, uefi::page_size);
         PMD->page_ppn    = (uint64_t)PTDT >> 12;
         PMD->present     = true;
