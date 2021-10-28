@@ -8,6 +8,12 @@ project(os-dev-kernel CXX ASM_NASM)
 # nasm is required to build the kernel
 find_program(NASM nasm REQUIRED)
 
+# enable ccache
+find_program(CCACHE_FOUND ccache)
+if(CCACHE_FOUND)
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
+endif(CCACHE_FOUND)
+
 #############
 # Toolchain #
 #############

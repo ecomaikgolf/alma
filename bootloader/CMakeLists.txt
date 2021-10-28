@@ -11,6 +11,12 @@ project(os-dev-bootloader C)
 # posix-uefi needed compilation files
 set(POSIXUEFI_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../toolchain/posix-uefi/uefi")
 
+# enable ccache
+find_program(CCACHE_FOUND ccache)
+if(CCACHE_FOUND)
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
+endif(CCACHE_FOUND)
+
 #############
 # Toolchain #
 #############
