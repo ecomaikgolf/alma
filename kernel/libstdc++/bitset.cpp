@@ -8,7 +8,7 @@
 
 #include "bitset.h"
 
-using namespace std;
+namespace std {
 
 /**
  * Return the bit value of index 'index'
@@ -60,3 +60,5 @@ bitset::unset(size_t index)
 
     *(buffer + byte) = newvalue;
 }
+
+} // namespace std
