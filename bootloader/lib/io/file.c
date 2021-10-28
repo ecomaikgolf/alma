@@ -73,7 +73,7 @@ load_file(const char *filename)
     fread((void *)memory, size, 1, file);
     info("copied %s contents to memory 0x%p (%d bytes)", filename, memory, size);
 
-    // fclose(file);
+    fclose(file);
     info("closed %s", filename);
 
     return memory;
