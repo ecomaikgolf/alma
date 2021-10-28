@@ -4,20 +4,22 @@
  * @author Ernesto Martínez García <me@ecomaikgolf.com>
  */
 
-#include "IDT.h"
+#include "interrupts/IDT.h"
+#include "kernel.h"
 #include "paging/PFA.h"
 #include "screen/renderer.h"
+#include "uefi/memory.h"
 
 namespace interrupts {
 
 idt_ptr::idt_ptr()
   : lenght(0x0fff)
-  , ptr((uint64_t)allocator.request_page())
+  , ptr((uint64_t)kernel::allocator.request_page())
 {}
 
 idt_ptr::~idt_ptr()
 {
-    allocator.free_page((void *)this->ptr);
+    kernel::allocator.free_page((void *)this->ptr);
 }
 
 void

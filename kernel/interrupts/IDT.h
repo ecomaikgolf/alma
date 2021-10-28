@@ -5,7 +5,6 @@
  */
 
 #pragma once
-#include "uefi/memory_map.h"
 #include <stdint.h>
 
 namespace interrupts {
