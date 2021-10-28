@@ -11,46 +11,11 @@
 
 #include "address.h"
 #include "libc/string.h"
-#include "pagetables.h"
 #include "uefi/memory.h"
 
 namespace paging {
 
 namespace translator {
-
-/**
- * Trick to have the PGDT page aligned
- *
- * The CPU expects it to be page aligned, i've spent hours debugging why the PTM doesn't works and
- * it was because PGDT wasn't page aligned
- */
-struct PGDT_wrapper
-{
-    page_global_dir_entry_t PGDT[512];
-} __attribute__((aligned(uefi::page_size)));
-
-/**
- * Page table Manager
- */
-class PTM
-{
-  public:
-    PTM();
-    void map(uint64_t, uint64_t);
-    static void parse(uint64_t, address_t *);
-    static const uint16_t page_size = 512;
-
-    /**
-     * Returns the PGDT (PML4 table)
-     */
-    page_global_dir_entry_t *get_PGDT()
-    {
-        return this->PGD_table.PGDT;
-    }
-
-  private:
-    PGDT_wrapper PGD_table;
-};
 
 /**
  * @defgroup tablestruct Page Table structures
@@ -146,6 +111,40 @@ struct page_table_entry_t
     uint64_t execution_disabled : 1;
 } __attribute__((__packed__));
 /** @} */ // end of tablestruct
+
+/**
+ * Trick to have the PGDT page aligned
+ *
+ * The CPU expects it to be page aligned, i've spent hours debugging why the PTM doesn't works and
+ * it was because PGDT wasn't page aligned
+ */
+struct PGDT_wrapper
+{
+    page_global_dir_entry_t PGDT[512];
+} __attribute__((aligned(uefi::page_size)));
+
+/**
+ * Page table Manager
+ */
+class PTM
+{
+  public:
+    PTM();
+    void map(uint64_t, uint64_t);
+    static void parse(uint64_t, address_t *);
+    static const uint16_t page_size = 512;
+
+    /**
+     * Returns the PGDT (PML4 table)
+     */
+    page_global_dir_entry_t *get_PGDT()
+    {
+        return this->PGD_table.PGDT;
+    }
+
+  private:
+    PGDT_wrapper PGD_table;
+};
 
 } // namespace translator
 
