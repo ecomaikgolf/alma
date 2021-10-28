@@ -8,18 +8,18 @@
 
 #include "screen/fonts/psf1.h"
 #include "screen/framebuffer.h"
-#include "uefi/memory_map.h"
+#include "uefi/memory.h"
 
 namespace bootstrap {
 
 /**
  * Struct to be received from the bootloader
  */
-struct bootloader_args
+struct boot_args
 {
     screen::framebuffer *fb;
     screen::fonts::psf1 *font;
-    UEFIMMap::Map *map;
+    uefi::memory::map *map;
 };
 
 } // namespace bootstrap
