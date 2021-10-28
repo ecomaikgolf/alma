@@ -128,7 +128,7 @@ set(KERNEL_SOURCES
 	paging/PTM.cpp
 	screen/renderer.cpp
 	screen/fonts/psf1.cpp
-	uefi/memory_map.cpp
+	uefi/memory.cpp
 	segmentation/gdt.asm
 	${INTERRUPT_SOURCES}
 	kernel.cpp
