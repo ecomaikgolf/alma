@@ -1,64 +1,134 @@
-# os-dev
+<p align="center">
+  <img width="300" height="100" src="https://ls.ecomaikgolf.com/alma/logo.png">
+</p>
 
-## Build from source
+<p align="center">
+  <i>alma is an toy kernel written in C/C++ for x86_64 machines with the mere purpose of learning OS development</i>
+</p>
 
-### Install toolchain dependencies
+# alma
 
-> Note: It's a hard task to get a bulletproof script/makefile to compile the entire toolchain so I apply the "it works on my machine" law.
+> 6. f. Sustancia o parte principal de cualquier cosa.
 
-Expected `toolchain/` size:
- 
-* 12G with compiled **binaries** and **sources**
-* 3.8G with compiled **binaries**
-	* removed `toolchain/gcc`
-	* removed `toolchain/binutils-gdb`
-	* removed `toolchain/edk2`
+## Features
 
-Install the following packages from your package manager of choice:
+- structured project
+	- simple cmake builds
+	- `cmake -B build; cmake --build build` to compile
+	- `make -C qemu-fs` to run
+		- documented (bachelor's final project)
+	- out of source build
+	- build releases (no need to compile from source)
+		- more or less sane git commits
+	- toolchain compilation
+		- `make -C toolchain`
+		- git submodules
+- toolchain
+	- single script install (tested on archlinux)
+	- compile from source
+		- binutils
+		- gcc
+			- disable red zone patch
+			- only c/c++ compiler
+			- without standard/runtime headers
+			- x86_64-elf target
+		- edk2 ovmf
+			- proper compilation with gcc5
+			- release build
+		- posix-uefi libs
+- uefi shell
+	- bootloader run script
+- bootloader
+	- C + posix-uefi
+		- commented code (doxygen)
+		- compilation independent from posix-uefi's makefile (cmake)
+	- loads kernel
+	- parses and verifies (some) ELF headers
+	- graphics output protocol from UEFI
+	- framebuffer
+	- uefi memory map
+	- PSF1 fonts
+	- exit UEFI boot services
+	- jumps to kernel
+- kernel
+	- C++/NASM-ASM
+		- commented code (doxygen)
+		- structured (folders and namespaces)
+	- screen/tty
+		- print pixels
+		- print letters with a PSF1 font
+		- colors
+		- printf
+	- pagination
+		- page frame allocator
+			- request, reserve, lock... pages (bitset)
+		- virtual memory
+			- CPU's MMU virt-phys translation
+			- 512-ary tree (4 levels)
+	- segmentation
+		- dummy global descriptor table (I use paging)
+	- interrupts
+		- interrupt descriptor table
+		- register (vector, interrupt routine)
+		- call interrupt routines on interrupts
 
-* nasm
-* qemu
-* qemu-arch-extra
-* acpica (`iasl` tool)
-* gcc-5 (you can skip it, read below)
-* cmake
-* make
-* gcc (**warning**: i've encountered problems using other compilers like `tcc`)
+## Run
 
-Then,
+0. Install `qemu-system-x86_64` binary (usually `qemu` + `qemu-arch-extra`)
+1. Find build to test https://ls.ecomaikgolf.com/alma/builds/
+2. Download a build with wget:
 
-to compile the entire toolchain:
 ```bash
-make -C toolchain
+wget https://ls.ecomaikgolf.com/alma/builds/20211012-e906c4c.tar.gz # <-- Change build version!
+tar xf 20211012-e906c4c.tar.gz
+cd 20211012-e906c4c
 ```
 
-to skip "uefi" build and consecuently don't having to install gcc-5 dependency:
-```bash
-make -C toolchain skip_edk2
-wget -P toolchain/build/uefi https://ecomaikgolf.com/assets/bios.bin
-```
-
-Compiles:
-
-* binutils
-* edk2 (depends)
-* gcc (x86_64-elf target)
-* posix-uefi
-
-### Run the project
+3. Download precompiled edk2 Ovmf UEFI
 
 ```bash
-cmake -B build  # Generate makefiles
-make -C build   # Compile project
-make -C qemu-fs # Run
+wget https://ls.ecomaikgolf.com/alma/builds/bios.bin
 ```
 
-## Tinker source code
+4. Run
 
-### Fix LSP
+```bash
+make
+```
 
-To get your LSP working with the project get the `compile_commands.json` from 
-the build directory (build the project at least once).
+## Tinker
 
-You should know what to do with it, if it's not the case, try copying it to the 
-project root directory.
+`TODO`
+
+## Contributing
+
+Just_Fork_It™
+
+However i'm not looking for contributors, this project is just for learning 
+purposes.
+
+To see how to work with the source code read the section "Tinker"
+
+## Bugs
+
+Explain them to me please: `me@ecomaikgolf.com`
+
+## Bibliography
+
+* https://wiki.osdev.org/Main_Page
+* https://youtu.be/NpcGMuI7hxk
+* https://0xax.gitbooks.io/linux-insides/content/Interrupts/
+* https://youtu.be/mpPbKEeWIHU
+* https://www.iaik.tugraz.at/teaching/materials/os/tutorials/paging-on-intel-x86-64/
+* https://git.musl-libc.org/cgit/musl/tree
+
+_The list would be longer but I can't list each site where I read something. This list is a good place to start_
+
+## Author
+
+Ernesto Martínez García
+* me@ecomaikgolf.com _(C79F 01CE 017F 57A4 FBBB 4E22 33DD FB0A EB94 20CB)_
+* emg162@alu.ua.es 
+  [[verify](https://github.com/leereilly/swot/blob/master/lib/domains/es/ua.txt)]
+* https://ecomaikgolf.com/
+* https://twitter.com/ecomaikgolf
