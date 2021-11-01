@@ -14,6 +14,20 @@ namespace allocator {
 
 using namespace uefi::memory;
 
+PFA::PFA()
+  : free_mem(0)
+  , reserved_mem(0)
+  , used_mem(0){};
+
+void
+PFA::operator=(PFA &&rvalue)
+{
+    this->free_mem     = rvalue.get_free_mem();
+    this->reserved_mem = rvalue.get_reserved_mem();
+    this->used_mem     = rvalue.get_used_mem();
+    this->page         = static_cast<std::bitset &&>(rvalue.page);
+}
+
 /**
  * Page Frame Allocator constructor
  *

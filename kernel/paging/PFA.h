@@ -28,6 +28,8 @@ class PFA
 {
   public:
     PFA(const uefi::memory::map *);
+    PFA();
+    void operator=(PFA &&);
     void free_page(void *);
     void free_pages(void *, uint64_t);
     void lock_page(void *);

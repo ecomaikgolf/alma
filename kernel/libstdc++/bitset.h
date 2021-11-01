@@ -28,6 +28,8 @@ class bitset
     uint8_t *buffer;
 
   public:
+    bitset();
+    void operator=(bitset &&);
     bool operator[](size_t);
     void set(size_t);
     void unset(size_t);

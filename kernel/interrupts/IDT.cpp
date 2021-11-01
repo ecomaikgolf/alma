@@ -14,12 +14,12 @@ namespace interrupts {
 
 idt_ptr::idt_ptr()
   : lenght(0x0fff)
-  , ptr((uint64_t)kernel::allocator->request_page())
+  , ptr((uint64_t)kernel::allocator.request_page())
 {}
 
 idt_ptr::~idt_ptr()
 {
-    kernel::allocator->free_page((void *)this->ptr);
+    kernel::allocator.free_page((void *)this->ptr);
 }
 
 void

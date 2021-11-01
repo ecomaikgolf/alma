@@ -10,6 +10,18 @@
 
 namespace std {
 
+bitset::bitset()
+  : size(0)
+  , buffer(nullptr)
+{}
+
+void
+bitset::operator=(bitset &&rvalue)
+{
+    this->size   = rvalue.get_size();
+    this->buffer = rvalue.buffer;
+}
+
 /**
  * Return the bit value of index 'index'
  *
