@@ -1,10 +1,8 @@
 /**
- * Argument struct to be received from the bootloader
+ * Startup functions of the kernel
  *
  * @author Ernesto Martínez García <me@ecomaikgolf.com>
  */
-
-#pragma once
 
 #include "screen/fonts/psf1.h"
 #include "screen/framebuffer.h"
@@ -21,5 +19,7 @@ struct boot_args
     screen::fonts::psf1 *font;
     uefi::memory::map *map;
 };
+
+void allocator(uefi::memory::map *);
 
 } // namespace bootstrap

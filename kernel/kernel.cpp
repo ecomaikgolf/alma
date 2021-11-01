@@ -5,7 +5,7 @@
  */
 
 #include "kernel.h"
-#include "bootstrap/args.h"
+#include "bootstrap/startup.h"
 #include "float.h"
 #include "interrupts/IDT.h"
 #include "interrupts/interrupts.h"
@@ -50,7 +50,7 @@ _start(bootstrap::boot_args *args)
     }
 
     /* Memory allocator */
-    kernel::allocator = paging::allocator::PFA(args->map);
+    bootstrap::allocator(args->map);
 
     // kernel::allocator = paging::allocator::PFA(args->map);
 
@@ -85,7 +85,7 @@ _start(bootstrap::boot_args *args)
     /* Clean the screen */
     memset(args->fb->base, 0, args->fb->buffer_size);
 
-    aux.println("Hello from the kernel. WTF");
+    aux.println("Hello from the kernel");
 
     interrupts::idt_ptr idtr;
     interrupts::idt_entry *pagefault =

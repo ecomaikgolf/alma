@@ -40,6 +40,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")            # Disable C++ run
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions") 	   # Disable exceptions
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -nostdlib") 		   # Disable std lib
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mno-red-zone") 	   # Disable red zone
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g") 	   			   # Debug builds
 
 # Extra compiler options
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
@@ -129,6 +130,7 @@ set(INTERRUPT_SOURCES
 
 # kernel sources
 set(KERNEL_SOURCES
+	bootstrap/allocator.cpp
 	paging/PFA.cpp
 	paging/PTM.cpp
 	screen/renderer.cpp
