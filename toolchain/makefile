@@ -2,6 +2,8 @@
 ##### Configure ####
 ####################
 
+SHELL := /bin/bash
+
 ###########
 # General #
 ###########
@@ -22,7 +24,7 @@ PLATFORM_NAME=OvmfX64
 TARGET_EDK2=RELEASE
 ARCH=X64
 TOOLCHAIN=GCC5
-COMPILER_EDK2=gcc-5
+COMPILER_EDK2=gcc
 BIOS_FILE=bios.bin
 BUILD_DIR_UEFI=$(BUILD_DIR)/uefi
 
@@ -60,7 +62,7 @@ binutils-build:
 	cd binutils-gdb; \
 	mkdir build; \
 	cd build; \
-	../configure --target=$(TARGET_BINUTILS) --enable-targets=all --prefix="$(BUILD_DIR_TOOLCHAIN)" --with-sysroot --disable-nls --disable-werror; \
+	../configure --target=$(TARGET_BINUTILS) --disable-gdb --disable-libdecnumber --disable-readline --disable-sim --prefix="$(BUILD_DIR_TOOLCHAIN)" --with-sysroot --disable-nls --disable-werror; \
 	make -j$(THREADS); \
 	make install;
 	
