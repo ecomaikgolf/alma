@@ -2,8 +2,6 @@
 #### Configure ####
 ###################
 
-SHELL := /bin/bash
-
 ###########
 # General #
 ###########
@@ -45,6 +43,8 @@ BUILD_DIR_POSIX_UEFI=$(BUILD_DIR)/posix-uefi
 ################################
 ##### MAKEFILE DO NOT TOUCH ####
 ################################
+
+SHELL := /bin/bash
 
 .PHONY: all update edk2 binutils binutils-build gcc gcc-build posix-uefi posix-uefi-build clean debug
 
