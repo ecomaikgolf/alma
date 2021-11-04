@@ -1,12 +1,20 @@
-####################
-##### Configure ####
-####################
+###################
+#### Configure ####
+###################
 
 ###########
 # General #
 ###########
 THREADS=8
 BUILD_DIR=$(CURDIR)/build
+
+############
+# Versions #
+############
+binutils_v = binutils-2_37
+gcc_v = releases/gcc-11
+edk2_v = origin/stable/202011
+posix-uefi_v = 1431b327d2c239ba5c94a3c1fdfdddd798610c50
 
 ####################
 # Toolchain Config #
@@ -22,7 +30,7 @@ PLATFORM_NAME=OvmfX64
 TARGET_EDK2=RELEASE
 ARCH=X64
 TOOLCHAIN=GCC5
-COMPILER_EDK2=gcc-5
+COMPILER_EDK2=gcc
 BIOS_FILE=bios.bin
 BUILD_DIR_UEFI=$(BUILD_DIR)/uefi
 
@@ -58,9 +66,10 @@ update:
 
 binutils-build: 
 	cd binutils-gdb; \
+	git checkout $(binutils_v); \
 	mkdir build; \
 	cd build; \
-	../configure --target=$(TARGET_BINUTILS) --enable-targets=all --prefix="$(BUILD_DIR_TOOLCHAIN)" --with-sysroot --disable-nls --disable-werror; \
+	../configure --target=$(TARGET_BINUTILS) --disable-gdb --disable-libdecnumber --disable-readline --disable-sim --prefix="$(BUILD_DIR_TOOLCHAIN)" --with-sysroot --disable-nls --disable-werror; \
 	make -j$(THREADS); \
 	make install;
 	
@@ -76,6 +85,7 @@ gcc-build:
 	$(eval CONTENT = tmake_file="$$\{tmake_file} i386/t-x86_64-elf")
 	$(eval NUMBER = $(shell grep -F x86_64-*-elf -n $(CURDIR)/gcc/gcc/config.gcc | cut -f1 -d:))
 	cd gcc; \
+	git checkout $(gcc_v); \
 	./contrib/download_prerequisites; \
 	echo -e "MULTILIB_OPTIONS += mno-red-zone\nMULTILIB_DIRNAMES += no-red-zone" > gcc/config/i386/t-x86_64-elf; \
 	sed '$(NUMBER) a $(CONTENT)' gcc/config.gcc; \
@@ -98,7 +108,7 @@ gcc-build:
 
 $(BUILD_DIR_UEFI)/bios.bin:
 	cd edk2; \
-	git checkout origin/stable/202011; \
+	git checkout $(edk2_v); \
 	make CC=$(COMPILER_EDK2) -j$(THREADS) -C BaseTools; \
 	source ./edksetup.sh; \
 	sed -i -e "s@= EmulatorPkg/EmulatorPkg.dsc@= $(PLATFORM)@" Conf/target.txt; \
@@ -113,9 +123,11 @@ $(BUILD_DIR_UEFI)/bios.bin:
 ##############
 
 posix-uefi-build:
+	cd posix-uefi-build; \
+	git checkout $(posix-uefi_v); \
 	export PATH=$(BUILD_DIR_TOOLCHAIN)/bin/:$$PATH; \
-	USE_GCC=$(USE_GCC) make -C posix-uefi/uefi; \
-	ln -s $(CURDIR)/posix-uefi/build/uefi $(BUILD_DIR_POSIX_UEFI);
+	USE_GCC=$(USE_GCC) make -C uefi; \
+	ln -s $(CURDIR)/build/uefi $(BUILD_DIR_POSIX_UEFI);
 
 posix-uefi-examples:
 	$(info The makefile shows an error but everything compiles fine apparently)
