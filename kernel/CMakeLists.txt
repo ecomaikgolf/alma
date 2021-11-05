@@ -2,7 +2,9 @@
 # Project #
 ###########
 
-# project general options
+# minimum cmake version
+cmake_minimum_required(VERSION 3.16)
+
 project(os-dev-kernel CXX ASM_NASM)
 
 # nasm is required to build the kernel
