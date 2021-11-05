@@ -157,13 +157,14 @@ Tested on `Ubuntu 20.04`
 * texinfo
 * bison
 * flex
+* mtools
 
 Remember to have: `make` `git` `bash` `build-essential`
 
 Ubuntu 20.04 (and similars) one-command dependencies installer:
 
 ```bash
-apt install nasm iasl cmake make qemu-system-x86 qemu-system-gui git uuid-dev python python3-distutils bash texinfo bison flex build-essential
+apt install nasm iasl cmake make qemu-system-x86 qemu-system-gui git uuid-dev python python3-distutils bash texinfo bison flex build-essential mtools
 ```
 
 ## Bugs
