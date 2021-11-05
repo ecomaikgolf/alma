@@ -5,8 +5,8 @@ IMGFILE = flash.img
 DEFDEV = /dev/sda
 
 FILES = bootloader.efi kernel.elf zap-light16.psf
-QEMU_FILES: startup.nsh bios.bin
-QEMU_DEV: bios.bin
+QEMU_FILES = startup.nsh bios.bin
+QEMU_DEV = bios.bin
 ALL_FILES = $(FILES) $(QEMU_FILES) $(QEMU_DEV) 
 
 all: run
@@ -39,6 +39,7 @@ flash: $(IMGFILE)
 	read aux && \
 	read aux && \
 	sudo dd if=$(IMGFILE) of=$(DEFDEV) bs=1M
+	sync
 	@echo "Done. Remember to boot in UEFI mode"
 
 dev: bios.bin
@@ -46,7 +47,6 @@ dev: bios.bin
 	@echo "THIS IS VERY IMPORTANT DON'T CONTINUE IF YOU DON'T KNOW WHAT ARE YOU DOING"
 	read aux && \
 	sudo qemu-system-x86_64 $(QEMUPARAMS) $(DEFDEV)
-
 
 $(ALL_FILES) : 
 	$(error Missing files. Remember to build the project)
