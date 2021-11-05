@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <i>alma is an toy kernel written in C/C++ for x86_64 machines with the mere purpose of learning OS development</i>
+  <i>alma is a toy kernel written in C/C++ for x86_64 machines with the mere purpose of learning OS development</i>
 </p>
 
 # alma
@@ -12,30 +12,38 @@
 
 ## Features
 
-- structured project
-	- simple cmake builds
-	- `cmake -B build; cmake --build build` to compile
-	- `make -C qemu-fs` to run
-		- documented (bachelor's final project)
-	- out of source build
-	- build releases (no need to compile from source)
-		- more or less sane git commits
-	- toolchain compilation
-		- `make -C toolchain`
-		- git submodules
-- toolchain
-	- single script install (tested on archlinux)
-	- compile from source
-		- binutils
-		- gcc
-			- disable red zone patch
-			- only c/c++ compiler
-			- without standard/runtime headers
-			- x86_64-elf target
-		- edk2 ovmf
-			- proper compilation with gcc5
-			- release build
-		- posix-uefi libs
+- project
+	- compilation
+		- cmake
+		- `cmake -B build; cmake --build build`
+		- out of source builds
+	- run
+		- `make -C qemu-fs`
+		- `make -C qemu-fs debug` remote tcp gdb (localhost:1234)
+	- documentation
+		- inner workings (bachelor's final project)
+		- code (doxygen + comments)
+	- build releases
+		- https://ls.ecomaikgolf.com/alma/builds/
+	- git
+		- more or less clean management
+	- toolchain
+		- compilation from sources
+			- binutils
+				- x86_64-elf target
+			- gcc
+				- disable red zone patch
+				- only c/c++ compiler
+				- disable std/runtime things
+				- x86_64-elf target
+			- edk2
+				- release build
+			- posix-uefi
+				- independent from posix-uefi Makefile
+		- easy toolchain instalation
+			- 1: dependencies & `make -C toolchain`
+			- 2: preconfigured alma build VM
+		- git submodules (easy toolchain updating)
 - uefi shell
 	- bootloader run script
 - bootloader
@@ -74,7 +82,7 @@
 
 ## Run
 
-0. Install `qemu-system-x86_64` binary (usually `qemu` + `qemu-arch-extra`)
+0. Install dependencies (listed below)
 1. Find build to test https://ls.ecomaikgolf.com/alma/builds/
 2. Download a build with wget:
 
@@ -96,22 +104,85 @@ wget https://ls.ecomaikgolf.com/alma/builds/bios.bin
 make
 ```
 
-## Tinker
+### Run Dependencies
 
-`TODO`
+* `qemu-system-x86`
 
-## Contributing
+Ubuntu: `apt install qemu-system-x86 qemu-system-gui`
 
-Just_Fork_It™
+Arch-Linux: `pacman -S qemu qemu-arch-extra`
 
-However i'm not looking for contributors, this project is just for learning 
-purposes.
+## Build
 
-To see how to work with the source code read the section "Tinker"
+### Virtual Machine
+
+Get the "Alma Build VM" (.ova 5.9G), a Xubuntu 20.04 virtualbox VM ready to 
+compile.
+
+**Download (@gcloud.ua.es):** https://drive.google.com/file/d/1neuuBo7Ja4Czmwre1SWPkwGSF8MV98s3/view?usp=sharing
+
+<p align="center">
+  <img width="800" height="400" src="https://ls.ecomaikgolf.com/alma/alma-build-vm.png">
+</p>
+
+Features:
+* already compiled toolchain
+* systemwide ccache
+* preconfigured "neutral" IDE (vscodium)
+* one click functionalities
+	* compile
+	* run
+	* update
+	* clean
+
+### Manual
+
+Tested on `Ubuntu 20.04` 
+
+1. Install dependencies (listed below)
+2. `make -C toolchain/`
+3. `cmake -DCMAKE_BUILD_TYPE=Release -B build; cmake --build build`
+4. `make -C qemu-fs`
+
+#### Build Dependencies
+
+* nasm
+* iasl
+* cmake
+* qemu-system-x86
+* qemu-system-gui
+* uuid-dev
+* python
+* python3-distutils
+* texinfo
+* bison
+* flex
+
+Remember to have: `make` `git` `bash` `build-essential`
+
+Ubuntu 20.04 (and similars) one-command dependencies installer:
+
+```bash
+apt install nasm iasl cmake make qemu-system-x86 qemu-system-gui git uuid-dev python python3-distutils bash texinfo bison flex build-essential
+```
 
 ## Bugs
 
 Explain them to me please: `me@ecomaikgolf.com`
+
+## FAQ
+
+> Q: Muh tons of dependencies
+> 
+> A: I have to compile binutils, gdb, edk2 and posix-uefi from source
+
+> Q: 5.9GB VM
+>
+> A: I can't do more. Xubuntu + "zeroed" free memory before exporting so it can compress it.
+
+> Q: Frequently asked questions?
+>
+> A: More like preanswered questions
 
 ## Bibliography
 
@@ -122,7 +193,7 @@ Explain them to me please: `me@ecomaikgolf.com`
 * https://www.iaik.tugraz.at/teaching/materials/os/tutorials/paging-on-intel-x86-64/
 * https://git.musl-libc.org/cgit/musl/tree
 
-_The list would be longer but I can't list each site where I read something. This list is a good place to start_
+_The list is longer but I can't put each site where I read something. This list is a good place to start_
 
 ## Author
 
