@@ -5,7 +5,7 @@
 ###########
 # General #
 ###########
-THREADS=8
+THREADS=1
 BUILD_DIR=$(CURDIR)/build
 
 ############
@@ -71,7 +71,7 @@ binutils-build:
 	git checkout $(binutils_v); \
 	mkdir build; \
 	cd build; \
-	../configure --target=$(TARGET_BINUTILS) --disable-gdb --disable-libdecnumber --disable-readline --disable-sim --prefix="$(BUILD_DIR_TOOLCHAIN)" --with-sysroot --disable-nls --disable-werror; \
+	../configure --target=$(TARGET_BINUTILS) --enable-target=efi-app-x86-64 --disable-gdb --disable-libdecnumber --disable-readline --disable-sim --prefix="$(BUILD_DIR_TOOLCHAIN)" --with-sysroot --disable-nls --disable-werror; \
 	make -j$(THREADS); \
 	make install;
 	
