@@ -125,7 +125,7 @@ $(BUILD_DIR_UEFI)/bios.bin:
 ##############
 
 posix-uefi-build:
-	cd posix-uefi-build; \
+	cd posix-uefi; \
 	git checkout $(posix-uefi_v); \
 	export PATH=$(BUILD_DIR_TOOLCHAIN)/bin/:$$PATH; \
 	USE_GCC=$(USE_GCC) make -C uefi; \
