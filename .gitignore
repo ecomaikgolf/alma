@@ -6,7 +6,6 @@ toolchain/gcc
 toolchain/posix-uefi
 
 qemu-fs/NvVars
-qemu-fs/bios.bin
 qemu-fs/bootloader.efi
 qemu-fs/kernel.efi
 
