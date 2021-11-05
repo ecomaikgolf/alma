@@ -29,14 +29,16 @@ main(int argc, char *argv[])
     info("C enviroment is %s", __STDC_HOSTED__ ? "hosted" : "freestanding");
     info("Compilation datetime %s %s", __DATE__, __TIME__);
 
+    /* no argv[1] as real builds don't have the initial EFI script */
+
     /* startup.nsh kernel parameter */
-    if (argc < 2) {
+    /*if (argc < 2) {
         error("missing kernel file in argv[1]");
         return INCORRECT_ARGC;
-    }
+    }*/
 
     /* Load the kernel */
-    Elf64_Ehdr *elf_header = load_elf(argv[1]);
+    Elf64_Ehdr *elf_header = load_elf("kernel.elf");
 
     if (elf_header == NULL) {
         error("cannot load the kernel");
