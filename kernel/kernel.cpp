@@ -20,15 +20,11 @@
 #include <stdint.h>
 
 /**
- * Size of the kernel
- *
- * Values set by the linker script
+ * Kernel start & end address
+ * Set by the linker
  */
-extern uint64_t _kernel_start;
-extern uint64_t _kernel_end;
-
-paging::allocator::PFA kernel::allocator;
-screen::psf1_renderer kernel::tty;
+// extern uint64_t _kernel_start;
+// extern uint64_t _kernel_end;
 
 /**
  * Kernel starting function
@@ -37,31 +33,10 @@ screen::psf1_renderer kernel::tty;
 extern "C" [[noreturn]] void
 _start(bootstrap::boot_args *args)
 {
-    /* Main screen renderer */
-    // screen::psf1_renderer aux(args->fb, args->font);
-
-    /* Global descriptor table */
-    {
-        using namespace segmentation;
-
-        gdt_ptr gdt;
-        gdt.size   = sizeof(table) - 1;
-        gdt.offset = (uint64_t)&table;
-        load_gdt(&gdt);
-    }
-
-    /* Memory allocator */
-    bootstrap::allocator(args->map);
+    /* Bootstrap the kernel (function order is mandatory) */
     bootstrap::screen(args->fb, args->font);
-
-    // kernel::allocator = paging::allocator::PFA(args->map);
-
-    /* Get kernel size */
-    uint64_t _kernel_size  = (size_t)&_kernel_end - (size_t)&_kernel_start;
-    uint64_t _kernel_pages = _kernel_size / kernel::page_size + 1;
-
-    /* Lock kernel's memory */
-    kernel::allocator.lock_pages(&_kernel_start, _kernel_pages);
+    bootstrap::allocator(args->map);
+    bootstrap::gdt();
 
     /* Initialise the page table manager */
     paging::translator::PTM page_table;

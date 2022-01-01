@@ -6,7 +6,9 @@
 
 #include "screen/fonts/psf1.h"
 #include "screen/framebuffer.h"
+#include "segmentation/gdt.h"
 #include "uefi/memory.h"
+#include <stdint.h>
 
 namespace bootstrap {
 
@@ -20,7 +22,8 @@ struct boot_args
     uefi::memory::map *map;
 };
 
-void allocator(uefi::memory::map *);
 void screen(screen::framebuffer *, screen::fonts::psf1 *);
+void allocator(uefi::memory::map *);
+void gdt();
 
 } // namespace bootstrap
