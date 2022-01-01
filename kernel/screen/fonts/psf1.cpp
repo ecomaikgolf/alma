@@ -30,6 +30,20 @@ psf1_renderer::psf1_renderer(framebuffer *fb,
     this->color    = color;
 }
 
+psf1_renderer &
+psf1_renderer::operator=(psf1_renderer &&mov)
+{
+    this->font     = mov.font;
+    mov.font       = nullptr;
+    this->fb       = mov.fb;
+    mov.fb         = nullptr;
+    this->x_offset = mov.x_offset;
+    this->y_offset = mov.y_offset;
+    this->color    = mov.color;
+
+    return *this;
+}
+
 /**
  * Draw a character to the screen
  *

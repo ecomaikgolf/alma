@@ -21,5 +21,6 @@ struct boot_args
 };
 
 void allocator(uefi::memory::map *);
+void screen(screen::framebuffer *, screen::fonts::psf1 *);
 
 } // namespace bootstrap

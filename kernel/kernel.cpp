@@ -28,6 +28,7 @@ extern uint64_t _kernel_start;
 extern uint64_t _kernel_end;
 
 paging::allocator::PFA kernel::allocator;
+screen::psf1_renderer kernel::tty;
 
 /**
  * Kernel starting function
@@ -37,7 +38,7 @@ extern "C" [[noreturn]] void
 _start(bootstrap::boot_args *args)
 {
     /* Main screen renderer */
-    screen::psf1_renderer aux(args->fb, args->font);
+    // screen::psf1_renderer aux(args->fb, args->font);
 
     /* Global descriptor table */
     {
@@ -51,6 +52,7 @@ _start(bootstrap::boot_args *args)
 
     /* Memory allocator */
     bootstrap::allocator(args->map);
+    bootstrap::screen(args->fb, args->font);
 
     // kernel::allocator = paging::allocator::PFA(args->map);
 
@@ -85,7 +87,7 @@ _start(bootstrap::boot_args *args)
     /* Clean the screen */
     memset(args->fb->base, 0, args->fb->buffer_size);
 
-    aux.println("Hello from the kernel");
+    kernel::tty.println("Hello from the kernel");
 
     interrupts::idt_ptr idtr;
     interrupts::idt_entry *pagefault =

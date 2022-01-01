@@ -7,6 +7,8 @@
 #include "elf/loader.h"
 #include "io/file.h"
 #include "log/stdout.h"
+#include "types.h"
+#include <uefi.h>
 
 /** Machine type
  *
@@ -160,6 +162,38 @@ load_phdrs(const Elf64_Ehdr *const elf_header, const char *const memory)
             /* Ignore */
             default:
                 info("program header %d of type %d ignored", i, prog_hdr->p_type);
+        }
+    }
+}
+
+void
+call_ctors(Elf64_Ehdr *elf)
+{
+    /* e->shentsize is the index of the string table section */
+    Elf64_Shdr *str_table_hdr =
+      (Elf64_Shdr *)((char *)elf + elf->e_shoff + (elf->e_shentsize * elf->e_shstrndx));
+
+    char *str_table = ((char *)elf + str_table_hdr->sh_offset);
+
+    /* Iterate over section headers, skip the first as it's the NULL section header */
+    for (int i = 1; i < elf->e_shnum; i++) {
+        Elf64_Shdr *header = (Elf64_Shdr *)((char *)elf + elf->e_shoff + elf->e_shentsize * i);
+
+        /* http://www.sco.com/developers/gabi/2003-12-17/ch4.strtab.html */
+        char *section_name = str_table + header->sh_name;
+
+        if (strncmp(section_name, ".ctors", 7) == 0) {
+            uint64_t *ctors = (uint64_t *)((char *)elf + header->sh_offset);
+
+            /* / uint64_t as 64bit systems have 64bit addr */
+            uint64_t num_functions = (header->sh_size / sizeof(uint64_t));
+
+            for (uint64_t i = 0; i < num_functions; i++) {
+                /* sysv_abi as we are on a PE executable */
+                void (*func)() = ((__attribute__((sysv_abi)) void (*)(void)) * ctors);
+                func();
+                ctors++;
+            }
         }
     }
 }

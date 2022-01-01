@@ -6,9 +6,9 @@
  */
 
 #include "bootparams.h"
-#include "err_values.h"
 #include "elf/loader.h"
 #include "elf/types.h"
+#include "err_values.h"
 #include "gop/font.h"
 #include "gop/framebuffer.h"
 #include "gop/gop.h"
@@ -87,6 +87,12 @@ main(int argc, char *argv[])
      */
     void (*_start)() = ((__attribute__((sysv_abi)) void (*)(BootArgs *))elf_header->e_entry);
     info("jumping to kernel code at address: 0x%p", _start);
+
+    info("calling kernel global constructors");
+
+    call_ctors(elf_header);
+
+    info("finished kernel global constructors");
 
     /* Exit UEFI Boot Services */
     info("Exiting UEFI Boot Services before the jump");

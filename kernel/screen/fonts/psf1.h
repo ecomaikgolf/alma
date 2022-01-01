@@ -54,6 +54,8 @@ class psf1_renderer : public renderer_i
                   unsigned int x_offset = 0,
                   unsigned int y_offset = 0,
                   color_e color         = color_e::WHITE);
+    psf1_renderer()        = default;
+    psf1_renderer &operator=(psf1_renderer &&);
 
     void draw(const char);
 

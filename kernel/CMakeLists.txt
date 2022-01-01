@@ -132,7 +132,7 @@ set(INTERRUPT_SOURCES
 
 # kernel sources
 set(KERNEL_SOURCES
-	bootstrap/allocator.cpp
+	bootstrap/startup.cpp
 	paging/PFA.cpp
 	paging/PTM.cpp
 	screen/renderer.cpp
