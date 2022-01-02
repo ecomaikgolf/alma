@@ -38,23 +38,13 @@ _start(bootstrap::boot_args *args)
     bootstrap::translator(args->map);
     bootstrap::screen(args->fb, args->font);
     bootstrap::gdt();
+    bootstrap::interrupts();
     bootstrap::enable_virtualaddr();
+    bootstrap::enable_interrupts();
 
-    kernel::tty.println("Hello from the kernel");
-
-    interrupts::idt_ptr idtr;
-    interrupts::idt_entry *pagefault =
-      (interrupts::idt_entry *)(idtr.ptr + static_cast<int>(interrupts::vector_e::page_fault) *
-                                             sizeof(interrupts::idt_entry));
-
-    pagefault->set_offset((uint64_t)interrupts::pagefault);
-    pagefault->vector    = static_cast<uint8_t>(interrupts::vector_e::page_fault);
-    pagefault->type_attr = static_cast<uint8_t>(interrupts::gate_e::interrupt) |
-                           static_cast<uint8_t>(interrupts::status_e::enabled);
-
-    asm("lidt %0" : : "m"(idtr));
-
-    asm("int $0x0e");
+    kernel::tty.println("Hola desde el kernel!");
+    asm("int $0x09");
+    kernel::tty.println("Hola otra vez desde el kernel!");
 
     /* Shoudln't return */
     while (1) {

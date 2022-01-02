@@ -127,7 +127,7 @@ set(LIBSTDCXX_SOURCES
 # interrupt sources
 set(INTERRUPT_SOURCES
 	interrupts/IDT.cpp
-	interrupts/page_fault.cpp
+	interrupts/interrupts.cpp
 )
 
 # kernel sources

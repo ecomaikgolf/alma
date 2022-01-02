@@ -4,6 +4,7 @@
  * @author Ernesto Martínez García <me@ecomaikgolf.com>
  */
 
+#include "interrupts/interrupts.h"
 #include "screen/fonts/psf1.h"
 #include "screen/framebuffer.h"
 #include "segmentation/gdt.h"
@@ -26,6 +27,7 @@ void screen(screen::framebuffer *, screen::fonts::psf1 *);
 void allocator(uefi::memory::map *);
 void gdt();
 void translator(uefi::memory::map *);
+void interrupts();
 void enable_virtualaddr();
 void enable_interrupts();
 

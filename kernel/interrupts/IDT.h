@@ -26,7 +26,7 @@ enum class status_e
 
 enum class vector_e
 {
-    page_fault = 0x8,
+    reserved = 0x9,
 };
 
 /**
@@ -38,7 +38,8 @@ struct idt_ptr
     uint16_t lenght;
     uint64_t ptr;
     idt_ptr();
-    ~idt_ptr();
+    //~idt_ptr();
+    void set_ptr(uint64_t);
 } __attribute__((packed));
 
 /**

@@ -60,6 +60,24 @@ translator(uefi::memory::map *map)
 }
 
 void
+interrupts()
+{
+    /* Locks the IDT */
+    kernel::allocator.lock_pages(&kernel::idtr, sizeof(kernel::idtr) / kernel::page_size + 1);
+    kernel::idtr.set_ptr((uint64_t)kernel::allocator.request_page());
+
+    interrupts::idt_entry *reserved =
+      (interrupts::idt_entry *)(kernel::idtr.ptr +
+                                static_cast<int>(interrupts::vector_e::reserved) *
+                                  sizeof(interrupts::idt_entry));
+
+    reserved->set_offset((uint64_t)interrupts::reserved);
+    reserved->vector    = static_cast<uint8_t>(interrupts::vector_e::reserved);
+    reserved->type_attr = static_cast<uint8_t>(interrupts::gate_e::interrupt) |
+                          static_cast<uint8_t>(interrupts::status_e::enabled);
+}
+
+void
 enable_virtualaddr()
 {
     /* Enable virtual addresses */
@@ -68,6 +86,9 @@ enable_virtualaddr()
 
 void
 enable_interrupts()
-{}
+{
+    /* Enable interrupts */
+    asm("lidt %0" : : "m"(kernel::idtr));
+}
 
 } // namespace bootstrap

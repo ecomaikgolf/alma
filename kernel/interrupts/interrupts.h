@@ -5,6 +5,6 @@
 namespace interrupts {
 struct frame;
 
-__attribute__((interrupt)) void pagefault(frame *);
+__attribute__((interrupt)) void reserved(frame *);
 
 } // namespace interrupts
