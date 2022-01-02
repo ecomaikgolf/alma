@@ -80,6 +80,11 @@ renderer_i::setColor(color_e color)
     this->color = color;
 }
 
+/**
+ * Fast screen clear
+ *
+ * Uses biggest integer asignations
+ */
 void
 renderer_i::clear()
 {
