@@ -51,6 +51,12 @@ renderer_i::print(const char *str)
                 }
             }
         }
+        /* clear the screen if content overflows the screen */
+        if (this->fb->height <= (this->y_offset + this->glyph_y())) {
+            this->clear();
+            this->y_offset = 0;
+            this->x_offset = 0;
+        }
         i++;
     }
 }
