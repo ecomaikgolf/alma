@@ -12,7 +12,7 @@ screen(screen::framebuffer *fb, screen::fonts::psf1 *font)
     /* Create the tty */
     kernel::tty = screen::psf1_renderer(fb, font, 0, 0, screen::color_e::WHITE);
     /* Clean the screen */
-    memset(fb->base, 0, fb->buffer_size);
+    kernel::tty.clear();
 
     uint64_t fbbase = (uint64_t)fb->base;
     uint64_t fbsize = (uint64_t)fb->buffer_size + kernel::page_size;

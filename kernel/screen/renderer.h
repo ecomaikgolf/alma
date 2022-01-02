@@ -8,6 +8,7 @@
 
 #include "colors.h"
 #include "framebuffer.h"
+#include <stdint.h>
 
 namespace screen {
 
@@ -20,6 +21,7 @@ class renderer_i
     renderer_i() = default;
     void println(const char *);
     void print(const char *);
+    void clear();
     virtual void draw(const char) = 0;
     void put(const char);
     void setColor(color_e);

@@ -5,6 +5,7 @@
  */
 
 #include "screen/renderer.h"
+#include "colors.h"
 
 // screen::renderer_i *global;
 
@@ -77,6 +78,25 @@ void
 renderer_i::setColor(color_e color)
 {
     this->color = color;
+}
+
+void
+renderer_i::clear()
+{
+    uint32_t jumps = fb->buffer_size / sizeof(uint64_t);
+    uint32_t rest  = fb->buffer_size % sizeof(uint64_t);
+
+    /* Fast clear, use big integer movements */
+    unsigned int i;
+    for (i = 0; i < jumps; i++)
+        *((uint64_t *)fb->base + i) = static_cast<uint8_t>(screen::color_e::BLACK);
+
+    /* for sizes < 64 bytes */
+    for (unsigned int j = 0; j < rest; j++)
+        *((uint8_t *)((uint64_t *)fb->base + i) + j) = static_cast<uint8_t>(screen::color_e::BLACK);
+
+    this->x_offset = 0;
+    this->y_offset = 0;
 }
 
 } // namespace screen
