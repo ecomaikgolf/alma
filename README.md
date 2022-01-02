@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="300" height="100" src="https://ls.ecomaikgolf.com/alma/logo.png">
+  <img width="300" height="100" src="https://ls.ecomaikgolf.com/alma/logo3.png">
 </p>
 
 <p align="center">
