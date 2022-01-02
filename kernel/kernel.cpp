@@ -20,13 +20,6 @@
 #include <stdint.h>
 
 /**
- * Kernel start & end address
- * Set by the linker
- */
-// extern uint64_t _kernel_start;
-// extern uint64_t _kernel_end;
-
-/**
  * Kernel starting function
  * extern C to avoid C++ function mangling
  */
