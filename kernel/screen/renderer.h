@@ -22,6 +22,7 @@ class renderer_i
     void println(const char *);
     void print(const char *);
     void clear();
+    void scroll();
     virtual void draw(const char) = 0;
     void put(const char);
     void setColor(color_e);

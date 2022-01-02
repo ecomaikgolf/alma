@@ -45,18 +45,12 @@ renderer_i::print(const char *str)
             default: {
                 this->draw(str[i]);
                 this->x_offset += this->glyph_x();
-                if (this->x_offset >= this->fb->width) {
-                    this->y_offset += this->glyph_y();
-                    this->x_offset = 0;
-                }
+                if (this->x_offset >= this->fb->width)
+                    this->print("\n");
             }
         }
-        /* clear the screen if content overflows the screen */
-        if (this->fb->height <= (this->y_offset + this->glyph_y())) {
-            this->clear();
-            this->y_offset = 0;
-            this->x_offset = 0;
-        }
+        if ((this->y_offset + this->glyph_y()) > this->fb->height)
+            this->scroll();
         i++;
     }
 }
@@ -108,6 +102,44 @@ renderer_i::clear()
 
     this->x_offset = 0;
     this->y_offset = 0;
+}
+
+void
+renderer_i::scroll()
+{
+    uint32_t mrg = fb->ppscl * (this->glyph_y() * 4);
+    uint32_t dif = fb->buffer_size - mrg;
+    uint8_t *src = (uint8_t *)fb->base + mrg;
+    uint8_t *dst = (uint8_t *)fb->base;
+
+    {
+        uint32_t jumps = dif / sizeof(uint64_t);
+        uint32_t rest  = dif % sizeof(uint64_t);
+
+        unsigned int i;
+        for (i = 0; i < jumps; i++)
+            *((uint64_t *)dst + i) = *((uint64_t *)src + i);
+
+        for (unsigned int j = 0; j < rest; j++)
+            *((uint8_t *)((uint64_t *)dst + i) + j) = *((uint8_t *)((uint64_t *)src + i) + j);
+    }
+
+    {
+        uint8_t *clr = ((uint8_t *)fb->base + fb->buffer_size) - mrg;
+
+        uint32_t jumps = mrg / sizeof(uint64_t);
+        uint32_t rest  = mrg % sizeof(uint64_t);
+
+        unsigned int i;
+        for (i = 0; i < jumps; i++)
+            *((uint64_t *)clr + i) = 0;
+
+        for (unsigned int j = 0; j < rest; j++)
+            *((uint8_t *)((uint64_t *)clr + i) + j) = 0;
+    }
+
+    if (this->y_offset >= this->glyph_y())
+        this->y_offset -= this->glyph_y();
 }
 
 } // namespace screen
