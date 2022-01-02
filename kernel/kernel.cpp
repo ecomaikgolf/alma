@@ -34,33 +34,11 @@ extern "C" [[noreturn]] void
 _start(bootstrap::boot_args *args)
 {
     /* Bootstrap the kernel (function order is mandatory) */
-    bootstrap::screen(args->fb, args->font);
     bootstrap::allocator(args->map);
+    bootstrap::translator(args->map);
+    bootstrap::screen(args->fb, args->font);
     bootstrap::gdt();
-
-    /* Initialise the page table manager */
-    paging::translator::PTM page_table;
-
-    /* Map virtual memory to physical memory (same address for the kernel) */
-    for (uint64_t i = 0; i < uefi::memory::get_memsize(args->map); i += kernel::page_size) {
-        page_table.map(i, i);
-    }
-
-    /* Lock screen's memory */
-    uint64_t fbbase = (uint64_t)args->fb->base;
-    uint64_t fbsize = (uint64_t)args->fb->buffer_size + kernel::page_size;
-    kernel::allocator.lock_pages((void *)fbbase, fbsize / kernel::page_size + 1);
-
-    /* Map screen's memory */
-    for (uint64_t i = fbbase; i < fbbase + fbsize; i += kernel::page_size) {
-        page_table.map(i, i);
-    }
-
-    /* Enable virtual addresses */
-    asm("mov %0, %%cr3" : : "r"(page_table.get_PGDT()));
-
-    /* Clean the screen */
-    memset(args->fb->base, 0, args->fb->buffer_size);
+    bootstrap::enable_virtualaddr();
 
     kernel::tty.println("Hello from the kernel");
 

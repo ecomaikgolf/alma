@@ -21,7 +21,7 @@ const auto page_size = uefi::page_size;
 
 /* Variables */
 inline paging::allocator::PFA allocator;
-extern paging::translator::PTM translator;
+inline paging::translator::PTM translator __attribute__((aligned(uefi::page_size)));
 inline screen::psf1_renderer tty;
 inline segmentation::gdt_ptr gdt;
 

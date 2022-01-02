@@ -25,5 +25,8 @@ struct boot_args
 void screen(screen::framebuffer *, screen::fonts::psf1 *);
 void allocator(uefi::memory::map *);
 void gdt();
+void translator(uefi::memory::map *);
+void enable_virtualaddr();
+void enable_interrupts();
 
 } // namespace bootstrap
