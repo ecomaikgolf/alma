@@ -56,12 +56,14 @@
 	- framebuffer
 	- uefi memory map
 	- PSF1 fonts
+	- manually call kernel .ctors functions
 	- exit UEFI boot services
 	- jumps to kernel
 - kernel
 	- C++/NASM-ASM
 		- commented code (doxygen)
 		- structured (folders and namespaces)
+	- Call C++ global constructors before starting the kernel
 	- screen/tty
 		- print pixels
 		- print letters with a PSF1 font
