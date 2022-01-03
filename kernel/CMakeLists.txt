@@ -139,6 +139,7 @@ set(KERNEL_SOURCES
 	screen/fonts/psf1.cpp
 	uefi/memory.cpp
 	segmentation/gdt.asm
+	io/bus.cpp
 	${INTERRUPT_SOURCES}
 	kernel.cpp
 )

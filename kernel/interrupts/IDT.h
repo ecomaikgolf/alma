@@ -5,6 +5,7 @@
  */
 
 #pragma once
+#include "interrupts.h"
 #include <stdint.h>
 
 namespace interrupts {
@@ -38,8 +39,9 @@ struct idt_ptr
     uint16_t lenght;
     uint64_t ptr;
     idt_ptr();
-    //~idt_ptr();
     void set_ptr(uint64_t);
+    void add_handle(interrupts::vector_e code, void (*handler)(frame *));
+    static void remap_pic(uint8_t, uint8_t);
 } __attribute__((packed));
 
 /**

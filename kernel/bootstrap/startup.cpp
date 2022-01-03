@@ -1,4 +1,5 @@
 #include "bootstrap/startup.h"
+#include "io/bus.h"
 #include "kernel.h"
 #include "libc/stdlib.h"
 
@@ -66,15 +67,25 @@ interrupts()
     kernel::allocator.lock_pages(&kernel::idtr, sizeof(kernel::idtr) / kernel::page_size + 1);
     kernel::idtr.set_ptr((uint64_t)kernel::allocator.request_page());
 
-    interrupts::idt_entry *reserved =
-      (interrupts::idt_entry *)(kernel::idtr.ptr +
-                                static_cast<int>(interrupts::vector_e::reserved) *
-                                  sizeof(interrupts::idt_entry));
+    /* Load the interrupt handlers */
+    kernel::idtr.add_handle(interrupts::vector_e::reserved, interrupts::reserved);
+    kernel::idtr.add_handle((interrupts::vector_e)0x21, interrupts::keyboard);
 
-    reserved->set_offset((uint64_t)interrupts::reserved);
-    reserved->vector    = static_cast<uint8_t>(interrupts::vector_e::reserved);
-    reserved->type_attr = static_cast<uint8_t>(interrupts::gate_e::interrupt) |
-                          static_cast<uint8_t>(interrupts::status_e::enabled);
+    /*
+     * From OSDev:
+     * In protected mode, the IRQs 0 to 7 conflict with the CPU exception which are reserved
+     * by Intel up until 0x1F. It is thus recommended to change the PIC's offsets (also known
+     * as remapping the PIC) so that IRQs use non-reserved vectors. A common choice is to move
+     * them to the beginning of the available range (IRQs 0..0xF -> INT 0x20..0x2F).  For that,
+     * we need to set the master PIC's offset to 0x20 and the slave's to 0x28.
+     */
+    kernel::idtr.remap_pic(0x20, 0x28);
+
+    io::outb(io::PIC1_DATA, 0b11111101); // enable IRQ1 from PIC1 (keyboard)
+    io::outb(io::PIC2_DATA, 0b11111111); // mask all lines
+
+    /* Enable interrupts */
+    asm("sti");
 }
 
 void
