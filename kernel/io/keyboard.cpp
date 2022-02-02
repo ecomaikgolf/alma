@@ -43,10 +43,12 @@ ps2::process_scancode(uint8_t keycode)
             break;
         /* Block Mayus */
         case 0x3a:
-            this->state = PS2_State::Mayus;
+            if (this->state == PS2_State::Mayus)
+                this->state = PS2_State::Normal;
+            else
+                this->state = PS2_State::Mayus;
             break;
         case 0xba:
-            this->state = PS2_State::Normal;
             break;
         /* Del */
         case 0x0e:
