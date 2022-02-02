@@ -43,18 +43,6 @@ const char PS2_SCANCODES[][4] = {
 
 const unsigned int PS2_SCANCODE_SIZE = sizeof(PS2_SCANCODES) / sizeof(char[4]);
 
-enum class PS2_MODKEYS
-{
-    L_Ctrl,
-    L_Mod,
-    L_Alt,
-    L_Shift,
-    R_Altgr,
-    R_Mod,
-    R_Ctrl,
-    R_Shift
-};
-
 enum class PS2_State
 {
     Normal  = 0,
