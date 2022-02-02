@@ -13,7 +13,7 @@ void
 ps2::process_scancode(uint8_t keycode)
 {
     if (keycode < PS2_SCANCODE_SIZE) {
-        char letter = PS2_SCANCODES[keycode][this->state.shift];
+        char letter = PS2_SCANCODES[keycode][static_cast<int>(this->state)];
 
         if (letter != 0x0) {
             this->add_char(letter);
@@ -24,38 +24,36 @@ ps2::process_scancode(uint8_t keycode)
     switch (keycode) {
         /* L Shift */
         case 0x2a:
-            this->state.shift = true;
-            return;
+            this->state = PS2_State::Shifted;
+            break;
         case 0xaa:
-            this->state.shift = false;
-            return;
+            this->state = PS2_State::Normal;
+            break;
         /* L Ctrl */
         case 0x1d:
-            this->state.ctrl = true;
-            return;
+            break;
         case 0x9d:
-            this->state.ctrl = false;
-            return;
+            break;
         /* Alt */
         case 0x38:
-            this->state.alt = true;
-            return;
+            this->state = PS2_State::Alt;
+            break;
         case 0xb8:
-            this->state.alt = false;
-            return;
+            this->state = PS2_State::Normal;
+            break;
         /* Block Mayus */
         case 0x3a:
-            this->state.mayus = true;
-            return;
+            this->state = PS2_State::Mayus;
+            break;
         case 0xba:
-            this->state.mayus = false;
-            return;
-        /* Escape */
+            this->state = PS2_State::Normal;
+            break;
+        /* Del */
         case 0x0e:
             this->delete_char(1);
-            return;
+            break;
         case 0x8e:
-            return;
+            break;
     }
 }
 
