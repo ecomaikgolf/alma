@@ -16,6 +16,19 @@ const char PS2_SCANCODES[] = { 0x0, 0x0,  '1', '2', '3',  '4', '5', '6', '7', '8
                                '.', '/',  0x0, 0x0, 0x0,  ' ', 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
                                0x0, 0x0,  0x0, 0x0, 0x0,  0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
                                0x0, 0x0,  0x0, 0x0, 0x0,  0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+const unsigned int PS2_SCANCODE_SIZE = sizeof(PS2_SCANCODES) / sizeof(char);
+
+enum class PS2_MODKEYS
+{
+    L_Ctrl,
+    L_Mod,
+    L_Alt,
+    L_Shift,
+    R_Altgr,
+    R_Mod,
+    R_Ctrl,
+    R_Shift
+};
 
 /**
  * PS2 Keyboards pushes a hex keycode each time a key is pressed
@@ -33,20 +46,29 @@ const char PS2_SCANCODES[] = { 0x0, 0x0,  '1', '2', '3',  '4', '5', '6', '7', '8
 class ps2
 {
   public:
-    const static uint8_t max_keycodes = 6;
-    /** Adds a new keycode */
-    void add_keycode(uint8_t);
-    /** Gets the last char */
-    char get_last_char();
-    /** Checks if we have a keycode combination -> char */
-    bool has_char() const;
+    /** Process a new scancode */
+    void process_scancode(uint8_t);
+    /** Delete n chars from buffer */
+    void delete_char(uint16_t n = 1);
+    /** Add a new char */
+    void add_char(char);
+    /** True if we need to update keyboard values */
+    bool update();
+    const char *get_text() const;
 
   private:
-    /** Internal keycode "stack" */
-    uint8_t keycodes[max_keycodes];
-    uint8_t n_keycodes = 0;
-    /** Removes queued keycodes */
-    void clear_keycodes();
+    const static uint16_t BUFFER_SIZE = 256;
+    volatile uint16_t buffer_count    = 0;
+    char buffer[BUFFER_SIZE];
+    bool has_new_key = false;
+
+    struct
+    {
+        bool mayus = false;
+        bool shift = false;
+        bool ctrl  = false;
+        bool alt   = false;
+    } state;
 };
 
 } // namespace io

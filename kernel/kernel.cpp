@@ -9,6 +9,7 @@
 #include "float.h"
 #include "interrupts/IDT.h"
 #include "interrupts/interrupts.h"
+#include "io/keyboard.h"
 #include "libc/stdlib.h"
 #include "paging/PFA.h"
 #include "paging/PTM.h"
@@ -41,5 +42,7 @@ _start(bootstrap::boot_args *args)
 
     /* Shoudln't return */
     while (1) {
+        if (kernel::keyboard.update())
+            kernel::tty.println(kernel::keyboard.get_text());
     }
 }

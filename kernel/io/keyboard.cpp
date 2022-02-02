@@ -5,70 +5,97 @@
  */
 
 #include "io/keyboard.h"
+#include "libc/ctype.h"
 
 namespace io {
 
 void
-ps2::add_keycode(uint8_t keycode)
+ps2::process_scancode(uint8_t keycode)
 {
-    if (this->n_keycodes >= max_keycodes - 1) {
-        /* Temporary to avoid deadlocks, should be an error */
-        this->clear_keycodes();
+    switch (keycode) {
+        /* L Shift */
+        case 0x2a:
+            this->state.shift = true;
+            break;
+        case 0xaa:
+            this->state.shift = false;
+            break;
+        /* L Ctrl */
+        case 0x1d:
+            this->state.ctrl = true;
+            break;
+        case 0x9d:
+            this->state.ctrl = false;
+            break;
+        /* Alt */
+        case 0x38:
+            this->state.alt = true;
+            break;
+        case 0xb8:
+            this->state.alt = false;
+            break;
+        /* Block Mayus */
+        case 0x3a:
+            this->state.mayus = true;
+            break;
+        case 0xba:
+            this->state.mayus = false;
+            break;
+        /* Escape */
+        case 0x0e:
+            this->delete_char(1);
+            break;
+        case 0x8e:
+            break;
+    }
+    if (keycode > PS2_SCANCODE_SIZE)
         return;
+
+    char letter = PS2_SCANCODES[keycode];
+
+    /* Is a valid char */
+    if (letter != 0x0) {
+        /* Minus */
+        if (!(this->state.shift || this->state.mayus))
+            letter = tolower(letter);
+        /* LShift */
+        /* Alt */
+        this->add_char(letter);
     }
-
-    this->keycodes[this->n_keycodes] = keycode;
-    this->n_keycodes++;
-}
-
-char
-ps2::get_last_char()
-{
-    if (!has_char())
-        return (char)0x0;
-
-    /* No remainder check in has_char */
-    uint8_t n_keys = this->n_keycodes / 2;
-
-    for (uint8_t i = 0; i < n_keys; i++) {
-        uint8_t key1 = this->keycodes[i];
-        uint8_t key2 = this->keycodes[i + (n_keys - 1)];
-
-        char code = PS2_SCANCODES[key2];
-        return code;
-
-        // switch (key1) {
-        //     /* L Shift */
-        //     case 0x2a:
-        //         break;
-        //     /* L Ctrl */
-        //     case 0x1d:
-        //         break;
-        //     /* Alt */
-        //     case 0x38:
-        //         break;
-        //     /* Mod */
-        //     case 0xdb:
-        //         break;
-        //     /* Block Mayus */
-        //     case 0x3a:
-        //         break;
-        // }
-    }
-    this->clear_keycodes();
-}
-
-bool
-ps2::has_char() const
-{
-    return (n_keycodes > 0 && n_keycodes % 2 == 0 &&
-            keycodes[0] == (keycodes[n_keycodes - 1] - 0x80));
 }
 
 void
-ps2::clear_keycodes()
+ps2::delete_char(uint16_t n)
 {
-    n_keycodes = 0;
+    if (n > buffer_count)
+        return;
+    this->buffer_count         = this->buffer_count - n; // -= n volatile deprecated
+    this->buffer[buffer_count] = '\0';
+    this->has_new_key          = true;
+}
+
+void
+ps2::add_char(char letter)
+{
+    if (this->buffer_count > ps2::BUFFER_SIZE - 1)
+        return;
+    this->buffer[this->buffer_count] = letter;
+    this->buffer_count               = this->buffer_count + 1; // += 1 volatile deprecated
+    this->has_new_key                = true;
+}
+
+bool
+ps2::update()
+{
+    bool temp         = this->has_new_key;
+    this->has_new_key = false;
+    return temp;
+}
+
+const char *
+ps2::get_text() const
+{
+    return this->buffer;
 }
 
 } // namespace io

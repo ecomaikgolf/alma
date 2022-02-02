@@ -117,6 +117,7 @@ set(LIBC_SOURCES
 	libc/math/pow.cpp
 	libc/math/sqrt.cpp
 	libc/math/log.cpp
+	libc/ctype/toupper.cpp
 )
 
 # libstdc++ sources
