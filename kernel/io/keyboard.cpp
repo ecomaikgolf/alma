@@ -12,55 +12,50 @@ namespace io {
 void
 ps2::process_scancode(uint8_t keycode)
 {
+    if (keycode < PS2_SCANCODE_SIZE) {
+        char letter = PS2_SCANCODES[keycode][this->state.shift];
+
+        if (letter != 0x0) {
+            this->add_char(letter);
+            return;
+        }
+    }
+
     switch (keycode) {
         /* L Shift */
         case 0x2a:
             this->state.shift = true;
-            break;
+            return;
         case 0xaa:
             this->state.shift = false;
-            break;
+            return;
         /* L Ctrl */
         case 0x1d:
             this->state.ctrl = true;
-            break;
+            return;
         case 0x9d:
             this->state.ctrl = false;
-            break;
+            return;
         /* Alt */
         case 0x38:
             this->state.alt = true;
-            break;
+            return;
         case 0xb8:
             this->state.alt = false;
-            break;
+            return;
         /* Block Mayus */
         case 0x3a:
             this->state.mayus = true;
-            break;
+            return;
         case 0xba:
             this->state.mayus = false;
-            break;
+            return;
         /* Escape */
         case 0x0e:
             this->delete_char(1);
-            break;
+            return;
         case 0x8e:
-            break;
-    }
-    if (keycode > PS2_SCANCODE_SIZE)
-        return;
-
-    char letter = PS2_SCANCODES[keycode];
-
-    /* Is a valid char */
-    if (letter != 0x0) {
-        /* Minus */
-        if (!(this->state.shift || this->state.mayus))
-            letter = tolower(letter);
-        /* LShift */
-        /* Alt */
-        this->add_char(letter);
+            return;
     }
 }
 
