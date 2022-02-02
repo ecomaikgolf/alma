@@ -140,6 +140,7 @@ set(KERNEL_SOURCES
 	uefi/memory.cpp
 	segmentation/gdt.asm
 	io/bus.cpp
+	io/keyboard.cpp
 	${INTERRUPT_SOURCES}
 	kernel.cpp
 )

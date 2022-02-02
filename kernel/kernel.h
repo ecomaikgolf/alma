@@ -1,6 +1,7 @@
 #pragma once
 
 #include "interrupts/IDT.h"
+#include "io/keyboard.h"
 #include "paging/PFA.h"
 #include "paging/PTM.h"
 #include "screen/fonts/psf1.h"
@@ -26,6 +27,7 @@ inline paging::translator::PTM translator __attribute__((aligned(uefi::page_size
 inline screen::psf1_renderer tty;
 inline segmentation::gdt_ptr gdt;
 inline interrupts::idt_ptr idtr;
+inline io::ps2 keyboard;
 
 /* Kernel Constants */
 __attribute__((unused)) static void *_start_addr = &internal::_start_addr;
