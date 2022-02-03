@@ -27,7 +27,7 @@ inline paging::translator::PTM translator __attribute__((aligned(uefi::page_size
 inline screen::psf1_renderer tty;
 inline segmentation::gdt_ptr gdt;
 inline interrupts::idt_ptr idtr;
-inline io::ps2 keyboard;
+inline io::PS2 keyboard;
 
 /* Kernel Constants */
 __attribute__((unused)) static void *_start_addr = &internal::_start_addr;

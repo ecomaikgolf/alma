@@ -5,12 +5,13 @@
  */
 
 #include "io/keyboard.h"
+#include "kernel.h"
 #include "libc/ctype.h"
 
 namespace io {
 
 void
-ps2::process_scancode(uint8_t keycode)
+PS2::process_scancode(uint8_t keycode)
 {
     if (keycode < PS2_SCANCODE_SIZE) {
         char letter = PS2_SCANCODES[keycode][static_cast<int>(this->state)];
@@ -60,7 +61,7 @@ ps2::process_scancode(uint8_t keycode)
 }
 
 void
-ps2::delete_char(uint16_t n)
+PS2::delete_char(uint16_t n)
 {
     if (n > buffer_count)
         return;
@@ -70,17 +71,18 @@ ps2::delete_char(uint16_t n)
 }
 
 void
-ps2::add_char(char letter)
+PS2::add_char(char letter)
 {
-    if (this->buffer_count > ps2::BUFFER_SIZE - 1)
-        return;
+    /* Infinite circular buffer */
+    if (this->buffer_count >= PS2::buffer_maxsize)
+        this->buffer_count = 0;
     this->buffer[this->buffer_count] = letter;
     this->buffer_count               = this->buffer_count + 1; // += 1 volatile deprecated
     this->has_new_key                = true;
 }
 
 bool
-ps2::update()
+PS2::update()
 {
     bool temp         = this->has_new_key;
     this->has_new_key = false;
@@ -88,9 +90,46 @@ ps2::update()
 }
 
 const char *
-ps2::get_text() const
+PS2::get_text() const
 {
     return this->buffer;
+}
+
+void
+PS2::scanf(char *buffer, uint32_t maxsize)
+{
+    auto buffer_backup      = this->buffer;
+    auto count_backup       = this->buffer_count;
+    auto maxsize_backup     = this->buffer_maxsize;
+    auto has_new_key_backup = this->has_new_key;
+
+    this->buffer         = buffer;
+    this->buffer_maxsize = maxsize;
+    this->buffer_count   = 0;
+    this->has_new_key    = false;
+
+    uint32_t last_text_size = 0;
+    while (1) {
+        if (kernel::keyboard.update()) {
+            auto x_backup = kernel::tty.get_x();
+            auto y_backup = kernel::tty.get_y();
+            char aux[]    = { (char)0xdb, '\0' };
+            for (int i = 0; i < last_text_size; i++)
+                kernel::tty.print(aux);
+            kernel::tty.set_x(x_backup);
+            kernel::tty.set_x(y_backup);
+            auto text = this->get_text();
+            kernel::tty.print(text);
+            last_text_size = this->buffer_count;
+            kernel::tty.set_x(x_backup);
+            kernel::tty.set_x(y_backup);
+        }
+    }
+
+    this->buffer         = buffer_backup;
+    this->buffer_maxsize = maxsize_backup;
+    this->buffer_count   = count_backup;
+    this->has_new_key    = has_new_key_backup;
 }
 
 } // namespace io

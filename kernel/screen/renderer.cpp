@@ -142,4 +142,28 @@ renderer_i::scroll()
         this->y_offset -= this->glyph_y();
 }
 
+unsigned int
+renderer_i::get_x()
+{
+    return this->x_offset;
+}
+
+unsigned int
+renderer_i::get_y()
+{
+    return this->y_offset;
+}
+
+void
+renderer_i::set_x(unsigned int value)
+{
+    this->x_offset = value;
+}
+
+void
+renderer_i::set_y(unsigned int value)
+{
+    this->y_offset = value;
+}
+
 } // namespace screen

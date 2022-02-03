@@ -7,8 +7,12 @@
  */
 
 #include <stdint.h>
+
 namespace io {
 
+/**
+ * Scancode mapping for a ES keyboard with 1 byte chars
+ */
 const char PS2_SCANCODES[][4] = {
     { 0x0, 0x0, 0x0, 0x0 },   { 0x0, 0x0, 0x0, 0x0 }, { '1', '!', '|', 0x0 },
     { '2', '"', '@', 0x0 },   { '3', 0x0, '#', 0x0 }, { '4', '$', '~', 0x0 },
@@ -41,8 +45,10 @@ const char PS2_SCANCODES[][4] = {
     { 0x0, 0x0, 0x0, 0x0 },   { 0x0, 0x0, 0x0, 0x0 }, { '<', '>', 0x0, 0x0 },
 };
 
+/** Ammount of keys in the mapping */
 const unsigned int PS2_SCANCODE_SIZE = sizeof(PS2_SCANCODES) / sizeof(char[4]);
 
+/** States of the keyboard */
 enum class PS2_State
 {
     Normal  = 0,
@@ -64,7 +70,7 @@ enum class PS2_State
  *
  * We have to generate them by playing with pressed/released combinations
  */
-class ps2
+class PS2
 {
   public:
     /** Process a new scancode */
@@ -75,14 +81,24 @@ class ps2
     void add_char(char);
     /** True if we need to update keyboard values */
     bool update();
+    /** Returns the buffered input text */
     const char *get_text() const;
+    /** Read */
+    void scanf(char *, uint32_t);
 
   private:
-    const static uint16_t BUFFER_SIZE = 256;
-    volatile uint16_t buffer_count    = 0;
-    char buffer[BUFFER_SIZE];
+    const static uint16_t DEFAULT_MAXSIZE = 256;
+    /** Input buffer max size */
+    uint16_t buffer_maxsize = DEFAULT_MAXSIZE;
+    /** Chars in the input buffer */
+    volatile uint16_t buffer_count = 0;
+    /** Input buffer */
+    char local_buffer[DEFAULT_MAXSIZE];
+    char *buffer = local_buffer;
+    /** Buffer has unrequested changes */
     bool has_new_key = false;
-    PS2_State state  = PS2_State::Normal;
+    /** Keyboard state */
+    PS2_State state = PS2_State::Normal;
 };
 
 } // namespace io

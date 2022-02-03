@@ -26,6 +26,10 @@ class renderer_i
     virtual void draw(const char) = 0;
     void put(const char);
     void setColor(color_e);
+    unsigned int get_x();
+    unsigned int get_y();
+    void set_x(unsigned int);
+    void set_y(unsigned int);
 
   protected:
     /** Framebuffer to use */

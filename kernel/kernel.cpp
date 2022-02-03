@@ -40,9 +40,11 @@ _start(bootstrap::boot_args *args)
     asm("int $0x09");
     kernel::tty.println("Hola otra vez desde el kernel!");
 
+    char aux[256];
+    kernel::keyboard.scanf(aux, 256);
+    kernel::tty.println(aux);
+
     /* Shoudln't return */
     while (1) {
-        if (kernel::keyboard.update())
-            kernel::tty.println(kernel::keyboard.get_text());
     }
 }
