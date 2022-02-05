@@ -23,7 +23,7 @@
  * @info startup.nsh
  */
 int
-main(int argc, char *argv[])
+main(void)
 {
     info("started bootloader %s function from %s", __PRETTY_FUNCTION__, __FILE__);
     info("C enviroment is %s", __STDC_HOSTED__ ? "hosted" : "freestanding");
