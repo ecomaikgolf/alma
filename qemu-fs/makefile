@@ -1,5 +1,5 @@
 FILESYSTEMDIR= .
-QEMUPARAMS = -cpu qemu64 -m 256M -bios $(FILESYSTEMDIR)/bios.bin -net none 
+QEMUPARAMS = -cpu qemu64 -m 256M -bios $(FILESYSTEMDIR)/bios.bin -nic user,model=rtl8139,mac=01:02:03:04:05:06
 QEMUHDD = -hda fat:rw:$(FILESYSTEMDIR)
 IMGFILE = flash.img
 DEFDEV = /dev/sda
@@ -48,5 +48,5 @@ dev: bios.bin
 	read aux && \
 	sudo qemu-system-x86_64 $(QEMUPARAMS) $(DEFDEV)
 
-$(ALL_FILES) : 
-	$(error Missing files. Remember to build the project)
+#$(ALL_FILES) ::
+#	$(error Missing files. Remember to build the project)
