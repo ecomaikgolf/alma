@@ -14,3 +14,5 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_subdirectory(kernel)
 add_subdirectory(bootloader)
+
+configure_file("${QEMU_FS}/Makefile.in" "${QEMU_FS}/Makefile")

@@ -1,0 +1,48 @@
+FILESYSTEMDIR= .
+TOOLCHAIN_DIR=@TOOLCHAINDIR@
+BUILD_DIR=@CMAKE_CURRENT_BINARY_DIR@
+
+QEMU_CPU=-cpu qemu64
+QEMU_RAM=-m 256M
+QEMU_BIOS=-bios $(FILESYSTEMDIR)/bios.bin
+QEMU_NET=-nic user,model=rtl8139,mac=ca:fe:c0:ff:ee:00
+QEMU_BOOT=-drive file=$(BOOTFILE),format=raw,readonly=on,id=cd,if=none -device ahci,id=achi0 -device ide-cd,bus=achi0.0,drive=cd,id=cd1,bootindex=1
+QEMU_DEBUG=-s -S
+
+BOOTFILE = drive.img
+DEFDEV = /dev/sda
+
+FILES = bootloader.efi kernel.elf $(TOOLCHAIN_DIR)/font/zap-light16.psf
+
+ALL_FILES = $(FILES) $(QEMU_FILES) $(QEMU_DEV) 
+
+all: run
+run: $(BOOTFILE) bios.bin
+	qemu-system-x86_64 $(QEMU_CPU) $(QEMU_RAM) $(QEMU_BIOS) $(QEMU_NET) $(QEMU_BOOT)
+
+debug: $(BOOTFILE) bios.bin
+	qemu-system-x86_64 $(QEMU_DEBUG) $(QEMU_CPU) $(QEMU_RAM) $(QEMU_BIOS) $(QEMU_NET) $(QEMU_BOOT)
+
+$(BOOTFILE): $(FILES)
+	rm -f $(BOOTFILE)
+	dd if=/dev/zero of=$(BOOTFILE) bs=1k count=1440
+	mformat -i $(BOOTFILE) -f 1440 ::
+	mmd -i $(BOOTFILE) ::/EFI
+	mmd -i $(BOOTFILE) ::/EFI/BOOT
+	mcopy -i $(BOOTFILE) bootloader.efi ::/EFI/BOOT/BOOTX64.EFI
+	mcopy -i $(BOOTFILE) kernel.elf ::
+	mcopy -i $(BOOTFILE) zap-light16.psf ::
+
+flash: $(BOOTFILE)
+	@echo "README ==== ¿ is $(DEFDEV) CORRECT ? (3x Enter) ==== "
+	@echo "THIS IS VERY IMPORTANT DON'T CONTINUE IF YOU DON'T KNOW WHAT ARE YOU DOING"
+	@echo "$(DEFDEV) device is going to be erased, check that it isn't any internal HDD"
+	read aux && \
+	read aux && \
+	read aux && \
+	sudo dd if=$(BOOTFILE) of=$(DEFDEV) bs=1M
+	sync
+	@echo "Done. Remember to boot in UEFI mode"
+
+$(FILES):
+	make -C $(BUILD_DIR)
