@@ -8,6 +8,7 @@ toolchain/posix-uefi
 qemu-fs/NvVars
 qemu-fs/bootloader.efi
 qemu-fs/kernel.efi
+qemu-fs/drive.img
 
 # Clang
 .cache
