@@ -5,7 +5,7 @@
 ###########
 # General #
 ###########
-THREADS=1
+THREADS=10
 BUILD_DIR=$(CURDIR)/build
 
 ############
