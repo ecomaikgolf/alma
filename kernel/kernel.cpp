@@ -41,7 +41,9 @@ _start(bootstrap::boot_args *args)
     kernel::tty.println("Hola otra vez desde el kernel!");
 
     char aux[256];
+    kernel::tty.print("Introduce tu nombre: ");
     kernel::keyboard.scanf(aux, 256);
+    kernel::tty.print("Hola, ");
     kernel::tty.println(aux);
 
     /* Shoudln't return */

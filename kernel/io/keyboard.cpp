@@ -78,6 +78,7 @@ PS2::add_char(char letter)
         this->buffer_count = 0;
     this->buffer[this->buffer_count] = letter;
     this->buffer_count               = this->buffer_count + 1; // += 1 volatile deprecated
+    this->buffer[this->buffer_count] = '\0';
     this->has_new_key                = true;
 }
 
@@ -111,18 +112,26 @@ PS2::scanf(char *buffer, uint32_t maxsize)
     uint32_t last_text_size = 0;
     while (1) {
         if (kernel::keyboard.update()) {
+            if (this->buffer_count > 0 && this->buffer[this->buffer_count - 1] == '\n') {
+                this->buffer[this->buffer_count] = '\0';
+                kernel::tty.println("");
+                break;
+            }
+
             auto x_backup = kernel::tty.get_x();
             auto y_backup = kernel::tty.get_y();
             char aux[]    = { (char)0xdb, '\0' };
+            kernel::tty.setColor(screen::color_e::BLACK);
             for (int i = 0; i < last_text_size; i++)
                 kernel::tty.print(aux);
+            kernel::tty.setColor(screen::color_e::WHITE);
             kernel::tty.set_x(x_backup);
-            kernel::tty.set_x(y_backup);
+            kernel::tty.set_y(y_backup);
             auto text = this->get_text();
             kernel::tty.print(text);
             last_text_size = this->buffer_count;
             kernel::tty.set_x(x_backup);
-            kernel::tty.set_x(y_backup);
+            kernel::tty.set_y(y_backup);
         }
     }
 
