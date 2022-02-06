@@ -1,3 +1,4 @@
+# DEPRECATED
 @echo -off
 
 cls
