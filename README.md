@@ -205,6 +205,8 @@ Explain them to me please: `me@ecomaikgolf.com`
 * https://youtu.be/mpPbKEeWIHU
 * https://www.iaik.tugraz.at/teaching/materials/os/tutorials/paging-on-intel-x86-64/
 * https://git.musl-libc.org/cgit/musl/tree
+* https://maskray.me/blog/2021-11-07-init-ctors-init-array
+* https://blog.llandsmeer.com/tech/2019/07/21/uefi-x64-userland.html
 
 _The list is longer but I can't put each site where I read something. This list is a good place to start_
 
