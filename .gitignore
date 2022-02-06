@@ -9,6 +9,7 @@ qemu-fs/NvVars
 qemu-fs/bootloader.efi
 qemu-fs/kernel.efi
 qemu-fs/drive.img
+qemu-fs/Makefile
 
 # Clang
 .cache
