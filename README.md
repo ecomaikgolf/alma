@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="300" height="100" src="https://ls.ecomaikgolf.com/alma/logo3.png">
+  <img width="300" height="100" src="https://ls.ecomaikgolf.com/alma/img/logo3.png">
 </p>
 
 <p align="center">
@@ -11,7 +11,7 @@
 > 6. f. Sustancia o parte principal de cualquier cosa.
 
 <p align="center">
-  <img width="800" height="400" src="https://ls.ecomaikgolf.com/alma/screen.png">
+  <img width="800" height="400" src="https://ls.ecomaikgolf.com/alma/img/screen.png">
 </p>
 
 ## Features
@@ -128,7 +128,7 @@ compile.
 **Download (@gcloud.ua.es):** https://drive.google.com/file/d/1neuuBo7Ja4Czmwre1SWPkwGSF8MV98s3/view?usp=sharing
 
 <p align="center">
-  <img width="800" height="400" src="https://ls.ecomaikgolf.com/alma/alma-build-vm.png">
+  <img width="800" height="400" src="https://ls.ecomaikgolf.com/alma/img/alma-build-vm.png">
 </p>
 
 Features:
