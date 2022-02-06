@@ -22,7 +22,7 @@ struct psf1
     /**
      * PSF1 Font Header
      */
-    struct
+    struct __attribute__((packed))
     {
         /** 0x36, 0x04 */
         unsigned char magic[2];
@@ -39,7 +39,7 @@ struct psf1
     static const unsigned int glyph_x = 8;
     /** Glyph y size in pixels */
     static const unsigned int glyph_y = 16;
-};
+} __attribute__((packed));
 
 } // namespace fonts
 

@@ -20,6 +20,6 @@ struct framebuffer
     unsigned int width;
     unsigned int height;
     unsigned int ppscl;
-};
+} __attribute__((packed));
 
 } // namespace screen

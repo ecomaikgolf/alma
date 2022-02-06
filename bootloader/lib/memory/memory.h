@@ -11,7 +11,7 @@
 /** num of tries to get correct memory size */
 static const uint8_t RETRIES = 5;
 
-typedef struct
+typedef struct __attribute__((packed))
 {
 	/** Array of memory descriptors */
     efi_memory_descriptor_t *map;

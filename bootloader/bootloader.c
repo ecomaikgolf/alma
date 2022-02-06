@@ -95,11 +95,11 @@ main(void)
     info("finished kernel global constructors");
 
     /* Exit UEFI Boot Services */
-    info("Exiting UEFI Boot Services before the jump");
-    if (exit_bs() > 0) {
-        error("error exiting UEFI boot services");
-        return UEFI_BS;
-    }
+    // info("Exiting UEFI Boot Services before the jump");
+    // if (exit_bs() > 0) {
+    //     error("error exiting UEFI boot services");
+    //     return UEFI_BS;
+    // }
 
     /* Call the kernel */
     BootArgs args = { fb, font, map }; // with dynamic memory doesn't work, maybe due to exit_bs

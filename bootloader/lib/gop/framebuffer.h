@@ -11,7 +11,7 @@
 /**
  * Framebuffer struct
  */
-typedef struct {
+typedef struct __attribute__((packed)) {
   /** Base address of the framebuffer */
   char *base;
   /** Total size */

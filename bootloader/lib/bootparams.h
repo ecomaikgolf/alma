@@ -11,7 +11,7 @@
 #include "memory/memory.h"
 #include <uefi.h>
 
-typedef struct
+typedef struct __attribute__((packed))
 {
     Framebuffer *fb;
     PSF1_Font *font;

@@ -20,7 +20,7 @@
 /**
  * PSF1 Header
  */
-typedef struct {
+typedef struct __attribute__((packed)) {
   /** Magic number */
   unsigned char magic[2];
   /** Mode to manage number of glpyhs */
@@ -32,7 +32,7 @@ typedef struct {
 /**
  * PSF1 Font
  */
-typedef struct {
+typedef struct __attribute__((packed)) {
   /** PSF1 Header */
   PSF1_Header *header;
   /** Glyph buffer data */

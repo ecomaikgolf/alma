@@ -21,7 +21,7 @@ struct boot_args
     screen::framebuffer *fb;
     screen::fonts::psf1 *font;
     uefi::memory::map *map;
-};
+} __attribute__((packed));
 
 void screen(screen::framebuffer *, screen::fonts::psf1 *);
 void allocator(uefi::memory::map *);
