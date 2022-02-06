@@ -49,7 +49,7 @@
 			- 2: preconfigured alma build VM
 		- git submodules (easy toolchain updating)
 - uefi shell
-	- bootloader run script
+	- bootloader run script (deprecated)
 - bootloader
 	- C + posix-uefi
 		- commented code (doxygen)
@@ -85,6 +85,12 @@
 		- interrupt descriptor table
 		- register (vector, interrupt routine)
 		- call interrupt routines on interrupts
+	- keyboard
+		- PS2 keyboard support
+		- capital letters
+		- functional Lshift, Lalt, Lctrl 
+		- only 8byte chars
+
 
 ## Run
 
