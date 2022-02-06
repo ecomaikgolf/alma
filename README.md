@@ -10,6 +10,10 @@
 
 > 6. f. Sustancia o parte principal de cualquier cosa.
 
+<p align="center">
+  <img width="800" height="400" src="https://ls.ecomaikgolf.com/alma/screen.png">
+</p>
+
 ## Features
 
 - project
