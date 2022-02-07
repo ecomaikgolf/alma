@@ -85,7 +85,7 @@ renderer_i::setColor(color_e color)
  *
  * @return color Color in use
  */
-void
+color_e
 renderer_i::getColor()
 {
     return this->color;
