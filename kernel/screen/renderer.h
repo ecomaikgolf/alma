@@ -26,6 +26,7 @@ class renderer_i
     virtual void draw(const char) = 0;
     void put(const char);
     void setColor(color_e);
+    color_e getColor();
     unsigned int get_x();
     unsigned int get_y();
     void set_x(unsigned int);

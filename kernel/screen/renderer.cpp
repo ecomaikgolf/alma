@@ -81,6 +81,17 @@ renderer_i::setColor(color_e color)
 }
 
 /**
+ * Gets current color
+ *
+ * @return color Color in use
+ */
+void
+renderer_i::getColor()
+{
+    return this->color;
+}
+
+/**
  * Fast screen clear
  *
  * Uses biggest integer asignations
