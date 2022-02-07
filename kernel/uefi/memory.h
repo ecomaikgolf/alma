@@ -88,7 +88,7 @@ struct map
     uint64_t descriptor_size;
     /** Number of descriptors in the map array */
     uint64_t entries;
-} __attribute__((packed));
+};
 
 /** Function to retrieve total memory size from a UEFI memory map */
 size_t get_memsize(const map *);

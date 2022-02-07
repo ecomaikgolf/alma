@@ -20,23 +20,25 @@
 /**
  * PSF1 Header
  */
-typedef struct __attribute__((packed)) {
-  /** Magic number */
-  unsigned char magic[2];
-  /** Mode to manage number of glpyhs */
-  unsigned char mode;
-  /** Size of a glyph bitmap */
-  unsigned char charsize;
+typedef struct
+{
+    /** Magic number */
+    unsigned char magic[2];
+    /** Mode to manage number of glpyhs */
+    unsigned char mode;
+    /** Size of a glyph bitmap */
+    unsigned char charsize;
 } PSF1_Header;
 
 /**
  * PSF1 Font
  */
-typedef struct __attribute__((packed)) {
-  /** PSF1 Header */
-  PSF1_Header *header;
-  /** Glyph buffer data */
-  void *buffer;
+typedef struct
+{
+    /** PSF1 Header */
+    PSF1_Header *header;
+    /** Glyph buffer data */
+    void *buffer;
 } PSF1_Font;
 
 PSF1_Font *load_psf1_font(const char *const);
