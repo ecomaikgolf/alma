@@ -20,7 +20,21 @@ class renderer_i
   public:
     renderer_i() = default;
     void println(const char *);
+    void printcharln(char letter)
+    {
+        char aux[] = { letter, '\0' };
+        this->println(aux);
+    }
     void print(const char *);
+    void printchar(char letter)
+    {
+        char aux[] = { letter, '\0' };
+        this->print(aux);
+    };
+    void newline()
+    {
+        this->println("");
+    };
     void clear();
     void scroll();
     virtual void draw(const char) = 0;
