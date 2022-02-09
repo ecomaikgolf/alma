@@ -10,6 +10,12 @@ outb(uint16_t port, uint8_t value)
     asm volatile("outb %0, %1" : : "a"(value), "Nd"(port));
 }
 
+void
+outb(io::port port, uint8_t value)
+{
+    io::outb(static_cast<uint16_t>(port), value);
+}
+
 uint8_t
 inb(uint16_t port)
 {
@@ -18,6 +24,12 @@ inb(uint16_t port)
     uint8_t aux;
     asm volatile("inb %1, %0" : "=a"(aux) : "Nd"(port));
     return aux;
+}
+
+uint8_t
+inb(io::port port)
+{
+    return io::inb(static_cast<uint16_t>(port));
 }
 
 void

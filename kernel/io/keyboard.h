@@ -79,12 +79,31 @@ class PS2
     void delete_char(uint16_t n = 1);
     /** Add a new char */
     void add_char(char);
+    /** Add a new mod char */
+    void add_modchar(char);
     /** True if we need to update keyboard values */
     bool update();
-    /** Returns the buffered input text */
-    const char *get_text() const;
     /** Read */
     void scanf(char *, uint32_t);
+    /** Returns the buffered input text */
+    const char *get_buffer() const
+    {
+        return this->buffer;
+    };
+    /** Sets a new buffer to store text */
+    void set_buffer(char *buffer)
+    {
+        this->buffer = buffer;
+    };
+    uint16_t get_maxsize() const
+    {
+        return this->buffer_maxsize;
+    };
+    void set_maxsize(uint16_t maxsize)
+    {
+        this->buffer_maxsize = maxsize;
+    };
+    static void enable_keyboard();
 
   private:
     const static uint16_t DEFAULT_MAXSIZE = 256;
@@ -93,12 +112,19 @@ class PS2
     /** Chars in the input buffer */
     volatile uint16_t buffer_count = 0;
     /** Input buffer */
-    char local_buffer[DEFAULT_MAXSIZE];
-    char *buffer = local_buffer;
+    char *buffer = nullptr;
     /** Buffer has unrequested changes */
     bool has_new_key = false;
     /** Keyboard state */
     PS2_State state = PS2_State::Normal;
+
+    enum class buffer_mode
+    {
+        circular,
+        limit
+    };
+
+    buffer_mode buffer_handling;
 };
 
 } // namespace io

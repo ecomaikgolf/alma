@@ -28,6 +28,7 @@ enum class status_e
 enum class vector_e
 {
     reserved = 0x9,
+    keyboard = 0x21,
 };
 
 /**

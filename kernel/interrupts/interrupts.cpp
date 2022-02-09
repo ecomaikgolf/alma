@@ -15,7 +15,7 @@ reserved(frame *)
 __attribute__((interrupt)) void
 keyboard(frame *)
 {
-    uint8_t status = io::inb(0x60);   // 0x60 is the keyboard controller port
+    uint8_t status = io::inb(io::port::PS2);
     io::outb(io::PIC1_COMMAND, 0x20); // return correct receive
     kernel::keyboard.process_scancode(status);
 

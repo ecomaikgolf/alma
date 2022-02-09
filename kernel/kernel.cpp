@@ -35,14 +35,15 @@ _start(bootstrap::boot_args *args)
     bootstrap::interrupts();
     bootstrap::enable_virtualaddr();
     bootstrap::enable_interrupts();
+    bootstrap::keyboard();
 
     kernel::tty.println("Hola desde el kernel!");
     asm("int $0x09");
     kernel::tty.println("Hola otra vez desde el kernel!");
 
-    char aux[256];
+    char aux[5];
     kernel::tty.print("Introduce tu nombre: ");
-    kernel::keyboard.scanf(aux, 256);
+    kernel::keyboard.scanf(aux, 5);
     kernel::tty.print("Hola, ");
     kernel::tty.println(aux);
 

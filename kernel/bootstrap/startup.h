@@ -30,5 +30,6 @@ void translator(uefi::memory::map *);
 void interrupts();
 void enable_virtualaddr();
 void enable_interrupts();
+void keyboard();
 
 } // namespace bootstrap

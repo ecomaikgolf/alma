@@ -5,6 +5,8 @@
 
 namespace bootstrap {
 
+const uint16_t KEYBOARD_BUFF_SIZE = kernel::page_size;
+
 void
 screen(screen::framebuffer *fb, screen::fonts::psf1 *font)
 {
@@ -69,7 +71,6 @@ interrupts()
 
     /* Load the interrupt handlers */
     kernel::idtr.add_handle(interrupts::vector_e::reserved, interrupts::reserved);
-    kernel::idtr.add_handle((interrupts::vector_e)0x21, interrupts::keyboard);
 
     /*
      * From OSDev:
@@ -101,5 +102,16 @@ enable_interrupts()
     /* Enable interrupts */
     asm("lidt %0" : : "m"(kernel::idtr));
 }
+
+void
+keyboard()
+{
+    auto buffer = kernel::allocator.request_page();
+    auto size   = KEYBOARD_BUFF_SIZE;
+
+    kernel::keyboard.set_buffer(static_cast<char *>(buffer));
+    kernel::keyboard.set_maxsize(size);
+    io::PS2::enable_keyboard();
+};
 
 } // namespace bootstrap
