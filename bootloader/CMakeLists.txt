@@ -116,6 +116,7 @@ set(BOOTLOADER_SOURCES
 	lib/gop/gop.c
 	lib/memory/memory.c
 	lib/io/file.c
+	lib/acpi/acpi.c
 )
 
 # posix-uefi libs

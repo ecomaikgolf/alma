@@ -13,6 +13,7 @@
 #include "gop/framebuffer.h"
 #include "gop/gop.h"
 #include "io/file.h"
+#include "lib/acpi/acpi.h"
 #include "log/stdout.h"
 #include "memory/memory.h"
 #include <uefi.h>
@@ -68,6 +69,9 @@ main(void)
      */
     MapInfo *map = load_memmap();
 
+    /* Obtain the RSDP */
+    rsdp_v2 *rsdp = load_rsdp();
+
     /* Load the PSF1 font */
     PSF1_Font *font = load_psf1_font("zap-light16.psf");
 
@@ -102,7 +106,7 @@ main(void)
     // }
 
     /* Call the kernel */
-    BootArgs args = { fb, font, map }; // with dynamic memory doesn't work, maybe due to exit_bs
+    BootArgs args = { fb, font, map, rsdp };
     _start(&args);
 
     /* _start shouldn't return */
