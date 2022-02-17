@@ -3,6 +3,7 @@ TOOLCHAIN_DIR=@TOOLCHAINDIR@
 BUILD_DIR=@CMAKE_CURRENT_BINARY_DIR@
 
 QEMU_CPU=-cpu qemu64
+QEMU_MACH=-machine q35
 QEMU_RAM=-m 256M
 QEMU_BIOS=-bios $(FILESYSTEMDIR)/bios.bin
 QEMU_NET=-nic user,model=rtl8139,mac=ca:fe:c0:ff:ee:00
@@ -18,10 +19,10 @@ ALL_FILES = $(FILES) $(QEMU_FILES) $(QEMU_DEV)
 
 all: run
 run: $(BOOTFILE) bios.bin
-	qemu-system-x86_64 $(QEMU_CPU) $(QEMU_RAM) $(QEMU_BIOS) $(QEMU_NET) $(QEMU_BOOT)
+	qemu-system-x86_64 $(QEMU_MACH) $(QEMU_CPU) $(QEMU_RAM) $(QEMU_BIOS) $(QEMU_NET) $(QEMU_BOOT)
 
 debug: $(BOOTFILE) bios.bin
-	qemu-system-x86_64 $(QEMU_DEBUG) $(QEMU_CPU) $(QEMU_RAM) $(QEMU_BIOS) $(QEMU_NET) $(QEMU_BOOT)
+	qemu-system-x86_64 $(QEMU_DEBUG) $(QEMU_MACH) $(QEMU_CPU) $(QEMU_RAM) $(QEMU_BIOS) $(QEMU_NET) $(QEMU_BOOT)
 
 $(BOOTFILE): $(FILES)
 	rm -f $(BOOTFILE)
