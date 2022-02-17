@@ -4,6 +4,7 @@
  * @author Ernesto Martínez García <me@ecomaikgolf.com>
  */
 
+#include "acpi/acpi.h"
 #include "interrupts/interrupts.h"
 #include "screen/fonts/psf1.h"
 #include "screen/framebuffer.h"
@@ -21,6 +22,7 @@ struct boot_args
     screen::framebuffer *fb;
     screen::fonts::psf1 *font;
     uefi::memory::map *map;
+    acpi::rsdp_v2 *rsdp;
 };
 
 void screen(screen::framebuffer *, screen::fonts::psf1 *);
@@ -31,5 +33,6 @@ void interrupts();
 void enable_virtualaddr();
 void enable_interrupts();
 void keyboard();
+void acpi(acpi::rsdp_v2 *);
 
 } // namespace bootstrap

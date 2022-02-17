@@ -5,6 +5,7 @@
  */
 
 #include "kernel.h"
+#include "acpi/acpi.h"
 #include "bootstrap/startup.h"
 #include "float.h"
 #include "interrupts/IDT.h"
@@ -36,12 +37,13 @@ _start(bootstrap::boot_args *args)
     bootstrap::enable_virtualaddr();
     bootstrap::enable_interrupts();
     bootstrap::keyboard();
+    bootstrap::acpi(args->rsdp);
 
     kernel::tty.println("Hola desde el kernel!");
     asm("int $0x09");
     kernel::tty.println("Hola otra vez desde el kernel!");
 
-    char aux[5];
+    char aux[256];
     kernel::tty.print("Introduce tu nombre: ");
     kernel::keyboard.scanf(aux, 5);
     kernel::tty.print("Hola, ");

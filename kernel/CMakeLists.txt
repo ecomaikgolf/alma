@@ -142,6 +142,7 @@ set(KERNEL_SOURCES
 	segmentation/gdt.asm
 	io/bus.cpp
 	io/keyboard.cpp
+	acpi/acpi.cpp
 	${INTERRUPT_SOURCES}
 	kernel.cpp
 )

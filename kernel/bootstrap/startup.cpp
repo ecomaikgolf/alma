@@ -114,4 +114,12 @@ keyboard()
     io::PS2::enable_keyboard();
 };
 
+void
+acpi(acpi::rsdp_v2 *rsdp_uefi)
+{
+    kernel::rsdp = *rsdp_uefi;
+    kernel::rsdp.memmap_acpi_tables();
+    kernel::rsdp.print_acpi_tables();
+};
+
 } // namespace bootstrap
