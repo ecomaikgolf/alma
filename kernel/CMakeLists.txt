@@ -114,6 +114,7 @@ include_directories(${INCLUDE_DIRECTORIES})
 set(LIBC_SOURCES
 	libc/stdlib/itoa.cpp
 	libc/string/memset.cpp
+	libc/string/strcmp.cpp
 	libc/math/pow.cpp
 	libc/math/sqrt.cpp
 	libc/math/log.cpp

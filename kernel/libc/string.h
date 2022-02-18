@@ -9,3 +9,4 @@
 #include <stdint.h>
 
 void memset(void *, uint8_t, uint64_t);
+int strcmp(const char *, const char *);
