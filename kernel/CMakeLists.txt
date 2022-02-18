@@ -143,6 +143,7 @@ set(KERNEL_SOURCES
 	io/bus.cpp
 	io/keyboard.cpp
 	acpi/acpi.cpp
+	pci/pci.cpp
 	${INTERRUPT_SOURCES}
 	kernel.cpp
 )
