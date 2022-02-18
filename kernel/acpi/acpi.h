@@ -5,6 +5,29 @@
 namespace acpi {
 
 /**
+ * SDT Header
+ *
+ * SDT (Headers for descriptor tables) are divided in two parts, the header (common for all SDT) and
+ * the table, different for each one
+ */
+struct sdt
+{
+    /** 4 byte string */
+    char signature[4];
+    /** total lenght of the table, including this header */
+    uint32_t length;
+    /** version */
+    uint8_t revision;
+    /** sum of all table bytes (with header) mod 0x100 must be 0 */
+    uint8_t checksum;
+    char oem[6];
+    char oem_table[8];
+    uint32_t oem_version;
+    uint32_t creator_id;
+    uint32_t creator_revision;
+} __attribute__((packed));
+
+/**
  * RSDP for ACPI v1
  */
 struct rsdp_v1
@@ -37,32 +60,10 @@ struct rsdp_v2
     /** reserved */
     uint8_t reserved[3];
 
+    sdt *find_table(const char *);
     void print_acpi_tables();
     void memmap_acpi_tables();
 
-} __attribute__((packed));
-
-/**
- * SDT Header
- *
- * SDT (Headers for descriptor tables) are divided in two parts, the header (common for all SDT) and
- * the table, different for each one
- */
-struct sdt
-{
-    /** 4 byte string */
-    char signature[4];
-    /** total lenght of the table, including this header */
-    uint32_t length;
-    /** version */
-    uint8_t revision;
-    /** sum of all table bytes (with header) mod 0x100 must be 0 */
-    uint8_t checksum;
-    char oem[6];
-    char oem_table[8];
-    uint32_t oem_version;
-    uint32_t creator_id;
-    uint32_t creator_revision;
 } __attribute__((packed));
 
 } // namespace acpi

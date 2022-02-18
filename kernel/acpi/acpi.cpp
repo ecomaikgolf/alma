@@ -1,5 +1,7 @@
 #include "acpi/acpi.h"
 #include "kernel.h"
+#include "libc/string.h"
+#include <stdint.h>
 
 namespace acpi {
 
@@ -42,6 +44,24 @@ rsdp_v2::memmap_acpi_tables()
     /* map pages */
     for (uint64_t i = 0; i < xsdt->length / kernel::page_size + 1; i += kernel::page_size)
         kernel::translator.map((uint64_t)((uint8_t *)xsdt + i), (uint64_t)((uint8_t *)xsdt + i));
+}
+
+sdt *
+rsdp_v2::find_table(const char *signature)
+{
+    acpi::sdt *xsdt = (acpi::sdt *)this->xsdt;
+
+    int entries = (xsdt->length - sizeof(acpi::sdt)) / sizeof(uint64_t);
+
+    for (int i = 0; i < entries; i++) {
+        acpi::sdt *tbl =
+          (acpi::sdt *)*(uint64_t *)((uint64_t)xsdt + sizeof(acpi::sdt) + (i * sizeof(uint64_t)));
+        if (strncmp(tbl->signature, signature, 4) == 0)
+            return tbl;
+    }
+
+    /* No table found */
+    return nullptr;
 }
 
 } // namespace acpi

@@ -12,6 +12,7 @@
 #include "interrupts/interrupts.h"
 #include "io/keyboard.h"
 #include "libc/stdlib.h"
+#include "libc/string.h"
 #include "paging/PFA.h"
 #include "paging/PTM.h"
 #include "screen/fonts/psf1.h"
@@ -42,6 +43,12 @@ _start(bootstrap::boot_args *args)
     kernel::tty.println("Hola desde el kernel!");
     asm("int $0x09");
     kernel::tty.println("Hola otra vez desde el kernel!");
+
+    kernel::tty.print("Encontrando la tabla MCFG: ");
+    char mcfg_str[256];
+    acpi::sdt *mcfg_ptr = kernel::rsdp.find_table("MCFG");
+    hstr((uint64_t)mcfg_ptr, mcfg_str);
+    kernel::tty.println(mcfg_str);
 
     char aux[256];
     kernel::tty.print("Introduce tu nombre: ");
