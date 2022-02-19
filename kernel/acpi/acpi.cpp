@@ -64,4 +64,10 @@ rsdp_v2::find_table(const char *signature)
     return nullptr;
 }
 
+bool
+sdt::check_signature(const char *signature)
+{
+    return (strncmp(this->signature, signature, 4) == 0);
+}
+
 } // namespace acpi

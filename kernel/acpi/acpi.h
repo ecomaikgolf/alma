@@ -25,6 +25,8 @@ struct sdt
     uint32_t oem_version;
     uint32_t creator_id;
     uint32_t creator_revision;
+
+    bool check_signature(const char *);
 } __attribute__((packed));
 
 /**
