@@ -60,6 +60,7 @@
 	- framebuffer
 	- uefi memory map
 	- PSF1 fonts
+	- obtain the RSDP (Root System Descriptor Pointer)
 	- manually call kernel .ctors functions
 	- exit UEFI boot services
 	- jumps to kernel
@@ -90,7 +91,16 @@
 		- capital letters
 		- functional Lshift, Lalt, Lctrl 
 		- only 8byte chars
-
+	- acpi
+		- get the RSDP from UEFI
+		- get/query acpi tables
+		- get the MCFG
+	- pci/pcie
+		- enumerate dev/bus/func (iterating)
+		- Access PCIe Enhanced Configuration Access Mechanism (ECAM)
+	- networking
+		- emulate Realtek RTL8139 network chip (qemu)
+		- get the MAC through MMIO
 
 ## Run
 
