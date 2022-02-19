@@ -34,5 +34,6 @@ void enable_virtualaddr();
 void enable_interrupts();
 void keyboard();
 void acpi(acpi::rsdp_v2 *);
+void pci();
 
 } // namespace bootstrap

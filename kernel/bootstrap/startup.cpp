@@ -2,6 +2,7 @@
 #include "io/bus.h"
 #include "kernel.h"
 #include "libc/stdlib.h"
+#include "pci/pci.h"
 
 namespace bootstrap {
 
@@ -121,5 +122,12 @@ acpi(acpi::rsdp_v2 *rsdp_uefi)
     kernel::rsdp.memmap_acpi_tables();
     kernel::rsdp.print_acpi_tables();
 };
+
+void
+pci()
+{
+    acpi::sdt *mcfg_ptr = (acpi::sdt *)kernel::rsdp.find_table("MCFG");
+    pci::enum_pci(mcfg_ptr);
+}
 
 } // namespace bootstrap
