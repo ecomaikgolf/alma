@@ -4,9 +4,16 @@
 
 namespace pci {
 
+static uint64_t startaddr;
+static uint64_t _bus;
+static uint64_t startbus;
+static uint64_t _device;
+static uint64_t _function;
+
 void
 enum_fun(uint64_t addr, uint64_t fun)
 {
+    _function       = fun;
     uint64_t offset = fun << 12;
 
     uint64_t funaddr = addr + offset;
@@ -19,6 +26,7 @@ enum_fun(uint64_t addr, uint64_t fun)
     if (device->id == 0 || device->id == 0xffff)
         return;
 
+    /* WARNING: This code is a mess, it's here just for demo purposes and should be removed */
     char device_id[16];
     hstr(device->id, device_id);
     char vendor_id[16];
@@ -26,11 +34,24 @@ enum_fun(uint64_t addr, uint64_t fun)
     kernel::tty.print(vendor_id);
     kernel::tty.print(" - ");
     kernel::tty.println(device_id);
+    if (device->id == 0x8139) {
+        uint64_t asd = (device->BAR[1] & 0xfffffff0);
+        kernel::translator.map(asd, asd);
+        char auxstr[256];
+        kernel::tty.println("MAC Address: ");
+        for (int i = 0; i < 6; i++) {
+            uint8_t aux = *((uint8_t *)asd + i);
+            hstr(aux, auxstr);
+            kernel::tty.print("    ");
+            kernel::tty.println(auxstr);
+        }
+    }
 }
 
 void
 enum_dev(uint64_t addr, uint64_t dev)
 {
+    _device         = dev;
     uint64_t offset = dev << 15;
 
     uint64_t devaddr = addr + offset;
@@ -50,6 +71,7 @@ enum_dev(uint64_t addr, uint64_t dev)
 void
 enum_bus(uint64_t addr, uint64_t bus)
 {
+    _bus            = bus;
     uint64_t offset = bus << 20;
 
     uint64_t busaddr = addr + offset;
@@ -80,6 +102,9 @@ enum_pci(acpi::sdt *mcfg)
         pci::device_config *device =
           (pci::device_config *)((uint64_t)mcfg + (sizeof(acpi::sdt) + sizeof(uint64_t)) +
                                  sizeof(pci::device_config) * i);
+
+        startaddr = device->baseaddr;
+        startbus  = device->start_bus;
 
         for (uint64_t bus = device->start_bus; bus < device->end_bus; bus++)
             enum_bus(device->baseaddr, bus);

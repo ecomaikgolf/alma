@@ -30,6 +30,8 @@ struct device_header
     uint8_t latency_timer;
     uint8_t header_type;
     uint8_t BIST;
+    uint32_t BAR[6];
+    /* More parameters needed */
 } __attribute__((packed));
 
 void enum_fun(uint64_t addr, uint64_t fun);
