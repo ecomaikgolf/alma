@@ -40,6 +40,29 @@ _start(bootstrap::boot_args *args)
     bootstrap::keyboard();
     bootstrap::acpi(args->rsdp);
     bootstrap::pci();
+    bootstrap::heap((void *)0x0000100000000000, 0x10);
+    char asd[256];
+    void *a = kernel::heap.malloc(0x10);
+    hstr((uint64_t)a, asd);
+    kernel::tty.println(asd);
+
+    a = kernel::heap.malloc(0x8000);
+    hstr((uint64_t)a, asd);
+    kernel::tty.println(asd);
+
+    a = kernel::heap.malloc(0x90000);
+    hstr((uint64_t)a, asd);
+    kernel::tty.println(asd);
+
+    a = kernel::heap.malloc(0x1000);
+    hstr((uint64_t)a, asd);
+    kernel::tty.println(asd);
+
+    kernel::heap.free(a);
+
+    a = kernel::heap.malloc(0x1000);
+    hstr((uint64_t)a, asd);
+    kernel::tty.println(asd);
 
     kernel::tty.println("Hola desde el kernel!");
     asm("int $0x09");

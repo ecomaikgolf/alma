@@ -1,6 +1,8 @@
 #pragma once
 
 #include "acpi/acpi.h"
+#include "heap/allocator_i.h"
+#include "heap/simple_allocator.h"
 #include "interrupts/IDT.h"
 #include "io/keyboard.h"
 #include "paging/PFA.h"
@@ -30,6 +32,7 @@ inline segmentation::gdt_ptr gdt;
 inline interrupts::idt_ptr idtr;
 inline io::PS2 keyboard;
 inline acpi::rsdp_v2 rsdp;
+inline heap::simple_allocator heap;
 
 /* Kernel Constants */
 __attribute__((unused)) static void *_start_addr = &internal::_start_addr;

@@ -35,5 +35,6 @@ void enable_interrupts();
 void keyboard();
 void acpi(acpi::rsdp_v2 *);
 void pci();
+void heap(void *, size_t);
 
 } // namespace bootstrap

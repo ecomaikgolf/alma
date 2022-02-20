@@ -145,6 +145,7 @@ set(KERNEL_SOURCES
 	io/keyboard.cpp
 	acpi/acpi.cpp
 	pci/pci.cpp
+	heap/simple_allocator.cpp
 	${INTERRUPT_SOURCES}
 	kernel.cpp
 )
