@@ -69,15 +69,8 @@ add_custom_target(debug
 # doxygen documentation generation
 find_program(DOXYGEN doxygen)
 if (DOXYGEN)
-  # 'doc' Generate documentation in build dir
   set(DOXYFILE ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile)
     add_custom_target(doc ALL
-        COMMAND doxygen ${DOXYFILE}
-        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-        VERBATIM )
-  # 'pdoc' Generate documentation in project dir
-  set(DOXYFILE ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile)
-    add_custom_target(pdoc ALL
         COMMAND doxygen ${DOXYFILE}
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         VERBATIM )
