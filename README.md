@@ -103,7 +103,7 @@
 		- get the MAC through MMIO
 	- dynamic memory
 		- simple memory allocator
-		- ~malloc()~, ~free()~
+		- `malloc()`, `free()`
 
 ## Run
 
