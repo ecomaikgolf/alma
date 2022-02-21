@@ -136,7 +136,7 @@ set(SOURCES
 ###############
 
 # Final executable
-add_executable(bootloader ${POSIXUEFI_LIBS} ${BOOTLOADER_SOURCES})
+add_executable(bootloader.so ${POSIXUEFI_LIBS} ${BOOTLOADER_SOURCES})
 
 SET_SOURCE_FILES_PROPERTIES(
   ${POSIXUEFI_LIBS}
@@ -146,17 +146,18 @@ SET_SOURCE_FILES_PROPERTIES(
 )
 
 # Executable with .elf suffix
-set_target_properties(bootloader PROPERTIES
+set_target_properties(bootloader.so PROPERTIES
   SUFFIX ""
 )
 
 # Custom linker script
-set_target_properties(bootloader PROPERTIES 
+set_target_properties(bootloader.so PROPERTIES
 	LINK_DEPENDS ${LINKER_SCRIPT}
 )
 
-# Using system's objcopy instead the toolchain's one as it doesn't have the needed target
-add_custom_command(TARGET bootloader POST_BUILD
-	COMMAND ${CMAKE_OBJCOPY} -j .text -j .sdata -j .data -j .dynamic -j .dynsym  -j .rel -j .rela -j .rel.* -j .rela.* -j .reloc --target efi-app-x86_64 --subsystem=10 "$<TARGET_FILE:bootloader>" "$<TARGET_FILE:bootloader>.efi" 
-	COMMAND rm "$<TARGET_FILE:bootloader>" 
-	VERBATIM)
+add_custom_target(bootloader.efi
+	DEPENDS bootloader.so
+	BYPRODUCTS bootloader.efi
+	COMMAND ${CMAKE_OBJCOPY} -j .text -j .sdata -j .data -j .dynamic -j .dynsym  -j .rel -j .rela -j .rel.* -j .rela.* -j .reloc --target efi-app-x86_64 --subsystem=10 "$<TARGET_FILE:bootloader.so>" "bootloader.efi"
+	VERBATIM
+)
