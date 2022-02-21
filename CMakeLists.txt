@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(os-dev)
+project(alma)
 
 set(QEMU_FS "${CMAKE_CURRENT_SOURCE_DIR}/qemu-fs")
 

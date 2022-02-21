@@ -6,7 +6,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 # project general options
-project(os-dev-bootloader C)
+project(alma-bootloader C)
 
 # posix-uefi needed compilation files
 set(POSIXUEFI_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../toolchain/posix-uefi/uefi")

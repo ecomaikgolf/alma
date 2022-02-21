@@ -5,7 +5,7 @@
 # minimum cmake version
 cmake_minimum_required(VERSION 3.16)
 
-project(os-dev-kernel CXX ASM_NASM)
+project(alma-kernel CXX ASM_NASM)
 
 # nasm is required to build the kernel
 find_program(NASM nasm REQUIRED)
