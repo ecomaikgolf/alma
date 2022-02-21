@@ -17,13 +17,16 @@
 ## Features
 
 - project
-	- compilation
-		- cmake
-		- `cmake -B build; cmake --build build`
+	- configuration
+		- cmake 
+		- `cmake -B build`
+	- build
+		- Makefile, Ninja, etc. (cmake generators)
+		- `make -C build`
 		- out of source builds
-	- run
-		- `make -C qemu-fs`
-		- `make -C qemu-fs debug` remote tcp gdb (localhost:1234)
+	- run & debug
+		- `make -C build run`
+		- `make -C build debug`
 	- documentation
 		- inner workings (bachelor's final project)
 		- code (doxygen + comments)
