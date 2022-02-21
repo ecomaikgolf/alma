@@ -1,0 +1,7 @@
+.inline {
+  display:block;
+  margin: 0 auto;
+}
+.contents {
+  max-width: 90vh;
+}
