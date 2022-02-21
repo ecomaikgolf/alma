@@ -47,21 +47,38 @@ add_custom_command(OUTPUT disk.img
   VERBATIM
 )
 
-# system image generation (patch to avoid rebuilding)
+# (default) system image generation (patch to avoid rebuilding)
 add_custom_target(disk ALL
   DEPENDS disk.img
 )
 
-# qemu emulation
+# 'run' qemu emulation
 add_custom_target(run
   DEPENDS disk
   COMMAND ${QEMU_BIN} ${QEMU_MACH} ${QEMU_CPU} ${QEMU_RAM} ${QEMU_BIOS} ${QEMU_NET} ${QEMU_BOOT}
   VERBATIM
 )
 
-# qemu debug
+# 'debug' qemu debug
 add_custom_target(debug
   DEPENDS disk
   COMMAND ${QEMU_BIN} ${QEMU_DBG} ${QEMU_MACH} ${QEMU_CPU} ${QEMU_RAM} ${QEMU_BIOS} ${QEMU_NET} ${QEMU_BOOT} &; gdb -ex "target remote localhost:1234" $<TARGET_FILE:kernel>
   USES_TERMINAL
 )
+
+# doxygen documentation generation
+find_program(DOXYGEN doxygen)
+if (DOXYGEN)
+  # 'doc' Generate documentation in build dir
+  set(DOXYFILE ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile)
+    add_custom_target(doc ALL
+        COMMAND doxygen ${DOXYFILE}
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+        VERBATIM )
+  # 'pdoc' Generate documentation in project dir
+  set(DOXYFILE ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile)
+    add_custom_target(pdoc ALL
+        COMMAND doxygen ${DOXYFILE}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        VERBATIM )
+endif (DOXYGEN)
