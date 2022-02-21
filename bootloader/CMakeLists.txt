@@ -162,6 +162,5 @@ add_custom_command(
 	POST_BUILD
 	BYPRODUCTS bootloader.efi
 	COMMAND ${CMAKE_OBJCOPY} -j .text -j .sdata -j .data -j .dynamic -j .dynsym  -j .rel -j .rela -j .rel.* -j .rela.* -j .reloc --target efi-app-x86_64 --subsystem=10 "$<TARGET_FILE:bootloader>" "bootloader.efi"
-	COMMENT "Tuning bootloader.so into bootloader.efi"
 	VERBATIM
 )
