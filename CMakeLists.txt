@@ -22,7 +22,6 @@ add_custom_command(OUTPUT disk.img
   COMMAND mcopy -n -o -i disk.img bootloader/bootloader.efi ::/EFI/BOOT/BOOTX64.EFI
   COMMAND mcopy -n -o -i disk.img $<TARGET_FILE:kernel> ::
   COMMAND mcopy -n -o -i disk.img ${TOOLCHAINDIR}/font/zap-light16.psf ::
-  COMMENT "asd"
   VERBATIM
 )
 
