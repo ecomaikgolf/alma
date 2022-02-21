@@ -11,7 +11,7 @@ project(alma)
 find_program(MFORMAT mformat REQUIRED)
 find_program(MMD mmd REQUIRED)
 find_program(MCOPY mcopy REQUIRED)
-find_program(QEMU ${QEMU_BIN} REQUIRED)
+find_program(QEMU qemu-system-x86_64 REQUIRED)
 
 # Toolchain directories (x86_64-elf target gcc toolchain)
 set(TOOLCHAINDIR "${CMAKE_CURRENT_SOURCE_DIR}/toolchain")
