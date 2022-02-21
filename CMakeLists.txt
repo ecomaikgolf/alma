@@ -70,7 +70,7 @@ add_custom_target(debug
 find_program(DOXYGEN doxygen)
 if (DOXYGEN)
   set(DOXYFILE ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile)
-    add_custom_target(doc ALL
+    add_custom_target(doc
         COMMAND doxygen ${DOXYFILE}
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         VERBATIM )
