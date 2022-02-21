@@ -21,7 +21,6 @@
 		- cmake 
 		- `cmake -B build`
 	- build
-		- Makefile, Ninja, etc. (cmake generators)
 		- `make -C build`
 		- out of source builds
 	- run & debug
