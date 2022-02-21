@@ -135,9 +135,10 @@ set(SOURCES
 # Compilation #
 ###############
 
-# Final executable
-add_executable(bootloader.so ${POSIXUEFI_LIBS} ${BOOTLOADER_SOURCES})
+# .so executable (as posix-uefi makefile does)
+add_executable(bootloader ${POSIXUEFI_LIBS} ${BOOTLOADER_SOURCES})
 
+# posixuefi as external generated library
 SET_SOURCE_FILES_PROPERTIES(
   ${POSIXUEFI_LIBS}
   PROPERTIES
@@ -145,19 +146,22 @@ SET_SOURCE_FILES_PROPERTIES(
   GENERATED true
 )
 
-# Executable with .elf suffix
-set_target_properties(bootloader.so PROPERTIES
-  SUFFIX ""
+# Executable suffix (before doing objcopy)
+set_target_properties(bootloader PROPERTIES
+  SUFFIX ".so"
 )
 
 # Custom linker script
-set_target_properties(bootloader.so PROPERTIES
+set_target_properties(bootloader PROPERTIES
 	LINK_DEPENDS ${LINKER_SCRIPT}
 )
 
-add_custom_target(bootloader.efi
-	DEPENDS bootloader.so
+# Custom linker script
+add_custom_command(
+	TARGET bootloader
+	POST_BUILD
 	BYPRODUCTS bootloader.efi
-	COMMAND ${CMAKE_OBJCOPY} -j .text -j .sdata -j .data -j .dynamic -j .dynsym  -j .rel -j .rela -j .rel.* -j .rela.* -j .reloc --target efi-app-x86_64 --subsystem=10 "$<TARGET_FILE:bootloader.so>" "bootloader.efi"
+	COMMAND ${CMAKE_OBJCOPY} -j .text -j .sdata -j .data -j .dynamic -j .dynsym  -j .rel -j .rela -j .rel.* -j .rela.* -j .reloc --target efi-app-x86_64 --subsystem=10 "$<TARGET_FILE:bootloader>" "bootloader.efi"
+	COMMENT "Tuning bootloader.so into bootloader.efi"
 	VERBATIM
 )
