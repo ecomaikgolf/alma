@@ -101,6 +101,9 @@
 	- networking
 		- emulate Realtek RTL8139 network chip (qemu)
 		- get the MAC through MMIO
+	- dynamic memory
+		- simple memory allocator
+		- ~malloc()~, ~free()~
 
 ## Run
 
