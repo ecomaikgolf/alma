@@ -147,6 +147,8 @@ set(KERNEL_SOURCES
 	acpi/acpi.cpp
 	pci/pci.cpp
 	heap/simple_allocator.cpp
+	shell/command.cpp
+	shell/interpreter.cpp
 	${INTERRUPT_SOURCES}
 	kernel.cpp
 )

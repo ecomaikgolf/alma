@@ -137,4 +137,11 @@ heap(void *start_addr, size_t size)
     kernel::heap = aux;
 }
 
+void
+shell(const shell::command *commands)
+{
+    shell::interpreter aux(commands);
+    kernel::shell = aux;
+}
+
 } // namespace bootstrap

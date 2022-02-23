@@ -9,6 +9,7 @@
 #include "paging/PTM.h"
 #include "screen/fonts/psf1.h"
 #include "segmentation/gdt.h"
+#include "shell/interpreter.h"
 #include <stdint.h>
 
 namespace kernel {
@@ -33,6 +34,7 @@ inline interrupts::idt_ptr idtr;
 inline io::PS2 keyboard;
 inline acpi::rsdp_v2 rsdp;
 inline heap::simple_allocator heap;
+inline shell::interpreter shell;
 
 /* Kernel Constants */
 __attribute__((unused)) static void *_start_addr = &internal::_start_addr;

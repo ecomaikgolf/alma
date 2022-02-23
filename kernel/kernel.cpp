@@ -19,6 +19,7 @@
 #include "screen/framebuffer.h"
 #include "screen/renderer.h"
 #include "segmentation/gdt.h"
+#include "shell/command.h"
 #include <stddef.h>
 #include <stdint.h>
 
@@ -41,38 +42,17 @@ _start(bootstrap::boot_args *args)
     bootstrap::acpi(args->rsdp);
     bootstrap::pci();
     bootstrap::heap((void *)0x0000100000000000, 0x10);
-    char asd[256];
-    void *a = kernel::heap.malloc(0x10);
-    hstr((uint64_t)a, asd);
-    kernel::tty.println(asd);
-
-    a = kernel::heap.malloc(0x8000);
-    hstr((uint64_t)a, asd);
-    kernel::tty.println(asd);
-
-    a = kernel::heap.malloc(0x90000);
-    hstr((uint64_t)a, asd);
-    kernel::tty.println(asd);
-
-    a = kernel::heap.malloc(0x1000);
-    hstr((uint64_t)a, asd);
-    kernel::tty.println(asd);
-
-    kernel::heap.free(a);
-
-    a = kernel::heap.malloc(0x1000);
-    hstr((uint64_t)a, asd);
-    kernel::tty.println(asd);
+    bootstrap::shell(shell::kernel_commands);
 
     kernel::tty.println("Hola desde el kernel!");
     asm("int $0x09");
     kernel::tty.println("Hola otra vez desde el kernel!");
 
     char aux[256];
-    kernel::tty.print("Introduce tu nombre: ");
-    kernel::keyboard.scanf(aux, 5);
-    kernel::tty.print("Hola, ");
-    kernel::tty.println(aux);
+    kernel::tty.print("$ ");
+    kernel::keyboard.scanf(aux, 256);
+    kernel::shell.process(aux);
+    kernel::tty.newline();
 
     /* Shoudln't return */
     while (1) {

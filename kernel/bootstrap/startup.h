@@ -9,6 +9,7 @@
 #include "screen/fonts/psf1.h"
 #include "screen/framebuffer.h"
 #include "segmentation/gdt.h"
+#include "shell/command.h"
 #include "uefi/memory.h"
 #include <stdint.h>
 
@@ -36,5 +37,6 @@ void keyboard();
 void acpi(acpi::rsdp_v2 *);
 void pci();
 void heap(void *, size_t);
+void shell(const shell::command *);
 
 } // namespace bootstrap
