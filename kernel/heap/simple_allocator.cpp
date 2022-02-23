@@ -155,6 +155,8 @@ simple_allocator::combine_forward(heap_header *hdr)
     if (hdr->next == this->last_header)
         last_header = hdr;
 
+    hdr->next = hdr->next->next;
+
     hdr->length = hdr->length + hdr->next->length + sizeof(heap_header);
 }
 
