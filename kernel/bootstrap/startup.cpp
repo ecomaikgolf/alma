@@ -133,15 +133,8 @@ pci()
 void
 heap(void *start_addr, size_t size)
 {
-    heap::simple_allocator aux(start_addr, size);
-    kernel::heap = aux;
-}
-
-void
-shell(const shell::command *commands)
-{
-    shell::interpreter aux(commands);
-    kernel::shell = aux;
+    // heap::simple_allocator aux(start_addr, size);
+    // kernel::heap = aux;
 }
 
 } // namespace bootstrap
