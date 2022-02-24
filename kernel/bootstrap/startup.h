@@ -37,6 +37,5 @@ void keyboard();
 void acpi(acpi::rsdp_v2 *);
 void pci();
 void heap(void *, size_t);
-void shell(const shell::command *);
 
 } // namespace bootstrap
