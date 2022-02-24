@@ -15,6 +15,7 @@
 #include "libc/string.h"
 #include "paging/PFA.h"
 #include "paging/PTM.h"
+#include "pci/pci.h"
 #include "screen/fonts/psf1.h"
 #include "screen/framebuffer.h"
 #include "screen/renderer.h"
@@ -40,19 +41,15 @@ _start(bootstrap::boot_args *args)
     bootstrap::enable_interrupts();
     bootstrap::keyboard();
     bootstrap::acpi(args->rsdp);
+    // bootstrap::heap((void *)0x0000100000000000, 0x1000);
+
     bootstrap::pci();
-    bootstrap::heap((void *)0x0000100000000000, 0x10);
-    bootstrap::shell(shell::kernel_commands);
 
-    kernel::tty.println("Hola desde el kernel!");
-    asm("int $0x09");
-    kernel::tty.println("Hola otra vez desde el kernel!");
+    // kernel::tty.println("Hola desde el kernel!");
+    // asm("int $0x09");
+    // kernel::tty.println("Hola otra vez desde el kernel!");
 
-    char aux[256];
-    kernel::tty.print("$ ");
-    kernel::keyboard.scanf(aux, 256);
-    kernel::shell.process(aux);
-    kernel::tty.newline();
+    shell::commands::shell(0, nullptr);
 
     /* Shoudln't return */
     while (1) {

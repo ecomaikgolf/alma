@@ -34,6 +34,16 @@ struct device_header
     /* More parameters needed */
 } __attribute__((packed));
 
+struct pci_device
+{
+    device_header header;
+    uint16_t device;
+    uint16_t bus;
+    uint16_t function;
+    pci_device *prev;
+    pci_device *next;
+};
+
 void enum_fun(uint64_t addr, uint64_t fun);
 void enum_dev(uint64_t addr, uint64_t dev);
 void enum_bus(uint64_t addr, uint64_t bus);

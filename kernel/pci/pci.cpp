@@ -26,14 +26,24 @@ enum_fun(uint64_t addr, uint64_t fun)
     if (device->id == 0 || device->id == 0xffff)
         return;
 
-    /* WARNING: This code is a mess, it's here just for demo purposes and should be removed */
-    char device_id[16];
-    hstr(device->id, device_id);
-    char vendor_id[16];
-    hstr(device->vendor, vendor_id);
-    kernel::tty.print(vendor_id);
-    kernel::tty.print(" - ");
-    kernel::tty.println(device_id);
+    static pci_device *prev = nullptr;
+
+    pci::pci_device *dev = (pci::pci_device *)kernel::heap.malloc(sizeof(pci::pci_device));
+
+    dev->header   = *device;
+    dev->device   = _device;
+    dev->function = _function;
+    dev->bus      = _bus;
+    dev->prev     = prev;
+
+    /*First device in chain or not */
+    if (prev == nullptr)
+        kernel::devices = dev;
+    else
+        prev->next = dev;
+
+    prev = dev;
+
     if (device->id == 0x8139) {
         uint64_t asd = (device->BAR[1] & 0xfffffff0);
         kernel::translator.map(asd, asd);

@@ -17,13 +17,18 @@ class interpreter
         return *this;
     };
 
-    void loop();
+    char *get_buffer()
+    {
+        return this->input_buffer;
+    }
+
     int process(char *);
     int launch_command(char *, int, char **);
+    static const auto BUFFER_SIZE = 256;
 
   private:
     /** Buffer for user input (shell input) */
-    char input_buffer[256];
+    char input_buffer[BUFFER_SIZE];
     /** Array of commands */
     const command *commands;
 };

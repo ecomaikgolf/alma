@@ -11,7 +11,7 @@ OUTPUT_FORMAT(elf64-x86-64)
 
 SECTIONS 
 {
-	. = 0x100000;
+	. = 0x1000000;
 	_start_addr = .;
 	.text : ALIGN(4K) 
 	{
