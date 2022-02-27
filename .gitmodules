@@ -14,3 +14,7 @@
 	path = toolchain/gcc
 	url = https://github.com/gcc-mirror/gcc
     ignore = all
+[submodule "toolchain/stivale"]
+	path = toolchain/stivale
+	url = https://github.com/stivale/stivale.git
+    ignore = all
