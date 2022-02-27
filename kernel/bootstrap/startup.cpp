@@ -12,17 +12,17 @@ void
 screen(screen::framebuffer *fb, screen::fonts::psf1 *font)
 {
     /* Lock the tty itself  */
-    kernel::allocator.lock_pages(&kernel::tty, sizeof(kernel::tty) / kernel::page_size + 1);
+    // kernel::allocator.lock_pages(&kernel::tty, sizeof(kernel::tty) / kernel::page_size + 1);
     /* Create the tty */
     kernel::tty = screen::psf1_renderer(fb, font, 0, 0, screen::color_e::WHITE);
     /* Clean the screen */
     kernel::tty.clear();
 
-    uint64_t fbbase = (uint64_t)fb->base;
-    uint64_t fbsize = (uint64_t)fb->buffer_size + kernel::page_size;
-    /* Map screen's memory */
-    for (uint64_t i = fbbase; i < fbbase + fbsize; i += kernel::page_size)
-        kernel::translator.map(i, i);
+    // uint64_t fbbase = (uint64_t)fb->base;
+    // uint64_t fbsize = (uint64_t)fb->buffer_size + kernel::page_size;
+    ///* Map screen's memory */
+    // for (uint64_t i = fbbase; i < fbbase + fbsize; i += kernel::page_size)
+    //     kernel::translator.map(i, i);
 }
 
 void
