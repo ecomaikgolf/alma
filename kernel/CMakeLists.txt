@@ -47,8 +47,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g") 	   			   # Debug builds
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mcmodel=kernel") 	   			   # Debug builds
 
 # Extra compiler options
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wextra")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wextra")
 
 # Set minimum CXX standard
 set(CMAKE_CXX_STANDARD 20)
