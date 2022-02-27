@@ -14,6 +14,16 @@ namespace screen {
 
 namespace fonts {
 
+struct psf1_header
+{
+    /** 0x36, 0x04 */
+    unsigned char magic[2];
+    /** number of glyphs mode */
+    unsigned char mode;
+    /** size of each glyph in the glyph buffer */
+    unsigned char charsize;
+};
+
 /**
  * PSF1 Font
  */
@@ -22,15 +32,7 @@ struct psf1
     /**
      * PSF1 Font Header
      */
-    struct
-    {
-        /** 0x36, 0x04 */
-        unsigned char magic[2];
-        /** number of glyphs mode */
-        unsigned char mode;
-        /** size of each glyph in the glyph buffer */
-        unsigned char charsize;
-    } * header;
+    psf1_header *header;
 
     /** glyph buffer */
     void *buffer;

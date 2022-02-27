@@ -28,6 +28,10 @@ static uint8_t stack[8192];
 #include <stddef.h>
 #include <stdint.h>
 
+/**
+ *
+ */
+
 extern "C" void _init();
 extern "C" void _fini();
 /**
@@ -38,6 +42,7 @@ extern "C" [[noreturn]] void
 _start(stivale2_struct *stivale2_struct)
 {
     _init();
+
     stivale2_struct_tag_memmap *map =
       (stivale2_struct_tag_memmap *)stivale2_get_tag(stivale2_struct, 0x2187f79e8612de07);
     stivale2_struct_tag_framebuffer *fb =
@@ -59,9 +64,14 @@ _start(stivale2_struct *stivale2_struct)
     screen::framebuffer frame;
     frame.base        = (unsigned int *)fb->framebuffer_addr;
     frame.buffer_size = fb->framebuffer_width * fb->framebuffer_pitch;
-    frame.ppscl       = fb->framebuffer_pitch;
+    frame.ppscl       = (fb->framebuffer_pitch / sizeof(uint32_t));
     frame.width       = fb->framebuffer_width;
     frame.height      = fb->framebuffer_height;
+
+    screen::fonts::psf1 f;
+    screen::fonts::psf1_header *f_hdr = (screen::fonts::psf1_header *)font;
+    f.header                          = f_hdr;
+    f.buffer                          = (uint8_t *)font + sizeof(screen::fonts::psf1_header);
 
     void (*stivale2_term_write)(uint64_t ptr, uint64_t length);
 
@@ -72,11 +82,10 @@ _start(stivale2_struct *stivale2_struct)
 
     bootstrap::boot_args *args = nullptr;
     /* Bootstrap the kernel (function order is mandatory) */
-    bootstrap::screen(&frame, font);
+    bootstrap::screen(&frame, &f);
+    kernel::tty.println("hola");
 
     __asm__("hlt");
-
-    kernel::tty.println("hola");
 
     bootstrap::allocator(args->map);
     bootstrap::translator(args->map);
@@ -99,6 +108,8 @@ _start(stivale2_struct *stivale2_struct)
 
     _fini();
     /* Shoudln't return */
+    __asm__("hlt");
+    /* To supress diagnostics */
     while (1) {
-    }
+    };
 }
