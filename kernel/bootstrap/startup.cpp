@@ -51,16 +51,18 @@ gdt()
 }
 
 void
-translator(uefi::memory::map *map)
+translator(stivale2_struct_tag_memmap *map)
 {
     ///* Locks the PTM */
     // kernel::allocator.lock_pages(&kernel::translator,
     //                              sizeof(kernel::translator) / kernel::page_size + 1);
 
     ///* Map virtual memory to physical memory (same address for the kernel) */
-    // size_t usable_mem_size = uefi::memory::get_memsize(map);
-    // for (uint64_t i = 0; i < usable_mem_size; i += kernel::page_size)
-    //     kernel::translator.map(i, i);
+    size_t usable_mem_size = uefi::memory::get_memsize(map);
+    for (uint64_t i = 0; i < usable_mem_size; i += kernel::page_size)
+        kernel::translator.map(i, i);
+
+    // asm("mov %0, %%cr3" : : "r"(kernel::translator.get_PGDT()));
 }
 
 void

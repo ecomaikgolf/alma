@@ -30,7 +30,7 @@ struct boot_args
 void screen(screen::framebuffer *, screen::fonts::psf1 *);
 void allocator(stivale2_struct_tag_memmap *);
 void gdt();
-void translator(uefi::memory::map *);
+void translator(stivale2_struct_tag_memmap *);
 void interrupts();
 void enable_virtualaddr();
 void enable_interrupts();

@@ -53,6 +53,8 @@ _start(stivale2_struct *stivale2_struct)
       (stivale2_struct_tag_terminal *)stivale2_get_tag(stivale2_struct, 0xc2b3f4c3233b0974);
     stivale2_struct_tag_modules *mod =
       (stivale2_struct_tag_modules *)stivale2_get_tag(stivale2_struct, 0x4b6fe466aade04ce);
+    stivale2_struct_tag_rsdp *rs =
+      (stivale2_struct_tag_rsdp *)stivale2_get_tag(stivale2_struct, 0x9e1786930a375e78);
 
     screen::fonts::psf1 *font = nullptr;
     for (int i = 0; i < mod->module_count; i++) {
@@ -87,20 +89,29 @@ _start(stivale2_struct *stivale2_struct)
 
     char mem[256];
     for (int i = 0; i < map->entries; i++) {
-        hstr((uint64_t)map->memmap[i].base, mem);
-        kernel::tty.print("Base ");
-        kernel::tty.print(mem);
-        str((int)map->memmap[i].length, mem);
-        kernel::tty.print(" - Lenght ");
-        kernel::tty.print(mem);
-        str((int)map->memmap[i].type, mem);
-        kernel::tty.print(" - Type ");
-        kernel::tty.print(mem);
-        kernel::tty.newline();
+        if (map->memmap[i].type == 1) {
+            hstr((uint64_t)map->memmap[i].base, mem);
+            kernel::tty.print(mem);
+            str((int)map->memmap[i].length / kernel::page_size, mem);
+            kernel::tty.print("(");
+            kernel::tty.print(mem);
+            kernel::tty.print("), ");
+            // str((int)map->memmap[i].length, mem);
+            // kernel::tty.print(" - Lenght ");
+            // kernel::tty.print(mem);
+            // str((int)map->memmap[i].type, mem);
+            // kernel::tty.print(" - Type ");
+            // kernel::tty.print(mem);
+            // kernel::tty.newline();
+        }
     }
 
     bootstrap::allocator(map);
 
+    kernel::tty.newline();
+
+    bootstrap::translator(map);
+
     hstr((uint64_t)kernel::allocator.request_page(), mem);
     kernel::tty.println(mem);
     hstr((uint64_t)kernel::allocator.request_page(), mem);
@@ -112,16 +123,13 @@ _start(stivale2_struct *stivale2_struct)
     hstr((uint64_t)kernel::allocator.request_page(), mem);
     kernel::tty.println(mem);
 
-    __asm__("hlt");
-
-    bootstrap::translator(args->map);
-    bootstrap::screen(&frame, font);
+    // bootstrap::screen(&frame, font);
     bootstrap::gdt();
     bootstrap::interrupts();
-    bootstrap::enable_virtualaddr();
+    // bootstrap::enable_virtualaddr();
     bootstrap::enable_interrupts();
     bootstrap::keyboard();
-    bootstrap::acpi(args->rsdp);
+    bootstrap::acpi((acpi::rsdp_v2 *)rs->rsdp);
     // bootstrap::heap((void *)0x0000100000000000, 0x1000);
 
     bootstrap::pci();
