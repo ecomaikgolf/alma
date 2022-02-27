@@ -6,6 +6,7 @@
 
 #include "PFA.h"
 #include "kernel.h"
+#include "libc/string.h"
 #include "uefi/memory.h"
 
 namespace paging {
@@ -59,16 +60,18 @@ PFA::PFA(stivale2_struct_tag_memmap *map)
     size_t bitset_size = memsize / kernel::page_size;
     page.set_size(bitset_size);
     page.set_buffer((uint8_t *)largest.base);
+    // memset((void *)largest.base, 1, bitset_size);
 
     PFA::zero_bitset();
 
-    PFA::lock_pages(this->page.get_buffer(), (this->page.get_size() / (8 * kernel::page_size)) + 1);
+    // PFA::lock_pages(this->page.get_buffer(), (this->page.get_size() / (8 * kernel::page_size)) +
+    // 1);
 
     for (uint64_t i = 0; i < map->entries; i++) {
 
-        if (map->memmap[i].type != 1) {
-            this->reserve_pages((void *)map->memmap[i].base,
-                                map->memmap[i].length / kernel::page_size);
+        if (map->memmap[i].type == 1) {
+            this->free_pages((void *)map->memmap[i].base,
+                             map->memmap[i].length / kernel::page_size);
         }
     }
 }
@@ -100,7 +103,8 @@ void
 PFA::zero_bitset()
 {
     for (size_t i = 0; i < page.get_size() / 8; i++)
-        *(uint64_t *)(page.get_buffer() + i) = 0;
+        page.set(i);
+    //*(uint64_t *)(page.get_buffer() + i) = 18446744073709551615UL;
 }
 
 /**
