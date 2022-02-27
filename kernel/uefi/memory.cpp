@@ -41,7 +41,7 @@ const char desctypes[][27] = {
  * function returns arround 536.47 MB
  */
 size_t
-get_memsize(const map *map)
+get_memsize(stivale2_struct_tag_memmap *map)
 {
     /** Storage for get_memsize (you only need to retrieve it once) */
     static size_t memsize = 0;
@@ -53,10 +53,8 @@ get_memsize(const map *map)
         return memsize;
 
     for (uint64_t i = 0; i < map->entries; i++) {
-        efi_memory_descriptor_t *descriptor =
-          (efi_memory_descriptor_t *)((uint64_t)map->map + (i * map->descriptor_size));
-
-        memsize += descriptor->NumberOfPages * page_size;
+        if (map->memmap[i].type == 1)
+            memsize += map->memmap[i].length;
     }
 
     return memsize;

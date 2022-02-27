@@ -26,15 +26,15 @@ screen(screen::framebuffer *fb, screen::fonts::psf1 *font)
 }
 
 void
-allocator(uefi::memory::map *map)
+allocator(stivale2_struct_tag_memmap *map)
 {
     /* Construct the allocator with the UEFI mem map */
     kernel::allocator = paging::allocator::PFA(map);
     /* Lock kernel memory */
-    kernel::allocator.lock_pages(kernel::_start_addr, kernel::_size_npages);
+    // kernel::allocator.lock_pages(kernel::_start_addr, kernel::_size_npages);
     /* Lock the allocator itself  */
-    kernel::allocator.lock_pages(&kernel::allocator,
-                                 sizeof(kernel::allocator) / kernel::page_size + 1);
+    // kernel::allocator.lock_pages(&kernel::allocator,
+    //                              sizeof(kernel::allocator) / kernel::page_size + 1);
 }
 
 void
@@ -53,14 +53,14 @@ gdt()
 void
 translator(uefi::memory::map *map)
 {
-    /* Locks the PTM */
-    kernel::allocator.lock_pages(&kernel::translator,
-                                 sizeof(kernel::translator) / kernel::page_size + 1);
+    ///* Locks the PTM */
+    // kernel::allocator.lock_pages(&kernel::translator,
+    //                              sizeof(kernel::translator) / kernel::page_size + 1);
 
-    /* Map virtual memory to physical memory (same address for the kernel) */
-    size_t usable_mem_size = uefi::memory::get_memsize(map);
-    for (uint64_t i = 0; i < usable_mem_size; i += kernel::page_size)
-        kernel::translator.map(i, i);
+    ///* Map virtual memory to physical memory (same address for the kernel) */
+    // size_t usable_mem_size = uefi::memory::get_memsize(map);
+    // for (uint64_t i = 0; i < usable_mem_size; i += kernel::page_size)
+    //     kernel::translator.map(i, i);
 }
 
 void

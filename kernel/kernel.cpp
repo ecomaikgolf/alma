@@ -85,11 +85,37 @@ _start(stivale2_struct *stivale2_struct)
     bootstrap::screen(&frame, &f);
     kernel::tty.println("hola");
 
+    char mem[256];
+    for (int i = 0; i < map->entries; i++) {
+        hstr((uint64_t)map->memmap[i].base, mem);
+        kernel::tty.print("Base ");
+        kernel::tty.print(mem);
+        str((int)map->memmap[i].length, mem);
+        kernel::tty.print(" - Lenght ");
+        kernel::tty.print(mem);
+        str((int)map->memmap[i].type, mem);
+        kernel::tty.print(" - Type ");
+        kernel::tty.print(mem);
+        kernel::tty.newline();
+    }
+
+    bootstrap::allocator(map);
+
+    hstr((uint64_t)kernel::allocator.request_page(), mem);
+    kernel::tty.println(mem);
+    hstr((uint64_t)kernel::allocator.request_page(), mem);
+    kernel::tty.println(mem);
+    hstr((uint64_t)kernel::allocator.request_page(), mem);
+    kernel::tty.println(mem);
+    hstr((uint64_t)kernel::allocator.request_page(), mem);
+    kernel::tty.println(mem);
+    hstr((uint64_t)kernel::allocator.request_page(), mem);
+    kernel::tty.println(mem);
+
     __asm__("hlt");
 
-    bootstrap::allocator(args->map);
     bootstrap::translator(args->map);
-    bootstrap::screen(args->fb, font);
+    bootstrap::screen(&frame, font);
     bootstrap::gdt();
     bootstrap::interrupts();
     bootstrap::enable_virtualaddr();

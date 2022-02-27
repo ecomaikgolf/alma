@@ -44,12 +44,12 @@ PFA::operator=(PFA &&rvalue)
  *
  * @param map UEFI memory map
  */
-PFA::PFA(const map *map)
+PFA::PFA(stivale2_struct_tag_memmap *map)
 {
     if (map == NULL)
         return;
 
-    efi_memory_descriptor_t *largest = PFA::get_largest_segment(map);
+    auto largest = PFA::get_largest_segment(map);
 
     size_t memsize     = get_memsize(map);
     this->free_mem     = memsize;
@@ -58,18 +58,17 @@ PFA::PFA(const map *map)
 
     size_t bitset_size = memsize / kernel::page_size;
     page.set_size(bitset_size);
-    page.set_buffer((uint8_t *)largest->PhysicalStart);
+    page.set_buffer((uint8_t *)largest.base);
 
     PFA::zero_bitset();
 
     PFA::lock_pages(this->page.get_buffer(), (this->page.get_size() / (8 * kernel::page_size)) + 1);
 
     for (uint64_t i = 0; i < map->entries; i++) {
-        efi_memory_descriptor_t *descriptor =
-          (efi_memory_descriptor_t *)((uint64_t)map->map + (i * map->descriptor_size));
 
-        if (descriptor->Type != static_cast<int>(segment_e::EFI_CONVENTIONAL_MEMORY)) {
-            this->reserve_pages((void *)descriptor->PhysicalStart, descriptor->NumberOfPages);
+        if (map->memmap[i].type != 1) {
+            this->reserve_pages((void *)map->memmap[i].base,
+                                map->memmap[i].length / kernel::page_size);
         }
     }
 }
@@ -79,24 +78,17 @@ PFA::PFA(const map *map)
  *
  * @warning Only counts EFI_CONVENTIONAL_MEMORY
  */
-efi_memory_descriptor_t *
-PFA::get_largest_segment(const map *map)
+stivale2_mmap_entry
+PFA::get_largest_segment(stivale2_struct_tag_memmap *map)
 {
-    size_t largest_segment_size                 = 0;
-    efi_memory_descriptor_t *largest_descriptor = NULL;
+    size_t largest_segment_size = 0;
+    uint64_t largest_segment    = 0;
     for (uint64_t i = 0; i < map->entries; i++) {
-        efi_memory_descriptor_t *descriptor =
-          (efi_memory_descriptor_t *)((uint64_t)map->map + (i * map->descriptor_size));
-
-        if (descriptor->Type == static_cast<int>(segment_e::EFI_CONVENTIONAL_MEMORY)) {
-            if (descriptor->NumberOfPages * kernel::page_size > largest_segment_size) {
-                largest_segment_size = descriptor->NumberOfPages * kernel::page_size;
-                largest_descriptor   = descriptor;
-            }
-        }
+        if (map->memmap[i].type == 1 && map->memmap[i].length > largest_segment_size)
+            largest_segment = i;
     }
 
-    return largest_descriptor;
+    return map->memmap[largest_segment];
 }
 
 /**

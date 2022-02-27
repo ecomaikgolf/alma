@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "stivale2.h"
 #include <stddef.h>
 #include <stdint.h>
 
@@ -91,7 +92,7 @@ struct map
 };
 
 /** Function to retrieve total memory size from a UEFI memory map */
-size_t get_memsize(const map *);
+size_t get_memsize(stivale2_struct_tag_memmap *);
 
 } // namespace memory
 } // namespace uefi

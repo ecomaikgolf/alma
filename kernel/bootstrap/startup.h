@@ -10,6 +10,7 @@
 #include "screen/framebuffer.h"
 #include "segmentation/gdt.h"
 #include "shell/command.h"
+#include "stivale2.h"
 #include "uefi/memory.h"
 #include <stdint.h>
 
@@ -27,7 +28,7 @@ struct boot_args
 };
 
 void screen(screen::framebuffer *, screen::fonts::psf1 *);
-void allocator(uefi::memory::map *);
+void allocator(stivale2_struct_tag_memmap *);
 void gdt();
 void translator(uefi::memory::map *);
 void interrupts();

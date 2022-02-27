@@ -7,6 +7,7 @@
 #pragma once
 
 #include "libstdc++/bitset.h"
+#include "stivale2.h"
 #include "uefi/memory.h"
 #include <stddef.h>
 #include <stdint.h>
@@ -27,7 +28,7 @@ namespace allocator {
 class PFA
 {
   public:
-    PFA(const uefi::memory::map *);
+    PFA(stivale2_struct_tag_memmap *);
     PFA();
     void operator=(PFA &&);
     void free_page(void *);
@@ -61,7 +62,7 @@ class PFA
     void release_page(void *);
     void release_pages(void *, uint64_t);
     void zero_bitset();
-    uefi::memory::efi_memory_descriptor_t *get_largest_segment(const uefi::memory::map *);
+    stivale2_mmap_entry get_largest_segment(stivale2_struct_tag_memmap *);
     size_t free_mem;
     size_t reserved_mem;
     size_t used_mem;
