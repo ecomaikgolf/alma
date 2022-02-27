@@ -192,18 +192,19 @@ set_target_properties(kernel PROPERTIES
 set_property(SOURCE crti.s PROPERTY LANGUAGE CXX)
 set_property(SOURCE crtn.s PROPERTY LANGUAGE CXX)
 
+# build crts
 add_library(crts OBJECT
     crti.s
     crtn.s
 )
 
+# build crts first
+add_dependencies(kernel crts)
+
 # retrieve crtbegin.o and crtend.o
 execute_process( COMMAND ${CMAKE_CXX_COMPILER} -print-file-name=crtbegin.o OUTPUT_VARIABLE CRTBEGIN_O OUTPUT_STRIP_TRAILING_WHITESPACE )
 execute_process( COMMAND ${CMAKE_CXX_COMPILER} -print-file-name=crtend.o OUTPUT_VARIABLE CRTEND_O OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-get_target_property(KERNDIR crts LIBRARY_OUTPUT_DIRECTORY)
-
 # kernel linking (as it has to be done in specific order)
+# yes i know that i shouldn't be using a hardcoded build path :(
 set(CMAKE_CXX_LINK_EXECUTABLE "${CMAKE_LINKER} <LINK_FLAGS> ${CMAKE_BINARY_DIR}/kernel/CMakeFiles/crts.dir/crti.s.o ${CRTBEGIN_O} <OBJECTS> -o <TARGET> <LINK_LIBRARIES> ${CRTEND_O} ${CMAKE_BINARY_DIR}/kernel/CMakeFiles/crts.dir/crtn.s.o" )
-
-add_dependencies(kernel crts)
