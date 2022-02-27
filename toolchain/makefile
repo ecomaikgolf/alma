@@ -97,7 +97,9 @@ gcc-build:
 	export PATH=$(BUILD_DIR_TOOLCHAIN)/bin/:$$PATH; \
 	../configure --target=x86_64-elf --prefix="$(BUILD_DIR_TOOLCHAIN)" --disable-nls --enable-languages=c,c++ --without-headers; \
 	make -j$(THREADS) all-gcc; \
-	make -j$(THREADS) all-target-libgcc; \
+	make -j$(THREADS) all-target-libgcc CFLAGS_FOR_TARGET='-g -O2 -mcmodel=kernel -mno-red-zone'|| true; \
+ 	sed -i 's/PICFLAG/DISABLED_PICFLAG/g' x86_64-elf/libgcc/Makefile; \
+	make -j$(THREADS) all-target-libgcc CFLAGS_FOR_TARGET='-g -O2 -mcmodel=kernel -mno-red-zone'; \
 	make install-gcc; \
 	make install-target-libgcc;
 
