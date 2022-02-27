@@ -28,6 +28,8 @@ static uint8_t stack[8192];
 #include <stddef.h>
 #include <stdint.h>
 
+extern "C" void _init();
+extern "C" void _fini();
 /**
  * Kernel starting function
  * extern C to avoid C++ function mangling
@@ -35,6 +37,7 @@ static uint8_t stack[8192];
 extern "C" [[noreturn]] void
 _start(stivale2_struct *stivale2_struct)
 {
+    _init();
     stivale2_struct_tag_memmap *map =
       (stivale2_struct_tag_memmap *)stivale2_get_tag(stivale2_struct, 0x2187f79e8612de07);
     stivale2_struct_tag_framebuffer *fb =
@@ -94,6 +97,7 @@ _start(stivale2_struct *stivale2_struct)
 
     shell::commands::shell(0, nullptr);
 
+    _fini();
     /* Shoudln't return */
     while (1) {
     }

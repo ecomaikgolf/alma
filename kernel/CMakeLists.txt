@@ -183,3 +183,27 @@ set_target_properties(kernel PROPERTIES
 set_target_properties(kernel PROPERTIES 
 	LINK_DEPENDS ${LINKER_SCRIPT}
 )
+
+###############
+# _init _fini #
+###############
+
+# build them with our toolchain
+set_property(SOURCE crti.s PROPERTY LANGUAGE CXX)
+set_property(SOURCE crtn.s PROPERTY LANGUAGE CXX)
+
+add_library(crts OBJECT
+    crti.s
+    crtn.s
+)
+
+# retrieve crtbegin.o and crtend.o
+execute_process( COMMAND ${CMAKE_CXX_COMPILER} -print-file-name=crtbegin.o OUTPUT_VARIABLE CRTBEGIN_O OUTPUT_STRIP_TRAILING_WHITESPACE )
+execute_process( COMMAND ${CMAKE_CXX_COMPILER} -print-file-name=crtend.o OUTPUT_VARIABLE CRTEND_O OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+get_target_property(KERNDIR crts LIBRARY_OUTPUT_DIRECTORY)
+
+# kernel linking (as it has to be done in specific order)
+set(CMAKE_CXX_LINK_EXECUTABLE "${CMAKE_LINKER} <LINK_FLAGS> ${CMAKE_BINARY_DIR}/kernel/CMakeFiles/crts.dir/crti.s.o ${CRTBEGIN_O} <OBJECTS> -o <TARGET> <LINK_LIBRARIES> ${CRTEND_O} ${CMAKE_BINARY_DIR}/kernel/CMakeFiles/crts.dir/crtn.s.o" )
+
+add_dependencies(kernel crts)
