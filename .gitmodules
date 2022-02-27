@@ -18,3 +18,8 @@
 	path = toolchain/stivale
 	url = https://github.com/stivale/stivale.git
     ignore = all
+[submodule "toolchain/limine"]
+	path = toolchain/limine
+	url = https://github.com/limine-bootloader/limine.git
+    ignore = all
+

@@ -46,15 +46,16 @@ BUILD_DIR_POSIX_UEFI=$(BUILD_DIR)/posix-uefi
 
 SHELL := /bin/bash
 
-.PHONY: all update edk2 binutils binutils-build gcc gcc-build posix-uefi posix-uefi-build clean debug
+.PHONY: all update edk2 binutils binutils-build gcc gcc-build posix-uefi posix-uefi-build limine limine-build clean debug
 
-all: update edk2 binutils gcc posix-uefi
+all: update limine binutils gcc 
 skip_edk2: update binutils gcc posix-uefi
 
 edk2: update $(BUILD_DIR_UEFI)/bios.bin
 binutils: update binutils-build
 gcc: update gcc-build
 posix-uefi: update posix-uefi-build
+limine: update limine-build
 
 ##########
 # Update #
@@ -137,6 +138,15 @@ posix-uefi-examples:
 	sed -i -e "1s@^@OVMF = $(BUILD_DIR_UEFI)/$(BIOS_FILE)\n@" posix-uefi/Makefile; \
 	sed -i -e "1s/^/#define _inline inline\n/" posix-uefi/examples/0C_png/stb_image.h; \
 	export PATH=$(BUILD_DIR_TOOLCHAIN)/bin/:$$PATH; USE_GCC=$(USE_GCC) make -C posix-uefi/uefi;
+
+##########
+# limine #
+##########
+
+limine-build:
+	cd limine; \
+	git checkout v2.0-branch-binary; \
+	make;
 
 #########
 # Clean #
