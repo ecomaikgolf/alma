@@ -1,0 +1,6 @@
+- toolchain/binutils-gdb
+- toolchain/build
+- toolchain/edk2
+- toolchain/font
+- toolchain/gcc
+- toolchain/posix-uefi
