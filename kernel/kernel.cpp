@@ -69,7 +69,15 @@ _start(stivale2_struct *stivale2_struct)
     bootstrap::screen(stivale2_struct);
     bootstrap::gdt();
     bootstrap::interrupts();
-    asm("int $0x9");
+    // bootstrap::enable_virtualaddr();
+    bootstrap::enable_interrupts();
+    bootstrap::keyboard();
+    // bootstrap::acpi((acpi::rsdp_v2 *)rs->rsdp);
+    //  bootstrap::heap((void *)0x0000100000000000, 0x1000);
+
+    shell::commands::shell(0, nullptr);
+
+    // bootstrap::pci();
 
     kernel::tty.println("Hola!");
 
@@ -150,19 +158,11 @@ _start(stivale2_struct *stivale2_struct)
     //
     //    // bootstrap::screen(&frame, font);
 
-    //    // bootstrap::enable_virtualaddr();
-    //    bootstrap::enable_interrupts();
-    //    bootstrap::keyboard();
-    //    bootstrap::acpi((acpi::rsdp_v2 *)rs->rsdp);
-    //    // bootstrap::heap((void *)0x0000100000000000, 0x1000);
-    //
-    //    bootstrap::pci();
     //
     //    // kernel::tty.println("Hola desde el kernel!");
     //    // asm("int $0x09");
     //    // kernel::tty.println("Hola otra vez desde el kernel!");
     //
-    //    shell::commands::shell(0, nullptr);
 
     /* Call global destructors & functions */
     _fini();
