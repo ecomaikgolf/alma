@@ -71,8 +71,10 @@ gdt()
 }
 
 void
-translator(stivale2_struct_tag_memmap *map)
+translator(stivale2_struct *st)
 {
+    auto *map = (stivale2_struct_tag_memmap *)stivale2_get_tag(st, STIVALE2_STRUCT_TAG_MEMMAP_ID);
+
     ///* Locks the PTM */
     // kernel::allocator.lock_pages(&kernel::translator,
     //                              sizeof(kernel::translator) / kernel::page_size + 1);

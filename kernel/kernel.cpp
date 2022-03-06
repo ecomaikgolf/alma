@@ -64,22 +64,11 @@ _start(stivale2_struct *stivale2_struct)
     /* Call global constructors & functions */
     _init();
 
-    bootstrap::screen(stivale2_struct);
     bootstrap::allocator(stivale2_struct);
+    bootstrap::translator(stivale2_struct);
+    bootstrap::screen(stivale2_struct);
 
     kernel::tty.println("Hola!");
-
-    char mem[256];
-    hstr((uint64_t)kernel::allocator.request_page(), mem);
-    kernel::tty.println(mem);
-    hstr((uint64_t)kernel::allocator.request_page(), mem);
-    kernel::tty.println(mem);
-    hstr((uint64_t)kernel::allocator.request_page(), mem);
-    kernel::tty.println(mem);
-    hstr((uint64_t)kernel::allocator.request_page(), mem);
-    kernel::tty.println(mem);
-    hstr((uint64_t)kernel::allocator.request_page(), mem);
-    kernel::tty.println(mem);
 
     asm("hlt");
 
@@ -152,7 +141,7 @@ _start(stivale2_struct *stivale2_struct)
     //
     //    kernel::tty.newline();
     //
-    //    bootstrap::translator(map);
+
     //
 
     //

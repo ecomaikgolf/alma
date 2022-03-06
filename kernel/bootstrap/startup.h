@@ -32,7 +32,7 @@ struct boot_args
 void screen(stivale2_struct *);
 void allocator(stivale2_struct *);
 void gdt();
-void translator(stivale2_struct_tag_memmap *);
+void translator(stivale2_struct *);
 void interrupts();
 void enable_virtualaddr();
 void enable_interrupts();
