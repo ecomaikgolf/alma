@@ -83,6 +83,18 @@ pci(int argc, char **argv)
     return 0;
 }
 
+int
+getpage(int argc, char **argv)
+{
+    char aux[16];
+    void *ptr = kernel::allocator.request_page();
+    hstr((uint64_t)ptr, aux);
+    kernel::tty.print("0x");
+    kernel::tty.println(aux);
+
+    return 0;
+}
+
 } // namespace commands
 
 } // namespace shell
