@@ -9,6 +9,14 @@
 
 namespace heap {
 
+/**
+ * Trivial allocator
+ *
+ * @warning NAIVE IMPLEMENTATION, DOES NOT WORK ALWAYS
+ *
+ * We can request a big chunk on memory and get it separated with memory reserved in between. It has
+ * to be patched with virtual memory mapping
+ */
 class trivial_allocator : allocator_i
 {
   public:
