@@ -4,6 +4,8 @@
  * @author Ernesto Martínez García <me@ecomaikgolf.com>
  */
 
+#pragma once
+
 #include "acpi/acpi.h"
 #include "interrupts/interrupts.h"
 #include "screen/fonts/psf1.h"
@@ -27,7 +29,7 @@ struct boot_args
     acpi::rsdp_v2 *rsdp;
 };
 
-void screen(screen::framebuffer *, screen::fonts::psf1 *);
+void screen(stivale2_struct *);
 void allocator(stivale2_struct_tag_memmap *);
 void gdt();
 void translator(stivale2_struct_tag_memmap *);

@@ -32,7 +32,7 @@ struct psf1
     /**
      * PSF1 Font Header
      */
-    psf1_header *header;
+    psf1_header header;
 
     /** glyph buffer */
     void *buffer;
@@ -51,8 +51,8 @@ struct psf1
 class psf1_renderer : public renderer_i
 {
   public:
-    psf1_renderer(framebuffer *,
-                  fonts::psf1 *,
+    psf1_renderer(framebuffer,
+                  fonts::psf1,
                   unsigned int x_offset = 0,
                   unsigned int y_offset = 0,
                   color_e color         = color_e::WHITE);
@@ -73,7 +73,7 @@ class psf1_renderer : public renderer_i
         return fonts::psf1::glyph_y;
     }
     /** PSF1 font to use */
-    fonts::psf1 *font;
+    fonts::psf1 font;
 };
 
 } // namespace screen

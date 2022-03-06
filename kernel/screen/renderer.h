@@ -48,7 +48,7 @@ class renderer_i
 
   protected:
     /** Framebuffer to use */
-    framebuffer *fb;
+    framebuffer fb;
     /** x PIXEL offset of next glyph */
     unsigned int x_offset;
     /** y PIXEL offset of next glyph */

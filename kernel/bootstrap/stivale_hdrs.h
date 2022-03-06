@@ -1,8 +1,12 @@
 #pragma once
 
+#include "libc/string.h"
 #include "stivale2.h"
 #include <stdint.h>
 
+#define NULL 0
+
+/*
 extern uint8_t stack[8192];
 
 static struct stivale2_header_tag_terminal terminal_hdr_tag = {
@@ -53,8 +57,9 @@ __attribute__((section(".stivale2hdr"), used)) static struct stivale2_header sti
     // points to the first one in the linked list.
     .tags = (uintptr_t)&framebuffer_hdr_tag
 };
+*/
 
-void *
+static void *
 stivale2_get_tag(struct stivale2_struct *stivale2_struct, uint64_t id)
 {
     stivale2_tag *current_tag = (stivale2_tag *)stivale2_struct->tags;
@@ -74,4 +79,18 @@ stivale2_get_tag(struct stivale2_struct *stivale2_struct, uint64_t id)
         // Get a pointer to the next tag in the linked list and repeat.
         current_tag = (stivale2_tag *)current_tag->next;
     }
+}
+
+static void *
+stivale2_get_mod(struct stivale2_struct_tag_modules *mod, const char *str)
+{
+    void *ptr = nullptr;
+    for (int i = 0; i < mod->module_count; i++) {
+        // TODO: can be changed to strncmp?
+        if (strcmp(mod->modules[i].string, str) == 0) {
+            ptr = (void *)mod->modules[i].begin;
+            break;
+        }
+    }
+    return ptr;
 }

@@ -17,8 +17,8 @@ namespace screen {
  * @param y_offset Y **pixel** initial position
  * @param color hex color (enum)
  */
-psf1_renderer::psf1_renderer(framebuffer *fb,
-                             fonts::psf1 *font,
+psf1_renderer::psf1_renderer(framebuffer fb,
+                             fonts::psf1 font,
                              unsigned int x_offset,
                              unsigned int y_offset,
                              color_e color)
@@ -33,10 +33,10 @@ psf1_renderer::psf1_renderer(framebuffer *fb,
 psf1_renderer &
 psf1_renderer::operator=(psf1_renderer &&mov)
 {
-    this->font     = mov.font;
-    mov.font       = nullptr;
-    this->fb       = mov.fb;
-    mov.fb         = nullptr;
+    this->font = mov.font;
+    // mov.font       = nullptr;
+    this->fb = mov.fb;
+    // mov.fb         = nullptr;
     this->x_offset = mov.x_offset;
     this->y_offset = mov.y_offset;
     this->color    = mov.color;
@@ -58,8 +58,8 @@ psf1_renderer::draw(const char character)
 {
     /* Select character from glyph buffer (a character is composed by charsize
      * elements )*/
-    char *chr = static_cast<char *>(this->font->buffer) +
-                (static_cast<unsigned char>(character) * this->font->header->charsize);
+    char *chr = static_cast<char *>(this->font.buffer) +
+                (static_cast<unsigned char>(character) * this->font.header.charsize);
 
     /* Iterate bitmap "rectangle" (with offset as base) */
     for (unsigned long y = this->y_offset; y < this->y_offset + this->glyph_y(); y++) {
@@ -67,7 +67,7 @@ psf1_renderer::draw(const char character)
             /* Each Y from bitmap is a "flag number", check if corresponding
              * x bit is set */
             if ((*chr & (0b10000000 >> (x - this->x_offset)))) {
-                *(static_cast<unsigned int *>(this->fb->base + x + (y * this->fb->ppscl))) =
+                *(static_cast<unsigned int *>(this->fb.base + x + (y * this->fb.ppscl))) =
                   static_cast<unsigned int>(this->color);
             }
         }
