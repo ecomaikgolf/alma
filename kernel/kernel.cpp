@@ -67,6 +67,8 @@ _start(stivale2_struct *stivale2_struct)
     bootstrap::allocator(stivale2_struct);
     bootstrap::translator(stivale2_struct);
     bootstrap::screen(stivale2_struct);
+    bootstrap::gdt();
+    // bootstrap::interrupts();
 
     kernel::tty.println("Hola!");
 
@@ -146,8 +148,7 @@ _start(stivale2_struct *stivale2_struct)
 
     //
     //    // bootstrap::screen(&frame, font);
-    //    bootstrap::gdt();
-    //    bootstrap::interrupts();
+
     //    // bootstrap::enable_virtualaddr();
     //    bootstrap::enable_interrupts();
     //    bootstrap::keyboard();
