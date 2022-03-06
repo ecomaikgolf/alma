@@ -12,11 +12,10 @@ const uint16_t KEYBOARD_BUFF_SIZE = kernel::page_size;
 void
 screen(stivale2_struct *st)
 {
-    stivale2_struct_tag_framebuffer *fb =
+    auto *fb =
       (stivale2_struct_tag_framebuffer *)stivale2_get_tag(st, STIVALE2_STRUCT_TAG_FRAMEBUFFER_ID);
 
-    stivale2_struct_tag_modules *mod =
-      (stivale2_struct_tag_modules *)stivale2_get_tag(st, STIVALE2_STRUCT_TAG_MODULES_ID);
+    auto *mod = (stivale2_struct_tag_modules *)stivale2_get_tag(st, STIVALE2_STRUCT_TAG_MODULES_ID);
 
     screen::framebuffer frame;
     frame.base        = (unsigned int *)fb->framebuffer_addr;
@@ -45,8 +44,10 @@ screen(stivale2_struct *st)
 }
 
 void
-allocator(stivale2_struct_tag_memmap *map)
+allocator(stivale2_struct *st)
 {
+    auto *map = (stivale2_struct_tag_memmap *)stivale2_get_tag(st, STIVALE2_STRUCT_TAG_MEMMAP_ID);
+
     /* Construct the allocator with the UEFI mem map */
     kernel::allocator = paging::allocator::PFA(map);
     /* Lock kernel memory */
