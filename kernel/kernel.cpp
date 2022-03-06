@@ -68,7 +68,8 @@ _start(stivale2_struct *stivale2_struct)
     bootstrap::translator(stivale2_struct);
     bootstrap::screen(stivale2_struct);
     bootstrap::gdt();
-    // bootstrap::interrupts();
+    bootstrap::interrupts();
+    asm("int $0x9");
 
     kernel::tty.println("Hola!");
 
