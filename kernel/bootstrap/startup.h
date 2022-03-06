@@ -37,7 +37,7 @@ void interrupts();
 void enable_virtualaddr();
 void enable_interrupts();
 void keyboard();
-void acpi(acpi::rsdp_v2 *);
+void acpi(stivale2_struct *);
 void pci();
 void heap(void *, size_t);
 

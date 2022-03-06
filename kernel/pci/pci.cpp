@@ -44,7 +44,7 @@ enum_fun(uint64_t addr, uint64_t fun)
 
     prev = dev;
 
-    if (device->id == 0x8139) {
+    /*if (device->id == 0x8139) {
         uint64_t asd = (device->BAR[1] & 0xfffffff0);
         kernel::translator.map(asd, asd);
         char auxstr[256];
@@ -55,7 +55,7 @@ enum_fun(uint64_t addr, uint64_t fun)
             kernel::tty.print("    ");
             kernel::tty.println(auxstr);
         }
-    }
+    }*/
 }
 
 void

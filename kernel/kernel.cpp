@@ -72,97 +72,13 @@ _start(stivale2_struct *stivale2_struct)
     // bootstrap::enable_virtualaddr();
     bootstrap::enable_interrupts();
     bootstrap::keyboard();
-    // bootstrap::acpi((acpi::rsdp_v2 *)rs->rsdp);
+    bootstrap::acpi(stivale2_struct);
     //  bootstrap::heap((void *)0x0000100000000000, 0x1000);
+    bootstrap::pci();
+
+    kernel::tty.println("welcome to the alma kernel");
 
     shell::commands::shell(0, nullptr);
-
-    // bootstrap::pci();
-
-    kernel::tty.println("Hola!");
-
-    asm("hlt");
-
-    //    stivale2_struct_tag_memmap *map =
-    //      (stivale2_struct_tag_memmap *)stivale2_get_tag(stivale2_struct, 0x2187f79e8612de07);
-    //    stivale2_struct_tag_framebuffer *fb =
-    //      (stivale2_struct_tag_framebuffer *)stivale2_get_tag(stivale2_struct,
-    //      0x506461d2950408fa);
-    //    stivale2_struct_tag_rsdp *rsdp =
-    //      (stivale2_struct_tag_rsdp *)stivale2_get_tag(stivale2_struct, 0x9e1786930a375e78);
-    //    stivale2_struct_tag_terminal *cmd =
-    //      (stivale2_struct_tag_terminal *)stivale2_get_tag(stivale2_struct, 0xc2b3f4c3233b0974);
-    //    stivale2_struct_tag_modules *mod =
-    //      (stivale2_struct_tag_modules *)stivale2_get_tag(stivale2_struct, 0x4b6fe466aade04ce);
-    //    stivale2_struct_tag_rsdp *rs =
-    //      (stivale2_struct_tag_rsdp *)stivale2_get_tag(stivale2_struct, 0x9e1786930a375e78);
-    //
-    //    screen::fonts::psf1 *font = nullptr;
-    //    for (int i = 0; i < mod->module_count; i++) {
-    //        if (strcmp(mod->modules[i].string, "font") == 0) {
-    //            font = (screen::fonts::psf1 *)mod->modules[i].begin;
-    //        }
-    //    }
-    //
-    //    screen::framebuffer frame;
-    //    frame.base        = (unsigned int *)fb->framebuffer_addr;
-    //    frame.buffer_size = fb->framebuffer_width * fb->framebuffer_pitch;
-    //    frame.ppscl       = (fb->framebuffer_pitch / sizeof(uint32_t));
-    //    frame.width       = fb->framebuffer_width;
-    //    frame.height      = fb->framebuffer_height;
-    //
-    //    // screen::fonts::psf1 f;
-    //    // screen::fonts::psf1_header *f_hdr = (screen::fonts::psf1_header *)font;
-    //    // f.header                          = f_hdr;
-    //    // f.buffer                          = (uint8_t *)font +
-    //    sizeof(screen::fonts::psf1_header);
-    //
-    //    void (*stivale2_term_write)(uint64_t ptr, uint64_t length);
-    //
-    //    stivale2_term_write = (void (*)(unsigned long, unsigned long))cmd->term_write;
-    //
-    //    char aux[] = "hola";
-    //    stivale2_term_write((uint64_t)&aux[0], 4);
-    //
-    //    bootstrap::boot_args *args = nullptr;
-    //    /* Bootstrap the kernel (function order is mandatory) */
-    //
-    //    kernel::tty.println("hola");
-    //
-    //    char mem[256];
-    //    for (int i = 0; i < map->entries; i++) {
-    //        if (map->memmap[i].type == 1) {
-    //            hstr((uint64_t)map->memmap[i].base, mem);
-    //            kernel::tty.print(mem);
-    //            str((int)map->memmap[i].length / kernel::page_size, mem);
-    //            kernel::tty.print("(");
-    //            kernel::tty.print(mem);
-    //            kernel::tty.print("), ");
-    //            // str((int)map->memmap[i].length, mem);
-    //            // kernel::tty.print(" - Lenght ");
-    //            // kernel::tty.print(mem);
-    //            // str((int)map->memmap[i].type, mem);
-    //            // kernel::tty.print(" - Type ");
-    //            // kernel::tty.print(mem);
-    //            // kernel::tty.newline();
-    //        }
-    //    }
-    //
-
-    //
-    //    kernel::tty.newline();
-    //
-
-    //
-
-    //
-    //    // bootstrap::screen(&frame, font);
-
-    //
-    //    // kernel::tty.println("Hola desde el kernel!");
-    //    // asm("int $0x09");
-    //    // kernel::tty.println("Hola otra vez desde el kernel!");
-    //
 
     /* Call global destructors & functions */
     _fini();
