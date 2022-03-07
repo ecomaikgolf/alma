@@ -117,6 +117,7 @@ include_directories(${INCLUDE_DIRECTORIES})
 # lib sources
 set(LIB_SOURCES
 	lib/stdlib/itoa.cpp
+	lib/stdlib/strol.cpp
 	lib/string/memset.cpp
 	lib/string/strcmp.cpp
 	lib/string/strlen.cpp
