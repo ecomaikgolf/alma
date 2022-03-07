@@ -168,8 +168,8 @@ Tested on `Ubuntu 20.04`
 
 1. Install dependencies (listed below)
 2. `make -C toolchain/`
-3. `cmake -DCMAKE_BUILD_TYPE=Release -B build; cmake --build build`
-4. `make -C qemu-fs`
+3. `cmake -B build`
+4. `make -C build run`
 
 #### Build Dependencies
 
@@ -196,7 +196,7 @@ apt install nasm iasl cmake make qemu-system-x86 qemu-system-gui git uuid-dev py
 
 ## Bugs
 
-Explain them to me please: `me@ecomaikgolf.com`
+Please explain them to me: `me@ecomaikgolf.com`
 
 ## FAQ
 
