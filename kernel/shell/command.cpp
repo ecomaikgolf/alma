@@ -121,6 +121,43 @@ getmac(int argc, char **argv)
     return 0;
 }
 
+int
+vmmap(int argc, char **argv)
+{
+    using namespace paging;
+    using namespace paging::translator;
+
+    uint64_t asd                 = 0x7000;
+    address_t *virtaddr          = (address_t *)&asd;
+    page_global_dir_entry_t *PGD = &kernel::translator.get_PGDT()[virtaddr->global];
+
+    if (!PGD->present)
+        return 1;
+
+    page_upper_dir_entry_t *PUDT = (page_upper_dir_entry_t *)((uint64_t)PGD->page_ppn << 12);
+    page_upper_dir_entry_t *PUD  = &PUDT[virtaddr->upper];
+
+    if (!PUD->present)
+        return 1;
+
+    page_mid_dir_entry_t *PMDT = (page_mid_dir_entry_t *)((uint64_t)PUD->page_ppn << 12);
+    page_mid_dir_entry_t *PMD  = &PMDT[virtaddr->mid];
+
+    if (!PMD->present)
+        return 1;
+
+    page_table_entry_t *PTDT = (page_table_entry_t *)((uint64_t)PMD->page_ppn << 12);
+    page_table_entry_t *PTD  = &PTDT[virtaddr->table];
+
+    uint64_t phys = (uint64_t)PTD->page_ppn << 12;
+
+    char aux[256];
+    hstr(phys, aux);
+    kernel::tty.println(aux);
+
+    return 0;
+}
+
 } // namespace commands
 
 } // namespace shell
