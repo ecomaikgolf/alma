@@ -18,11 +18,13 @@ int pci(int, char **);
 int getpage(int, char **);
 int getmac(int, char **);
 int vmmap(int, char **);
+int help(int, char **);
 
 } // namespace commands
 
 // clang-format off
 static const command kernel_commands[] = {
+    { "help"     , &commands::help},
     { "echo"     , &commands::echo },
     { "whoami"   , &commands::whoami },
     { "shell"    , &commands::shell },

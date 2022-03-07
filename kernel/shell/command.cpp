@@ -158,6 +158,20 @@ vmmap(int argc, char **argv)
     return 0;
 }
 
+int
+help(int argc, char **argv)
+{
+    for (uint32_t i = 0; kernel_commands[i].name != nullptr; i++) {
+        kernel::tty.print(kernel_commands[i].name);
+        if (kernel_commands[i + 1].name != nullptr)
+            kernel::tty.print(", ");
+        else
+            kernel::tty.newline();
+    }
+
+    return 0;
+}
+
 } // namespace commands
 
 } // namespace shell
