@@ -46,7 +46,9 @@ shell(int argc, char **argv)
     shell::interpreter inter(shell::kernel_commands);
 
     while (true) {
+        kernel::tty.setColor(screen::color_e::GREEN);
         kernel::tty.print("$ ");
+        kernel::tty.setColor(screen::color_e::WHITE);
         kernel::keyboard.scanf(inter.get_buffer(), inter.BUFFER_SIZE);
         auto ret = inter.process(inter.get_buffer());
         if (ret == 127) {
@@ -54,7 +56,7 @@ shell(int argc, char **argv)
             kernel::tty.print("Command not found");
             kernel::tty.setColor(screen::color_e::WHITE);
         }
-        kernel::tty.newline();
+        // kernel::tty.newline();
     }
 
     return 0;
