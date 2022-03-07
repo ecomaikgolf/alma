@@ -12,17 +12,20 @@
  * @return < 0 if s1 < s2, = 0 if s1 == s2, > 0 if s1 > s2
  */
 int
-strcmp(const char *s1, const char *s2)
+strcmp(const char *p1, const char *p2)
 {
+    const unsigned char *s1 = (const unsigned char *)p1;
+    const unsigned char *s2 = (const unsigned char *)p2;
+    unsigned char c1, c2;
+
     do {
-        s1++;
-        s2++;
-        if (*s1 == '\0')
-            return *s1 - *s2;
+        c1 = (unsigned char)*s1++;
+        c2 = (unsigned char)*s2++;
+        if (c1 == '\0')
+            return c1 - c2;
+    } while (c1 == c2);
 
-    } while (*s1 == *s2);
-
-    return *s1 - *s2;
+    return c1 - c2;
 }
 
 /**
