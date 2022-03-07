@@ -10,6 +10,7 @@ struct command
 
 namespace commands {
 
+int help(int, char **);
 int echo(int, char **);
 int whoami(int, char **);
 int shell(int, char **);
@@ -17,8 +18,8 @@ int clear(int, char **);
 int pci(int, char **);
 int getpage(int, char **);
 int getmac(int, char **);
-int vmmap(int, char **);
-int help(int, char **);
+int getphys(int, char **);
+int map(int, char **);
 
 } // namespace commands
 
@@ -32,7 +33,8 @@ static const command kernel_commands[] = {
     { "pci"      , &commands::pci},
     { "getpage"  , &commands::getpage},
     { "getmac"   , &commands::getmac},
-    { "vmmap"    , &commands::vmmap},
+    { "getphys"  , &commands::getphys},
+    { "map"      , &commands::map},
     { nullptr , nullptr }
 };
 // clang-format on

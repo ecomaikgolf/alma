@@ -122,13 +122,20 @@ getmac(int argc, char **argv)
 }
 
 int
-vmmap(int argc, char **argv)
+getphys(int argc, char **argv)
 {
     using namespace paging;
     using namespace paging::translator;
 
-    uint64_t asd                 = 0x7000;
-    address_t *virtaddr          = (address_t *)&asd;
+    if (argc <= 1) {
+        // Y need print formatting :( ...
+        kernel::tty.print("Usage: ");
+        kernel::tty.print(argv[0]);
+        kernel::tty.println(" virtaddr");
+    }
+
+    uint64_t addr                = strol(argv[1], 16);
+    address_t *virtaddr          = (address_t *)&addr;
     page_global_dir_entry_t *PGD = &kernel::translator.get_PGDT()[virtaddr->global];
 
     if (!PGD->present)
