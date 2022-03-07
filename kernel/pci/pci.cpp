@@ -30,11 +30,12 @@ enum_fun(uint64_t addr, uint64_t fun)
 
     pci::pci_device *dev = (pci::pci_device *)kernel::heap.malloc(sizeof(pci::pci_device));
 
-    dev->header   = *device;
-    dev->device   = _device;
-    dev->function = _function;
-    dev->bus      = _bus;
-    dev->prev     = prev;
+    dev->header     = *device;
+    dev->device     = _device;
+    dev->function   = _function;
+    dev->bus        = _bus;
+    dev->prev       = prev;
+    dev->header_ext = (void *)((uint8_t *)device + sizeof(pci::device_header));
 
     /*First device in chain or not */
     if (prev == nullptr)
@@ -44,18 +45,21 @@ enum_fun(uint64_t addr, uint64_t fun)
 
     prev = dev;
 
-    /*if (device->id == 0x8139) {
-        uint64_t asd = (device->BAR[1] & 0xfffffff0);
-        kernel::translator.map(asd, asd);
-        char auxstr[256];
-        kernel::tty.println("MAC Address: ");
-        for (int i = 0; i < 6; i++) {
-            uint8_t aux = *((uint8_t *)asd + i);
-            hstr(aux, auxstr);
-            kernel::tty.print("    ");
-            kernel::tty.println(auxstr);
-        }
-    }*/
+    // if (device->id == 0x8139) {
+    //     if (dev->header.header_type == 0x0) {
+    //         pci::header_t0 *test = (pci::header_t0 *)dev->header_ext;
+    //         uint64_t asd         = (test->BAR[1] & 0xfffffff0);
+    //         kernel::translator.map(asd, asd);
+    //         char auxstr[256];
+    //         kernel::tty.println("MAC Address: ");
+    //         for (int i = 0; i < 6; i++) {
+    //             uint8_t aux = *((uint8_t *)asd + i);
+    //             hstr(aux, auxstr);
+    //             kernel::tty.print("    ");
+    //             kernel::tty.println(auxstr);
+    //         }
+    //     }
+    // }
 }
 
 void
