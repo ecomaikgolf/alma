@@ -124,11 +124,12 @@ set(LIBC_SOURCES
 	libc/math/sqrt.cpp
 	libc/math/log.cpp
 	libc/ctype/toupper.cpp
+	libc/bitset.cpp
 )
 
 # libstdc++ sources
 set(LIBSTDCXX_SOURCES
-	libstdc++/bitset.cpp
+	#libstdc++/bitset.cpp
 )
 
 # interrupt sources
