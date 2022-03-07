@@ -1,6 +1,6 @@
 #pragma once
 
-#include "libc/string.h"
+#include "lib/string.h"
 #include "stivale2.h"
 #include <stdint.h>
 

@@ -6,7 +6,7 @@
 
 #include "io/keyboard.h"
 #include "kernel.h"
-#include "libc/ctype.h"
+#include "lib/ctype.h"
 
 namespace io {
 

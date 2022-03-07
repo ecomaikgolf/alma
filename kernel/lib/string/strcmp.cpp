@@ -1,5 +1,5 @@
-#include "libc/math.h"
-#include "libc/string.h"
+#include "lib/math.h"
+#include "lib/string.h"
 
 /**
  * strcmp function

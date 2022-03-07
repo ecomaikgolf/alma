@@ -4,7 +4,7 @@
  * @author Ernesto Martínez García <me@ecomaikgolf.com>
  */
 
-#include "libc/math.h"
+#include "lib/math.h"
 
 /**
  * Convert integer to string (provided buffer)

@@ -1,6 +1,6 @@
 #include "shell/interpreter.h"
 #include "kernel.h"
-#include "libc/string.h"
+#include "lib/string.h"
 #include <stdint.h>
 
 namespace shell {

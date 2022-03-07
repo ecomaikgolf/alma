@@ -1,7 +1,7 @@
 #include "interrupts.h"
 #include "io/keyboard.h"
 #include "kernel.h"
-#include "libc/stdlib.h"
+#include "lib/stdlib.h"
 #include "screen/renderer.h"
 
 namespace interrupts {

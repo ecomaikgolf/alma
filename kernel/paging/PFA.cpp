@@ -6,7 +6,7 @@
 
 #include "PFA.h"
 #include "kernel.h"
-#include "libc/string.h"
+#include "lib/string.h"
 #include "uefi/memory.h"
 
 namespace paging {

@@ -114,22 +114,17 @@ include_directories(${INCLUDE_DIRECTORIES})
 # Helper script
 # find folder/ -print | grep .cpp | cut -c 3-
 
-# libc sources
-set(LIBC_SOURCES
-	libc/stdlib/itoa.cpp
-	libc/string/memset.cpp
-	libc/string/strcmp.cpp
-	libc/string/strlen.cpp
-	libc/math/pow.cpp
-	libc/math/sqrt.cpp
-	libc/math/log.cpp
-	libc/ctype/toupper.cpp
-	libc/bitset.cpp
-)
-
-# libstdc++ sources
-set(LIBSTDCXX_SOURCES
-	#libstdc++/bitset.cpp
+# lib sources
+set(LIB_SOURCES
+	lib/stdlib/itoa.cpp
+	lib/string/memset.cpp
+	lib/string/strcmp.cpp
+	lib/string/strlen.cpp
+	lib/math/pow.cpp
+	lib/math/sqrt.cpp
+	lib/math/log.cpp
+	lib/ctype/toupper.cpp
+	lib/bitset.cpp
 )
 
 # interrupt sources
@@ -162,8 +157,7 @@ set(KERNEL_SOURCES
 # set source files
 set(SOURCES
 	${KERNEL_SOURCES}
-	${LIBC_SOURCES}
-	${LIBSTDCXX_SOURCES}
+	${LIB_SOURCES}
 )
 
 ###############

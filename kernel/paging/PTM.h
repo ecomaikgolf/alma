@@ -10,7 +10,7 @@
 #pragma once
 
 #include "address.h"
-#include "libc/string.h"
+#include "lib/string.h"
 #include "uefi/memory.h"
 
 namespace paging {

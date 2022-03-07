@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "libstdc++/bitset.h"
+#include "lib/bitset.h"
 #include "stivale2.h"
 #include "uefi/memory.h"
 #include <stddef.h>

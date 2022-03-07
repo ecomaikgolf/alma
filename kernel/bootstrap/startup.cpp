@@ -2,7 +2,7 @@
 #include "bootstrap/stivale_hdrs.h"
 #include "io/bus.h"
 #include "kernel.h"
-#include "libc/stdlib.h"
+#include "lib/stdlib.h"
 #include "pci/pci.h"
 
 namespace bootstrap {

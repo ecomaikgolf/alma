@@ -1,4 +1,4 @@
-#include "libc/string.h"
+#include "lib/string.h"
 
 uint32_t
 strlen(const char *str)

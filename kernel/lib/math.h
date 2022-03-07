@@ -8,4 +8,4 @@
 
 extern unsigned int int_log10(unsigned int);
 extern unsigned int pow(unsigned int, unsigned int);
-#include "libc/math/abs.h"
+#include "lib/math/abs.h"

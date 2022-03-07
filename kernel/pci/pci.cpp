@@ -1,6 +1,6 @@
 #include "pci.h"
 #include "kernel.h"
-#include "libc/stdlib.h"
+#include "lib/stdlib.h"
 
 namespace pci {
 

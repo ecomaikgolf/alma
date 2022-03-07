@@ -1,6 +1,6 @@
 #include "acpi/acpi.h"
 #include "kernel.h"
-#include "libc/string.h"
+#include "lib/string.h"
 #include <stdint.h>
 
 namespace acpi {
