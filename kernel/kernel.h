@@ -35,7 +35,7 @@ inline segmentation::gdt_ptr gdt;
 inline interrupts::idt_ptr idtr;
 inline io::PS2 keyboard;
 inline acpi::rsdp_v2 rsdp;
-inline heap::trivial_allocator heap;
+inline heap::simple_allocator heap;
 inline pci::pci_device *devices;
 
 /* Kernel Constants */

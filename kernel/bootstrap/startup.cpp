@@ -73,16 +73,23 @@ gdt()
 void
 translator(stivale2_struct *st)
 {
-    auto *map = (stivale2_struct_tag_memmap *)stivale2_get_tag(st, STIVALE2_STRUCT_TAG_MEMMAP_ID);
+
+    uint64_t mapaddr;
+    asm volatile("mov %%cr3, %0" : [Var] "=r"(mapaddr));
+    paging::translator::PGDT_wrapper *newpgdt = (paging::translator::PGDT_wrapper *)mapaddr;
+    kernel::translator.set_PGDT(newpgdt);
+
+    // auto *map = (stivale2_struct_tag_memmap *)stivale2_get_tag(st,
+    // STIVALE2_STRUCT_TAG_MEMMAP_ID);
 
     ///* Locks the PTM */
     // kernel::allocator.lock_pages(&kernel::translator,
     //                              sizeof(kernel::translator) / kernel::page_size + 1);
 
     ///* Map virtual memory to physical memory (same address for the kernel) */
-    size_t usable_mem_size = uefi::memory::get_memsize(map);
-    for (uint64_t i = 0; i < usable_mem_size; i += kernel::page_size)
-        kernel::translator.map(i, i);
+    // size_t usable_mem_size = uefi::memory::get_memsize(map);
+    // for (uint64_t i = 0; i < usable_mem_size; i += kernel::page_size)
+    //     kernel::translator.map(i, i);
 
     // asm("mov %0, %%cr3" : : "r"(kernel::translator.get_PGDT()));
 }
@@ -159,8 +166,8 @@ pci()
 void
 heap(void *start_addr, size_t size)
 {
-    // heap::simple_allocator aux(start_addr, size);
-    // kernel::heap = aux;
+    heap::simple_allocator aux(start_addr, size);
+    kernel::heap = aux;
 }
 
 } // namespace bootstrap

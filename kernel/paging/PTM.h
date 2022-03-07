@@ -139,11 +139,16 @@ class PTM
      */
     page_global_dir_entry_t *get_PGDT()
     {
-        return this->PGD_table.PGDT;
+        return this->PGD_table->PGDT;
+    }
+
+    void set_PGDT(PGDT_wrapper *PGDT)
+    {
+        this->PGD_table = PGDT;
     }
 
   private:
-    PGDT_wrapper PGD_table;
+    PGDT_wrapper *PGD_table;
 };
 
 } // namespace translator
