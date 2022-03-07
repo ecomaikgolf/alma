@@ -73,11 +73,7 @@ pci(int argc, char **argv)
         kernel::tty.print(", ");
         str(i->function, buffer);
         kernel::tty.print(buffer);
-        kernel::tty.print(") [");
-        uint64_t mmio_addr = (i->header.BAR[1] & 0xfffffff0);
-        hstr(mmio_addr, buffer);
-        kernel::tty.print(buffer);
-        kernel::tty.println("]");
+        kernel::tty.println(")");
     }
 
     return 0;
