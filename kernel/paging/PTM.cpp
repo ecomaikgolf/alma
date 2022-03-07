@@ -106,6 +106,9 @@ PTM::map(uint64_t virt, uint64_t phys)
     PTD->present     = true;
     PTD->writeable   = true;
     PTD->user_access = true;
+
+    /** Flush TLB Cache Entries  https://www.felixcloutier.com/x86/invlpg */
+    asm("invlpg %0" : : "m"(virt));
 }
 
 } // namespace translator
