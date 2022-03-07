@@ -91,6 +91,36 @@ getpage(int argc, char **argv)
     return 0;
 }
 
+int
+getmac(int argc, char **argv)
+{
+
+    char mac_addr[32];
+    for (pci::pci_device *i = kernel::devices; i != nullptr; i = i->next) {
+        if (i->header.id == 0x8139 && i->header.header_type == 0x0) {
+
+            pci::header_t0 *ext_hdr = (pci::header_t0 *)i->header_ext;
+            uint64_t mmio_addr      = (ext_hdr->BAR[1] & 0xfffffff0);
+
+            char auxstr[16];
+            for (int i = 0; i < 5; i++) {
+                uint8_t aux = *((uint8_t *)mmio_addr + i);
+                hstr(aux, auxstr);
+                uint8_t endstr      = strlen(auxstr);
+                mac_addr[i * 3]     = auxstr[endstr - 2];
+                mac_addr[i * 3 + 1] = auxstr[endstr - 1];
+                if (i != 4)
+                    mac_addr[i * 3 + 2] = ':';
+            }
+            break;
+        }
+    }
+    mac_addr[14] = '\0';
+    kernel::tty.println(mac_addr);
+
+    return 0;
+}
+
 } // namespace commands
 
 } // namespace shell

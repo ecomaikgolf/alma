@@ -16,6 +16,7 @@ int shell(int, char **);
 int clear(int, char **);
 int pci(int, char **);
 int getpage(int, char **);
+int getmac(int, char **);
 
 } // namespace commands
 
@@ -27,6 +28,7 @@ static const command kernel_commands[] = {
     { "clear"    , &commands::clear },
     { "pci"      , &commands::pci},
     { "getpage"  , &commands::getpage},
+    { "getmac"   , &commands::getmac},
     { nullptr , nullptr }
 };
 // clang-format on
