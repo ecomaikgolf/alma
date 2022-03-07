@@ -199,6 +199,48 @@ map(int argc, char **argv)
     return 0;
 }
 
+int
+set(int argc, char **argv)
+{
+    if (argc <= 2) {
+        // Y need print formatting :( ...
+        kernel::tty.print("Usage: ");
+        kernel::tty.print(argv[0]);
+        kernel::tty.println(" addr true/false");
+        return 1;
+    }
+
+    bool set = (strncmp(argv[2], "true", 4) == 0);
+
+    uint64_t addr = strol(argv[1], 16);
+    bool *data    = (bool *)addr;
+    *data         = set;
+
+    return 0;
+}
+
+int
+get(int argc, char **argv)
+{
+    if (argc <= 1) {
+        // Y need print formatting :( ...
+        kernel::tty.print("Usage: ");
+        kernel::tty.print(argv[0]);
+        kernel::tty.println(" addr");
+        return 1;
+    }
+
+    uint64_t addr = strol(argv[1], 16);
+    bool *data    = (bool *)addr;
+    kernel::tty.print("(bool *)0x");
+    kernel::tty.print(argv[1]);
+    if (*data)
+        kernel::tty.println(" -> true");
+    else
+        kernel::tty.println(" -> false");
+    return 0;
+}
+
 } // namespace commands
 
 } // namespace shell

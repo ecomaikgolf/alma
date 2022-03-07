@@ -20,6 +20,8 @@ int getpage(int, char **);
 int getmac(int, char **);
 int getphys(int, char **);
 int map(int, char **);
+int set(int, char **);
+int get(int, char **);
 
 } // namespace commands
 
@@ -35,6 +37,8 @@ static const command kernel_commands[] = {
     { "getmac"   , &commands::getmac},
     { "getphys"  , &commands::getphys},
     { "map"      , &commands::map},
+    { "get"      , &commands::get},
+    { "set"      , &commands::set},
     { nullptr , nullptr }
 };
 // clang-format on
