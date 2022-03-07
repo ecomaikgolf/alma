@@ -78,6 +78,11 @@ _start(stivale2_struct *stivale2_struct)
 
     kernel::tty.println("welcome to the alma kernel");
 
+    kernel::tty.fmt("Hola %s, ten el número %i y también un puntero %p",
+                    "ernesto",
+                    8,
+                    kernel::allocator.request_page());
+
     shell::commands::shell(0, nullptr);
 
     /* Call global destructors & functions */

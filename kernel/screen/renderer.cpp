@@ -6,6 +6,7 @@
 
 #include "screen/renderer.h"
 #include "colors.h"
+#include "lib/stdlib.h"
 
 // screen::renderer_i *global;
 
@@ -33,10 +34,10 @@ renderer_i::put(const char character)
  * @param str string to print
  */
 void
-renderer_i::print(const char *str)
+renderer_i::print(const char *str, int64_t n)
 {
     int i = 0;
-    while (str[i]) {
+    while (str[i] && n != 0) {
         switch (str[i]) {
             case '\n':
                 this->y_offset += this->glyph_y();
@@ -51,6 +52,8 @@ renderer_i::print(const char *str)
         }
         if ((this->y_offset + this->glyph_y()) > this->fb.height)
             this->scroll();
+
+        n--;
         i++;
     }
 }
@@ -175,6 +178,52 @@ void
 renderer_i::set_y(unsigned int value)
 {
     this->y_offset = value;
+}
+
+void
+renderer_i::fmt(const char *fmtstr, ...)
+{
+    va_list args;
+    va_start(args, fmtstr);
+    char buffer[256];
+    uint64_t i       = 0;
+    uint64_t literal = 0;
+    bool specialchar = false;
+    while (fmtstr[i] != '\0') {
+        if (fmtstr[i] == '%') {
+            specialchar = true;
+            this->print(&fmtstr[literal], i - literal);
+            literal = i + 2;
+        } else if (specialchar) {
+            specialchar = false;
+            switch (fmtstr[i]) {
+                case 'i': {
+                    str(va_arg(args, int), buffer);
+                    this->print(buffer);
+                    break;
+                }
+                case 's': {
+                    this->print(va_arg(args, const char *));
+                    break;
+                }
+                case 'p': {
+                    hstr(va_arg(args, uint64_t), buffer);
+                    this->print("0x");
+                    this->print(buffer);
+                    break;
+                }
+                case 'd': {
+                    str(va_arg(args, double), buffer);
+                    this->print(buffer);
+                    break;
+                }
+            }
+        }
+
+        i++;
+    }
+    this->print(&fmtstr[literal]);
+    this->newline();
 }
 
 } // namespace screen

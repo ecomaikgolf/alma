@@ -8,6 +8,7 @@
 
 #include "colors.h"
 #include "framebuffer.h"
+#include <stdarg.h>
 #include <stdint.h>
 
 namespace screen {
@@ -19,13 +20,14 @@ class renderer_i
 {
   public:
     renderer_i() = default;
+    void fmt(const char *, ...);
     void println(const char *);
     void printcharln(char letter)
     {
         char aux[] = { letter, '\0' };
         this->println(aux);
     }
-    void print(const char *);
+    void print(const char *, int64_t n = -1);
     void printchar(char letter)
     {
         char aux[] = { letter, '\0' };
