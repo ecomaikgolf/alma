@@ -8,6 +8,20 @@ namespace shell {
 namespace commands {
 
 int
+help(int argc, char **argv)
+{
+    for (uint32_t i = 0; kernel_commands[i].name != nullptr; i++) {
+        kernel::tty.print(kernel_commands[i].name);
+        if (kernel_commands[i + 1].name != nullptr)
+            kernel::tty.print(", ");
+        else
+            kernel::tty.newline();
+    }
+
+    return 0;
+}
+
+int
 echo(int argc, char **argv)
 {
     for (int i = 1; i < argc; i++) {
@@ -132,6 +146,7 @@ getphys(int argc, char **argv)
         kernel::tty.print("Usage: ");
         kernel::tty.print(argv[0]);
         kernel::tty.println(" virtaddr");
+        return 1;
     }
 
     uint64_t addr                = strol(argv[1], 16);
@@ -166,15 +181,20 @@ getphys(int argc, char **argv)
 }
 
 int
-help(int argc, char **argv)
+map(int argc, char **argv)
 {
-    for (uint32_t i = 0; kernel_commands[i].name != nullptr; i++) {
-        kernel::tty.print(kernel_commands[i].name);
-        if (kernel_commands[i + 1].name != nullptr)
-            kernel::tty.print(", ");
-        else
-            kernel::tty.newline();
+    if (argc <= 2) {
+        // Y need print formatting :( ...
+        kernel::tty.print("Usage: ");
+        kernel::tty.print(argv[0]);
+        kernel::tty.println(" virtaddr physaddr");
+        return 1;
     }
+
+    uint64_t virt = strol(argv[1], 16);
+    uint64_t phys = strol(argv[2], 16);
+
+    kernel::translator.map(virt, phys);
 
     return 0;
 }
