@@ -253,36 +253,42 @@ get(int argc, char **argv)
 int
 printmem(int argc, char **argv)
 {
-    /** TODO: get byte number (I need atoi function) */
+    /** Constants */
+    static const uint32_t BYTES_PER_LINE = 16;
+    static const uint32_t DEFAULT_LINES  = kernel::page_size / BYTES_PER_LINE;
 
     if (argc <= 1) {
         kernel::tty.fmt("Usage: %s addr [bytes]", argv[0]);
         return 1;
     }
 
-    uint16_t lines = 0;
+    uint16_t nlines = DEFAULT_LINES;
+    if (argc == 3)
+        nlines = strol(argv[2], 10);
+
     uint64_t addr  = strol(argv[1], 16);
     uint8_t column = 0;
     uint8_t line   = 0;
-    for (uint32_t byte = 0; byte < kernel::page_size; byte++) {
+    for (uint32_t byte = 0; byte < nlines * BYTES_PER_LINE; byte++) {
 
         if (column == 0) {
             char buff[32];
-            hstr((uint64_t)(uint8_t *)addr + (line * 16), buff);
+            hstr((uint64_t)(uint8_t *)addr + (line * BYTES_PER_LINE), buff);
             kernel::tty.print(buff);
             kernel::tty.print(": ");
         }
 
-        char buff[3];
+        char buff[16];
         uint8_t *ptr = ((uint8_t *)addr + byte);
         hstr(*ptr, buff);
-        kernel::tty.put(buff[0]);
-        kernel::tty.put(buff[1]);
+        int wrongthing = strlen(buff); // TODO: fix this mess
+        kernel::tty.put(buff[wrongthing - 2]);
+        kernel::tty.put(buff[wrongthing - 1]);
         kernel::tty.put(' ');
 
         column++;
 
-        if (column != 0 && column % 16 == 0) {
+        if (column != 0 && column % BYTES_PER_LINE == 0) {
             line++;
             column = 0;
             kernel::tty.newline();
