@@ -20,6 +20,7 @@ int getpage(int, char **);
 int getmac(int, char **);
 int getphys(int, char **);
 int map(int, char **);
+int unmap(int, char **);
 int set(int, char **);
 int get(int, char **);
 int printmem(int, char **);
@@ -38,6 +39,7 @@ static const command kernel_commands[] = {
     { "getmac"     , &commands::getmac},
     { "getphys"    , &commands::getphys},
     { "map"        , &commands::map},
+    { "unmap"      , &commands::unmap},
     { "get"        , &commands::get},
     { "set"        , &commands::set},
     { "printmem"   , &commands::printmem},

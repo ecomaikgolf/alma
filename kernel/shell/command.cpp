@@ -198,6 +198,26 @@ map(int argc, char **argv)
 
     kernel::translator.map(virt, phys);
 
+    kernel::tty.fmt("%s -> %s", argv[1], argv[2]);
+
+    return 0;
+}
+
+int
+unmap(int argc, char **argv)
+{
+    if (argc <= 1) {
+        // Y need print formatting :( ...
+        kernel::tty.fmt("Usage: %s virtaddr", argv[0]);
+        return 1;
+    }
+
+    uint64_t virt = strol(argv[1], 16);
+
+    kernel::translator.map(virt, virt);
+
+    kernel::tty.fmt("%s -> %s", argv[1], argv[1]);
+
     return 0;
 }
 
