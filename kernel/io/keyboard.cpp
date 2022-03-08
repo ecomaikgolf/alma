@@ -28,6 +28,10 @@ PS2::process_scancode(uint8_t keycode)
             this->state = PS2_State::Shifted;
             break;
         case 0xaa:
+            if (this->state != PS2_State::Mayus)
+                this->state = PS2_State::Normal;
+            break;
+        case 0x3a:
             if (this->state == PS2_State::Mayus)
                 this->state = PS2_State::Normal;
             else
