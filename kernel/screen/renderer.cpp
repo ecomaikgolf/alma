@@ -217,6 +217,10 @@ renderer_i::fmt(const char *fmtstr, ...)
                     this->print(buffer);
                     break;
                 }
+                case 'c': {
+                    this->printchar((char)va_arg(args, int));
+                    break;
+                }
             }
         }
 

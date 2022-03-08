@@ -78,7 +78,7 @@ _start(stivale2_struct *stivale2_struct)
 
     kernel::tty.println("welcome to the alma kernel");
 
-    kernel::tty.fmt("Hola %s, ten el número %i y también un puntero %p",
+    kernel::tty.fmt("Hola %c %s, ten el numero %i y tambien un puntero %p",
                     "ernesto",
                     8,
                     kernel::allocator.request_page());
