@@ -329,7 +329,7 @@ uefimmap(int argc, char **argv)
     for (uint64_t i = 0; i < map->entries; i++) {
         auto entry          = map->memmap[i];
         uint64_t init_addr  = entry.base;
-        uint64_t fini_addr  = (uint8_t)entry.base + entry.length;
+        uint64_t fini_addr  = entry.base + entry.length;
         uint64_t kbsize     = entry.length / 1024;
         const char *memtype = nullptr;
         switch (entry.type) {
