@@ -22,6 +22,8 @@ namespace internal {
 extern "C" uint64_t _start_addr;
 extern "C" uint64_t _end_addr;
 
+inline stivale2_struct stivalehdr;
+
 } // namespace internal
 
 /* System Constants  */

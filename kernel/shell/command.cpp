@@ -1,4 +1,5 @@
 #include "shell/command.h"
+#include "bootstrap/stivale_hdrs.h"
 #include "kernel.h"
 #include "lib/stdlib.h"
 #include "shell/interpreter.h"
@@ -29,6 +30,7 @@ echo(int argc, char **argv)
         if (i + 1 < argc)
             kernel::tty.print(" ");
     }
+    kernel::tty.newline();
 
     return 0;
 }
@@ -36,7 +38,7 @@ echo(int argc, char **argv)
 int
 whoami(int argc, char **argv)
 {
-    kernel::tty.print("chad");
+    kernel::tty.println("chad");
     return 0;
 }
 
@@ -313,6 +315,52 @@ printmem(int argc, char **argv)
             column = 0;
             kernel::tty.newline();
         }
+    }
+
+    return 0;
+}
+
+int
+uefimmap(int argc, char **argv)
+{
+    auto *map = (stivale2_struct_tag_memmap *)stivale2_get_tag(&kernel::internal::stivalehdr,
+                                                               STIVALE2_STRUCT_TAG_MEMMAP_ID);
+
+    for (uint64_t i = 0; i < map->entries; i++) {
+        auto entry          = map->memmap[i];
+        uint64_t init_addr  = entry.base;
+        uint64_t fini_addr  = (uint8_t)entry.base + entry.length;
+        uint64_t kbsize     = entry.length / 1024;
+        const char *memtype = nullptr;
+        switch (entry.type) {
+            case 1:
+                memtype = "Usable                ";
+                break;
+            case 2:
+                memtype = "Reserved              ";
+                break;
+            case 3:
+                memtype = "ACPI Reclaimable      ";
+                break;
+            case 4:
+                memtype = "ACPI NVS              ";
+                break;
+            case 5:
+                memtype = "Bad Memory            ";
+                break;
+            case 0x1000:
+                memtype = "Bootloader Reclaimable";
+                break;
+            case 0x1001:
+                memtype = "Kernel and Modules    ";
+                break;
+            case 0x1002:
+                memtype = "Framebuffer           ";
+                break;
+            default:
+                memtype = "ERROR                 ";
+        }
+        kernel::tty.fmt("[%p - %p) %s [%i KB]", init_addr, fini_addr, memtype, kbsize);
     }
 
     return 0;

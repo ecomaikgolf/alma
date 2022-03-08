@@ -76,6 +76,8 @@ _start(stivale2_struct *stivale2_struct)
     bootstrap::heap((void *)0x100000, 0x10);
     bootstrap::pci();
 
+    kernel::internal::stivalehdr = *stivale2_struct;
+
     kernel::tty.println("welcome to the alma kernel");
 
     shell::commands::shell(0, nullptr);
