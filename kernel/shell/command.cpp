@@ -53,7 +53,7 @@ shell(int argc, char **argv)
         auto ret = inter.process(inter.get_buffer());
         if (ret == 127) {
             kernel::tty.setColor(screen::color_e::RED);
-            kernel::tty.print("Command not found");
+            kernel::tty.println("Command not found");
             kernel::tty.setColor(screen::color_e::WHITE);
         }
         // kernel::tty.newline();
@@ -247,6 +247,48 @@ get(int argc, char **argv)
         kernel::tty.println(" -> true");
     else
         kernel::tty.println(" -> false");
+    return 0;
+}
+
+int
+printmem(int argc, char **argv)
+{
+    /** TODO: get byte number (I need atoi function) */
+
+    if (argc <= 1) {
+        kernel::tty.fmt("Usage: %s addr [bytes]", argv[0]);
+        return 1;
+    }
+
+    uint16_t lines = 0;
+    uint64_t addr  = strol(argv[1], 16);
+    uint8_t column = 0;
+    uint8_t line   = 0;
+    for (uint32_t byte = 0; byte < kernel::page_size; byte++) {
+
+        if (column == 0) {
+            char buff[32];
+            hstr((uint64_t)(uint8_t *)addr + (line * 16), buff);
+            kernel::tty.print(buff);
+            kernel::tty.print(": ");
+        }
+
+        char buff[3];
+        uint8_t *ptr = ((uint8_t *)addr + byte);
+        hstr(*ptr, buff);
+        kernel::tty.put(buff[0]);
+        kernel::tty.put(buff[1]);
+        kernel::tty.put(' ');
+
+        column++;
+
+        if (column != 0 && column % 16 == 0) {
+            line++;
+            column = 0;
+            kernel::tty.newline();
+        }
+    }
+
     return 0;
 }
 

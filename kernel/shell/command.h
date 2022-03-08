@@ -22,23 +22,25 @@ int getphys(int, char **);
 int map(int, char **);
 int set(int, char **);
 int get(int, char **);
+int printmem(int, char **);
 
 } // namespace commands
 
 // clang-format off
 static const command kernel_commands[] = {
-    { "help"     , &commands::help},
-    { "echo"     , &commands::echo },
-    { "whoami"   , &commands::whoami },
-    { "shell"    , &commands::shell },
-    { "clear"    , &commands::clear },
-    { "pci"      , &commands::pci},
-    { "getpage"  , &commands::getpage},
-    { "getmac"   , &commands::getmac},
-    { "getphys"  , &commands::getphys},
-    { "map"      , &commands::map},
-    { "get"      , &commands::get},
-    { "set"      , &commands::set},
+    { "help"       , &commands::help},
+    { "echo"       , &commands::echo },
+    { "whoami"     , &commands::whoami },
+    { "shell"      , &commands::shell },
+    { "clear"      , &commands::clear },
+    { "pci"        , &commands::pci},
+    { "getpage"    , &commands::getpage},
+    { "getmac"     , &commands::getmac},
+    { "getphys"    , &commands::getphys},
+    { "map"        , &commands::map},
+    { "get"        , &commands::get},
+    { "set"        , &commands::set},
+    { "printmem"   , &commands::printmem},
     { nullptr , nullptr }
 };
 // clang-format on
