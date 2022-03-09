@@ -75,6 +75,14 @@ BPFA::lock_page(uint64_t addr)
             if (diff == 0) {
                 iter->addr += kernel::page_size;
                 iter->pages -= 1;
+                if (iter->pages == 1) {
+                    iter->remove_node();
+                    if (iter->prev == nullptr)
+                        this->buffer_base = iter->next;
+                } else {
+                    iter->addr += kernel::page_size;
+                    iter->pages -= 1;
+                }
             } else if (pg_diff == iter->pages - 1) {
                 iter->pages -= 1;
             } else if (iter->pages == 1) {
