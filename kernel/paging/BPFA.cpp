@@ -71,10 +71,7 @@ BPFA::lock_page(uint64_t addr)
         if (addr >= iter->addr && addr < (iter->addr + (iter->pages * kernel::page_size))) {
             uint64_t diff    = addr - iter->addr;
             uint16_t pg_diff = diff / kernel::page_size;
-
             if (diff == 0) {
-                iter->addr += kernel::page_size;
-                iter->pages -= 1;
                 if (iter->pages == 1) {
                     iter->remove_node();
                     if (iter->prev == nullptr)
@@ -85,10 +82,6 @@ BPFA::lock_page(uint64_t addr)
                 }
             } else if (pg_diff == iter->pages - 1) {
                 iter->pages -= 1;
-            } else if (iter->pages == 1) {
-                iter->remove_node();
-                if (iter->prev == nullptr)
-                    this->buffer_base = iter->next;
             } else {
                 auto newaddr = this->new_node();
                 if (newaddr == nullptr)
@@ -123,6 +116,19 @@ BPFA::lock_pages(uint64_t addr, uint64_t pages)
 bool
 BPFA::free_page(uint64_t addr)
 {
+    auto it = this->get_first();
+    while (it != nullptr) {
+        if ((it->addr + (it->pages * kernel::page_size)) == addr) {
+            it->pages++;
+            return true;
+        } else if ((it->addr - kernel::page_size) == addr) {
+            it->pages++;
+            it->addr = addr;
+            return true;
+        }
+        it = it->next;
+    }
+
     auto newpage = this->new_node();
     if (newpage == nullptr)
         return false;
