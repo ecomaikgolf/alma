@@ -25,6 +25,7 @@ int set(int, char **);
 int get(int, char **);
 int printmem(int, char **);
 int uefimmap(int, char **);
+int printpfa(int, char **);
 
 } // namespace commands
 
@@ -45,6 +46,7 @@ static const command kernel_commands[] = {
     { "set"        , &commands::set},
     { "printmem"   , &commands::printmem},
     { "uefimmap"   , &commands::uefimmap},
+    { "printpfa"   , &commands::printpfa},
     { nullptr , nullptr }
 };
 // clang-format on

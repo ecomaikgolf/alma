@@ -43,6 +43,15 @@ class BPFA
     bool lock_pages(void *, uint64_t);
     void *request_page();
 
+    BPFA_page *get_first()
+    {
+        return this->list_first;
+    };
+    BPFA_page *get_last()
+    {
+        return this->list_last;
+    };
+
   private:
     BPFA_page *buffer_base;
     BPFA_page *buffer_next;

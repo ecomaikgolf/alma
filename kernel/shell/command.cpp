@@ -366,6 +366,16 @@ uefimmap(int argc, char **argv)
     return 0;
 }
 
+int
+printpfa(int argc, char **argv)
+{
+    auto it = kernel::allocator.get_first();
+    while (it != nullptr) {
+        kernel::tty.fmt("%p (%i)", it->addr, it->pages);
+        it = it->next;
+    }
+}
+
 } // namespace commands
 
 } // namespace shell
