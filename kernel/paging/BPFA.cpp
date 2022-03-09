@@ -34,17 +34,39 @@ BPFA::BPFA(stivale2_struct_tag_memmap *map)
                 (buffer_next - 1)->next = this->buffer_next;
             }
 
+            this->list_last = buffer_next;
+
             buffer_next++;
         }
     }
 
+    this->list_first = this->buffer_base;
+
     // this->lock_pages(this->buffer_base, total_pages);
 }
 
-void
+BPFA &
+BPFA::operator=(BPFA &&rval)
+{
+    this->buffer_base = rval.buffer_base;
+    this->buffer_limi = rval.buffer_limi;
+    this->buffer_next = rval.buffer_next;
+    this->list_first  = rval.list_first;
+    this->list_last   = rval.list_last;
+
+    rval.buffer_base = nullptr;
+    rval.buffer_limi = nullptr;
+    rval.buffer_next = nullptr;
+    rval.list_first  = nullptr;
+    rval.list_last   = nullptr;
+
+    return *this;
+}
+
+bool
 BPFA::lock_page(uint64_t addr)
 {
-    auto iter = this->buffer_base;
+    auto iter = this->list_first;
     do {
         if (addr >= iter->addr && addr < (iter->addr + (iter->pages * kernel::page_size))) {
             uint64_t diff    = addr - iter->addr;
@@ -60,13 +82,97 @@ BPFA::lock_page(uint64_t addr)
                 if (iter->prev == nullptr)
                     this->buffer_base = iter->next;
             } else {
-                iter->split(addr, this->get_addr());
+                auto newaddr = this->new_node();
+                if (newaddr == nullptr)
+                    return false;
+                iter->split(addr, newaddr);
             }
 
-            return;
+            return true;
         }
         iter = iter->next;
     } while (iter != nullptr);
+
+    return false;
+}
+
+bool
+BPFA::lock_pages(uint64_t addr, uint64_t pages)
+{
+    auto it       = addr;
+    uint64_t done = 0;
+    for (; pages > 0; pages--) {
+        done++;
+        if (!this->lock_page(it)) {
+            this->free_pages(it, done);
+            return false;
+        }
+        it += kernel::page_size;
+    }
+    return true;
+}
+
+bool
+BPFA::free_page(uint64_t addr)
+{
+    auto newpage = this->new_node();
+    if (newpage == nullptr)
+        return false;
+    newpage->addr       = addr;
+    newpage->pages      = 1;
+    newpage->occupied   = 1;
+    newpage->prev       = this->list_last;
+    newpage->prev->next = newpage;
+    this->list_last     = newpage;
+    return true;
+}
+
+bool
+BPFA::free_pages(uint64_t addr, uint64_t pages)
+{
+    for (; pages > 0; pages--) {
+        if (!this->free_page(addr))
+            return false;
+        addr += kernel::page_size;
+    }
+
+    return true;
+}
+
+inline bool
+BPFA::free_page(void *addr)
+{
+    return this->free_page((uint64_t)addr);
+}
+
+inline bool
+BPFA::free_pages(void *addr, uint64_t pages)
+{
+    return this->free_pages((uint64_t)addr, pages);
+}
+
+inline bool
+BPFA::lock_page(void *addr)
+{
+    return this->lock_page((uint64_t)addr);
+}
+
+inline bool
+BPFA::lock_pages(void *addr, uint64_t pages)
+{
+    return this->lock_pages((uint64_t)addr, pages);
+}
+
+void *
+BPFA::request_page()
+{
+
+    auto iter = this->list_first;
+    if (iter == nullptr)
+        return nullptr;
+    void *retval = (void *)iter->addr;
+    this->lock_page(iter->addr);
+    return retval;
 }
 
 stivale2_mmap_entry
@@ -95,7 +201,7 @@ BPFA::get_total_pages(stivale2_struct_tag_memmap *map)
 }
 
 BPFA_page *
-BPFA::get_addr()
+BPFA::new_node()
 {
     auto it = this->buffer_next;
     while (true) {

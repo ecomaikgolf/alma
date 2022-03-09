@@ -39,11 +39,11 @@ rsdp_v2::memmap_acpi_tables()
     acpi::sdt *xsdt = (acpi::sdt *)this->xsdt;
 
     /* reserve pages */
-    kernel::allocator.lock_pages((void *)xsdt, xsdt->length / kernel::page_size + 1);
+    // kernel::allocator.lock_pages((void *)xsdt, xsdt->length / kernel::page_size + 1);
 
     /* map pages */
-    for (uint64_t i = 0; i < xsdt->length / kernel::page_size + 1; i += kernel::page_size)
-        kernel::translator.map((uint64_t)((uint8_t *)xsdt + i), (uint64_t)((uint8_t *)xsdt + i));
+    // for (uint64_t i = 0; i < xsdt->length / kernel::page_size + 1; i += kernel::page_size)
+    //     kernel::translator.map((uint64_t)((uint8_t *)xsdt + i), (uint64_t)((uint8_t *)xsdt + i));
 }
 
 sdt *

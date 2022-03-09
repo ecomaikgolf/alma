@@ -6,7 +6,7 @@
 #include "heap/trivial_allocator.h"
 #include "interrupts/IDT.h"
 #include "io/keyboard.h"
-#include "paging/PFA.h"
+#include "paging/BPFA.h"
 #include "paging/PTM.h"
 #include "pci/pci.h"
 #include "screen/fonts/psf1.h"
@@ -30,7 +30,7 @@ inline stivale2_struct stivalehdr;
 const auto page_size = uefi::page_size;
 
 /* Variables */
-inline paging::allocator::PFA allocator;
+inline paging::allocator::BPFA allocator;
 inline paging::translator::PTM translator __attribute__((aligned(uefi::page_size)));
 inline screen::psf1_renderer tty;
 inline segmentation::gdt_ptr gdt;

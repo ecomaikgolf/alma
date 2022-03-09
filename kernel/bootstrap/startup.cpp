@@ -3,6 +3,7 @@
 #include "io/bus.h"
 #include "kernel.h"
 #include "lib/stdlib.h"
+#include "paging/BPFA.h"
 #include "pci/pci.h"
 
 namespace bootstrap {
@@ -49,7 +50,7 @@ allocator(stivale2_struct *st)
     auto *map = (stivale2_struct_tag_memmap *)stivale2_get_tag(st, STIVALE2_STRUCT_TAG_MEMMAP_ID);
 
     /* Construct the allocator with the UEFI mem map */
-    kernel::allocator = paging::allocator::PFA(map);
+    kernel::allocator = paging::allocator::BPFA(map);
     /* Lock kernel memory */
     // kernel::allocator.lock_pages(kernel::_start_addr, kernel::_size_npages);
     /* Lock the allocator itself  */
@@ -62,7 +63,8 @@ gdt()
 {
     using namespace segmentation;
     /* Lock the GDT */
-    kernel::allocator.lock_pages(&kernel::gdt, sizeof(kernel::gdt) / kernel::page_size + 1);
+    kernel::allocator.lock_pages((uint64_t)&kernel::gdt,
+                                 sizeof(kernel::gdt) / kernel::page_size + 1);
     /* Create an empty GDT */
     kernel::gdt.size   = sizeof(table) - 1;
     kernel::gdt.offset = (uint64_t)&table;
@@ -98,7 +100,8 @@ void
 interrupts()
 {
     /* Locks the IDT */
-    kernel::allocator.lock_pages(&kernel::idtr, sizeof(kernel::idtr) / kernel::page_size + 1);
+    kernel::allocator.lock_pages((uint64_t)&kernel::idtr,
+                                 sizeof(kernel::idtr) / kernel::page_size + 1);
     kernel::idtr.set_ptr((uint64_t)kernel::allocator.request_page());
 
     /* Load the interrupt handlers */

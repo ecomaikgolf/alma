@@ -80,12 +80,6 @@ _start(stivale2_struct *stivale2_struct)
 
     kernel::internal::stivalehdr = *stivale2_struct;
 
-    auto *map = (stivale2_struct_tag_memmap *)stivale2_get_tag(stivale2_struct,
-                                                               STIVALE2_STRUCT_TAG_MEMMAP_ID);
-
-    paging::allocator::BPFA test(map);
-    test.lock_page(12288);
-
     kernel::tty.println("welcome to the alma kernel");
 
     shell::commands::shell(0, nullptr);
