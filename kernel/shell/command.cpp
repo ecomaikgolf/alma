@@ -100,12 +100,18 @@ pci(int argc, char **argv)
 int
 getpage(int argc, char **argv)
 {
-    char aux[16];
-    void *ptr = kernel::allocator.request_page();
-    hstr((uint64_t)ptr, aux);
-    kernel::tty.print("0x");
-    kernel::tty.println(aux);
+    if (argc >= 2) {
+        uint64_t addr = strol(argv[1], 16);
+        auto ret      = kernel::allocator.request_page((void *)addr);
+        if (ret == nullptr) {
+            kernel::tty.println("Not available");
+            return 1;
+        }
+        kernel::tty.fmt("0x%p", (uint64_t)ret);
+        return 0;
+    }
 
+    kernel::tty.fmt("0x%p", (uint64_t)kernel::allocator.request_page());
     return 0;
 }
 
@@ -360,7 +366,7 @@ uefimmap(int argc, char **argv)
             default:
                 memtype = "ERROR                 ";
         }
-        kernel::tty.fmt("[%p - %p) %s [%i KB]", init_addr, fini_addr, memtype, kbsize);
+        kernel::tty.fmt("%p - %p %s [%i KB]", init_addr, fini_addr, memtype, kbsize);
     }
 
     return 0;
@@ -375,6 +381,8 @@ printpfa(int argc, char **argv)
         kernel::tty.fmt("%p - %p [%i pages]", it->addr, limaddr, it->pages);
         it = it->next;
     }
+
+    return 0;
 }
 
 } // namespace commands

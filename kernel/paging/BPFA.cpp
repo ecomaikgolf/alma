@@ -178,8 +178,13 @@ BPFA::lock_pages(void *addr, uint64_t pages)
 }
 
 void *
-BPFA::request_page()
+BPFA::request_page(void *ptr)
 {
+    if (ptr != nullptr) {
+        if (!this->lock_page(ptr))
+            return nullptr;
+        return ptr;
+    }
 
     auto iter = this->list_first;
     if (iter == nullptr)
