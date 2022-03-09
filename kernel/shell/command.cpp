@@ -371,7 +371,8 @@ printpfa(int argc, char **argv)
 {
     auto it = kernel::allocator.get_first();
     while (it != nullptr) {
-        kernel::tty.fmt("%p (%i)", it->addr, it->pages);
+        auto limaddr = it->addr + (it->pages * kernel::page_size);
+        kernel::tty.fmt("%p - %p [%i pages]", it->addr, limaddr, it->pages);
         it = it->next;
     }
 }
