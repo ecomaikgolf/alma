@@ -5,6 +5,7 @@
  */
 
 #include "lib/math.h"
+#include <stdint.h>
 
 /**
  * Convert integer to string (provided buffer)
@@ -98,15 +99,16 @@ str(float num, char result[], int precision)
  * @param num Number to convert
  * @param result Provided buffer and result
  */
+template<typename T>
 void
-hstr(unsigned int num, char result[])
+hstr(T num, char result[])
 {
     /** Pointer at the end of the number */
     unsigned char *ptr = reinterpret_cast<unsigned char *>(&num + 1);
     ptr--;
 
     /** Iterate over the bytes */
-    for (unsigned long i = 0; i < sizeof(unsigned int); i++) {
+    for (unsigned long i = 0; i < sizeof(T); i++) {
         /** 1 byte = 2 hex values */
         int lval          = (*ptr & 0xF0) >> 4;
         int rval          = (*ptr & 0x0F);
@@ -115,5 +117,5 @@ hstr(unsigned int num, char result[])
         ptr--;
     }
 
-    result[2 * sizeof(unsigned int)] = '\0';
+    result[2 * sizeof(T)] = '\0';
 }
