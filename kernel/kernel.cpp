@@ -7,12 +7,14 @@
 #include "kernel.h"
 #include "acpi/acpi.h"
 #include "bootstrap/startup.h"
+#include "bootstrap/stivale_hdrs.h"
 #include "float.h"
 #include "interrupts/IDT.h"
 #include "interrupts/interrupts.h"
 #include "io/keyboard.h"
 #include "lib/stdlib.h"
 #include "lib/string.h"
+#include "paging/BPFA.h"
 #include "paging/PFA.h"
 #include "paging/PTM.h"
 #include "pci/pci.h"
@@ -77,6 +79,12 @@ _start(stivale2_struct *stivale2_struct)
     bootstrap::pci();
 
     kernel::internal::stivalehdr = *stivale2_struct;
+
+    auto *map = (stivale2_struct_tag_memmap *)stivale2_get_tag(stivale2_struct,
+                                                               STIVALE2_STRUCT_TAG_MEMMAP_ID);
+
+    paging::allocator::BPFA test(map);
+    test.lock_page(12288);
 
     kernel::tty.println("welcome to the alma kernel");
 

@@ -138,6 +138,7 @@ set(INTERRUPT_SOURCES
 set(KERNEL_SOURCES
 	bootstrap/startup.cpp
 	paging/PFA.cpp
+	paging/BPFA.cpp
 	paging/PTM.cpp
 	screen/renderer.cpp
 	screen/fonts/psf1.cpp
