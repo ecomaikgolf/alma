@@ -42,7 +42,7 @@ BPFA::BPFA(stivale2_struct_tag_memmap *map)
 
     this->list_first = this->buffer_base;
 
-    // this->lock_pages(this->buffer_base, total_pages);
+    this->lock_pages(this->buffer_base, total_pages);
 }
 
 BPFA &
