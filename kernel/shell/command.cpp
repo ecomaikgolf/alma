@@ -76,11 +76,11 @@ pci(int argc, char **argv)
 {
     char buffer[256];
     for (pci::pci_device *i = kernel::devices; i != nullptr; i = i->next) {
-        hstr(i->header.vendor, buffer);
+        hstr(i->header->vendor, buffer);
         kernel::tty.print("* ");
         kernel::tty.print(buffer);
         kernel::tty.print(" - ");
-        hstr(i->header.id, buffer);
+        hstr(i->header->id, buffer);
         kernel::tty.print(buffer);
         kernel::tty.print(" (");
         str(i->device, buffer);
@@ -121,7 +121,7 @@ getmac(int argc, char **argv)
 
     char mac_addr[32];
     for (pci::pci_device *i = kernel::devices; i != nullptr; i = i->next) {
-        if (i->header.id == 0x8139 && i->header.header_type == 0x0) {
+        if (i->header->id == 0x8139 && i->header->header_type == 0x0) {
 
             pci::header_t0 *ext_hdr = (pci::header_t0 *)i->header_ext;
             uint64_t mmio_addr      = (ext_hdr->BAR[1] & 0xfffffff0);

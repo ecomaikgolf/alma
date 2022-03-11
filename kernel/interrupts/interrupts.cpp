@@ -24,4 +24,10 @@ keyboard(frame *)
     // kernel::tty.println(aux);
 }
 
+__attribute__((interrupt)) void
+ethernet(frame *)
+{
+    kernel::tty.println("Ethernet datagram received");
+}
+
 } // namespace interrupts

@@ -18,8 +18,6 @@ enum_fun(uint64_t addr, uint64_t fun)
 
     uint64_t funaddr = addr + offset;
 
-    kernel::translator.map(funaddr, funaddr);
-
     pci::device_header *device = (pci::device_header *)funaddr;
 
     /* not valid */
@@ -30,7 +28,7 @@ enum_fun(uint64_t addr, uint64_t fun)
 
     pci::pci_device *dev = (pci::pci_device *)kernel::heap.malloc(sizeof(pci::pci_device));
 
-    dev->header     = *device;
+    dev->header     = device;
     dev->device     = _device;
     dev->function   = _function;
     dev->bus        = _bus;
@@ -70,8 +68,6 @@ enum_dev(uint64_t addr, uint64_t dev)
 
     uint64_t devaddr = addr + offset;
 
-    kernel::translator.map(devaddr, devaddr);
-
     pci::device_header *device = (pci::device_header *)devaddr;
 
     /* not valid */
@@ -89,8 +85,6 @@ enum_bus(uint64_t addr, uint64_t bus)
     uint64_t offset = bus << 20;
 
     uint64_t busaddr = addr + offset;
-
-    kernel::translator.map(busaddr, busaddr);
 
     pci::device_header *device = (pci::device_header *)busaddr;
 
@@ -123,6 +117,12 @@ enum_pci(acpi::sdt *mcfg)
         for (uint64_t bus = device->start_bus; bus < device->end_bus; bus++)
             enum_bus(device->baseaddr, bus);
     }
+}
+
+device::device(device_header *hdr)
+{
+    this->header     = *hdr;
+    this->header_ext = (hdr + sizeof(device_header));
 }
 
 } // namespace pci

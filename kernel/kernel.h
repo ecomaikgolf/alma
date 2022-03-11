@@ -6,6 +6,7 @@
 #include "heap/trivial_allocator.h"
 #include "interrupts/IDT.h"
 #include "io/keyboard.h"
+#include "net/rtl8139.h"
 #include "paging/BPFA.h"
 #include "paging/PTM.h"
 #include "pci/pci.h"
@@ -39,6 +40,7 @@ inline io::PS2 keyboard;
 inline acpi::rsdp_v2 rsdp;
 inline heap::simple_allocator heap;
 inline pci::pci_device *devices;
+inline net::rtl8139 rtl8139;
 
 /* Kernel Constants */
 __attribute__((unused)) static void *_start_addr = &internal::_start_addr;

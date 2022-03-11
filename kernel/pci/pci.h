@@ -107,7 +107,7 @@ struct header_t2
 
 struct pci_device
 {
-    device_header header;
+    device_header *header;
     void *header_ext;
     uint16_t device;
     uint16_t bus;
@@ -120,5 +120,32 @@ void enum_fun(uint64_t addr, uint64_t fun);
 void enum_dev(uint64_t addr, uint64_t dev);
 void enum_bus(uint64_t addr, uint64_t bus);
 void enum_pci(acpi::sdt *);
+
+struct BAR_mem
+{
+    bool mem : 1;
+    unsigned int type : 2;
+    bool prefetchable : 3;
+    unsigned int addr : 26;
+};
+
+struct BAR_io
+{
+    bool io : 1;
+    bool reserved : 1;
+    unsigned int addr : 30;
+};
+
+class device
+{
+    device(device_header *);
+    device_header header;
+    void *header_ext;
+
+    uint16_t segment;
+    uint8_t bus;
+    uint8_t dev;
+    uint8_t fun;
+};
 
 } // namespace pci

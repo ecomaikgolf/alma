@@ -40,5 +40,6 @@ void keyboard();
 void acpi(stivale2_struct *);
 void pci();
 void heap(void *, size_t);
+void rtl8139();
 
 } // namespace bootstrap

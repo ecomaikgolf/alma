@@ -152,6 +152,7 @@ set(KERNEL_SOURCES
 	heap/trivial_allocator.cpp
 	shell/command.cpp
 	shell/interpreter.cpp
+	net/rtl8139.cpp
 	${INTERRUPT_SOURCES}
 	kernel.cpp
 )

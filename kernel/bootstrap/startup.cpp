@@ -173,4 +173,17 @@ heap(void *start_addr, size_t size)
     kernel::heap = aux;
 }
 
+void
+rtl8139()
+{
+    for (pci::pci_device *i = kernel::devices; i != nullptr; i = i->next) {
+        if (i->header->id == 0x8139 && i->header->header_type == 0x0) {
+            kernel::rtl8139 = net::rtl8139(i);
+            break;
+        }
+    }
+
+    kernel::rtl8139.start();
+}
+
 } // namespace bootstrap
