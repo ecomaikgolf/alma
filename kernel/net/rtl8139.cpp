@@ -41,6 +41,12 @@ outportl(uint16_t port, uint32_t val)
     __asm__ volatile("outl %0, %1" : : "a"(val), "d"(port));
 }
 
+static inline void
+outportd(uint16_t port, uint32_t val)
+{
+    __asm__ volatile("outd %0, %1" : : "a"(val), "d"(port));
+}
+
 uint32_t
 inportl(uint16_t _port)
 {
@@ -133,8 +139,14 @@ rtl8139::start()
 void
 rtl8139::send_packet(uint32_t addr, uint64_t size)
 {
-    this->setconfig<uint32_t>(this->TSAD_array[tx_cur], addr);
-    this->setconfig<uint32_t>(this->TSD_array[tx_cur++], size);
+    uint32_t address = (uint32_t)((this->device->bus << 16) | (this->device->device << 11) |
+                                  (this->device->function << 8) | ((uint32_t)0x80000000));
+
+    outportl(0xCF8, address | this->TSAD_array[tx_cur]);
+    outportl(0xCFC, addr);
+
+    outportl(0xCF8, address | this->TSD_array[tx_cur++]);
+    outportl(0xCFC, size);
 
     if (this->tx_cur > 3)
         this->tx_cur = 0;

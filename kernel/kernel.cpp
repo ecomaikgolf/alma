@@ -104,7 +104,24 @@ _start(stivale2_struct *stivale2_struct)
         1,
     };
 
-    kernel::rtl8139.send_packet((uint64_t)&aux, sizeof(aux));
+    auto test     = (ethheader *)kernel::allocator.request_page();
+    test->dsta[0] = 0xca;
+    test->dsta[1] = 0xfe;
+    test->dsta[2] = 0xc0;
+    test->dsta[3] = 0xff;
+    test->dsta[4] = 0xee;
+    test->dsta[5] = 0x00;
+
+    test->srca[0] = 0xee;
+    test->srca[1] = 0xee;
+    test->srca[2] = 0xee;
+    test->srca[3] = 0xee;
+    test->srca[4] = 0xee;
+    test->srca[5] = 0xee;
+
+    test->type = 1;
+
+    kernel::rtl8139.send_packet((uint64_t)test, sizeof(aux));
 
     shell::commands::shell(0, nullptr);
 
