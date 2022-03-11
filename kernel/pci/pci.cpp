@@ -18,6 +18,8 @@ enum_fun(uint64_t addr, uint64_t fun)
 
     uint64_t funaddr = addr + offset;
 
+    kernel::translator.map(funaddr, funaddr);
+
     pci::device_header *device = (pci::device_header *)funaddr;
 
     /* not valid */
@@ -68,6 +70,8 @@ enum_dev(uint64_t addr, uint64_t dev)
 
     uint64_t devaddr = addr + offset;
 
+    kernel::translator.map(devaddr, devaddr);
+
     pci::device_header *device = (pci::device_header *)devaddr;
 
     /* not valid */
@@ -85,6 +89,8 @@ enum_bus(uint64_t addr, uint64_t bus)
     uint64_t offset = bus << 20;
 
     uint64_t busaddr = addr + offset;
+
+    kernel::translator.map(busaddr, busaddr);
 
     pci::device_header *device = (pci::device_header *)busaddr;
 

@@ -38,24 +38,25 @@ class rtl8139
     void start();
     void send_packet(uint32_t, uint64_t);
 
-  private:
+    // temporary public, to debug
+    // private:
     rtl8139_config TSAD_array[4] = { TSAD0, TSAD1, TSAD2, TSAD3 };
     rtl8139_config TSD_array[4]  = { TSD0, TSD1, TSD2, TSD3 };
     uint8_t tx_cur               = 0;
 
-    uint64_t io_addr;
     pci::pci_device *device;
+    uint64_t mem_addr;
 
     template<typename T>
     void setconfig(rtl8139_config reg, T value)
     {
-        *((T *)((uint8_t *)this->io_addr + static_cast<int>(reg))) = value;
+        *((T *)((uint8_t *)this->mem_addr + static_cast<int>(reg))) = value;
     }
 
     template<typename T>
     T getconfig(rtl8139_config reg)
     {
-        return *((T *)((uint8_t *)this->io_addr + static_cast<int>(reg)));
+        return *((T *)((uint8_t *)this->mem_addr + static_cast<int>(reg)));
     }
 };
 

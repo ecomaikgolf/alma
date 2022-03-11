@@ -77,51 +77,11 @@ _start(stivale2_struct *stivale2_struct)
     bootstrap::acpi(stivale2_struct);
     bootstrap::heap((void *)0x100000, 0x10);
     bootstrap::pci();
-    // bootstrap::rtl8139();
-
-    for (pci::pci_device *i = kernel::devices; i != nullptr; i = i->next) {
-        if (i->header->id == 0x8139 && i->header->header_type == 0x0) {
-            net::rtl8139 aux(i);
-            aux.start();
-        }
-    }
+    bootstrap::rtl8139();
 
     kernel::internal::stivalehdr = *stivale2_struct;
 
     kernel::tty.println("welcome to the alma kernel");
-
-    struct ethheader
-    {
-        unsigned char dsta[6];
-        unsigned char srca[6];
-        uint16_t type;
-    };
-
-    ethheader aux{
-
-        { 0xca, 0xfe, 0xc0, 0xff, 0xee, 0x00 },
-        { 0xee, 0xee, 0xee, 0xee, 0xee, 0xee },
-        1,
-    };
-
-    auto test     = (ethheader *)kernel::allocator.request_page();
-    test->dsta[0] = 0xca;
-    test->dsta[1] = 0xfe;
-    test->dsta[2] = 0xc0;
-    test->dsta[3] = 0xff;
-    test->dsta[4] = 0xee;
-    test->dsta[5] = 0x00;
-
-    test->srca[0] = 0xee;
-    test->srca[1] = 0xee;
-    test->srca[2] = 0xee;
-    test->srca[3] = 0xee;
-    test->srca[4] = 0xee;
-    test->srca[5] = 0xee;
-
-    test->type = 1;
-
-    kernel::rtl8139.send_packet((uint64_t)test, sizeof(aux));
 
     shell::commands::shell(0, nullptr);
 

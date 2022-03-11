@@ -385,6 +385,84 @@ printpfa(int argc, char **argv)
     return 0;
 }
 
+int
+startnet(int argc, char **argv)
+{
+    kernel::rtl8139.start();
+    return 0;
+}
+
+int
+checknet(int argc, char **argv)
+{
+    auto hdr  = kernel::rtl8139.device->header;
+    auto cmd  = kernel::rtl8139.device->header->command;
+    auto addr = kernel::rtl8139.mem_addr;
+
+    auto cf1     = kernel::rtl8139.getconfig<uint8_t>(net::rtl8139_config::CONFIG1);
+    auto cr      = kernel::rtl8139.getconfig<uint8_t>(net::rtl8139_config::CR);
+    auto buff    = kernel::rtl8139.getconfig<uint32_t>(net::rtl8139_config::RECVBUFF);
+    auto imcrisr = kernel::rtl8139.getconfig<uint32_t>(net::rtl8139_config::IMR);
+    auto rcr     = kernel::rtl8139.getconfig<uint32_t>(net::rtl8139_config::RCR);
+    auto rete    = kernel::rtl8139.getconfig<uint8_t>(net::rtl8139_config::CR);
+
+    auto m0 = kernel::rtl8139.getconfig<uint8_t>(net::rtl8139_config::MAC0);
+    auto m1 = kernel::rtl8139.getconfig<uint8_t>(net::rtl8139_config::MAC1);
+    auto m2 = kernel::rtl8139.getconfig<uint8_t>(net::rtl8139_config::MAC2);
+    auto m3 = kernel::rtl8139.getconfig<uint8_t>(net::rtl8139_config::MAC3);
+    auto m4 = kernel::rtl8139.getconfig<uint8_t>(net::rtl8139_config::MAC4);
+    auto m5 = kernel::rtl8139.getconfig<uint8_t>(net::rtl8139_config::MAC5);
+
+    kernel::tty.fmt("mem_addr: %p", addr);
+    kernel::tty.fmt("command:  %i", cmd);
+    kernel::tty.fmt("cf1:      %i", cf1);
+    kernel::tty.fmt("buff:     %p", buff);
+    kernel::tty.fmt("imcr:     %i", imcrisr);
+    kernel::tty.fmt("rcr:      %i", rcr);
+    kernel::tty.fmt("rete:     %i", rete);
+
+    kernel::tty.fmt("m0:       %i", m0);
+    kernel::tty.fmt("m1:       %i", m1);
+    kernel::tty.fmt("m2:       %i", m2);
+    kernel::tty.fmt("m3:       %i", m3);
+    kernel::tty.fmt("m4:       %i", m4);
+    kernel::tty.fmt("m5:       %i", m5);
+
+    return 0;
+};
+
+int
+sendpacket(int argc, char **argv)
+{
+    struct ethheader
+    {
+        unsigned char dsta[6];
+        unsigned char srca[6];
+        uint16_t type;
+    };
+
+    auto test     = (ethheader *)kernel::allocator.request_page();
+    test->dsta[0] = 0xca;
+    test->dsta[1] = 0xfe;
+    test->dsta[2] = 0xc0;
+    test->dsta[3] = 0xff;
+    test->dsta[4] = 0xee;
+    test->dsta[5] = 0x00;
+
+    test->srca[0] = 0xee;
+    test->srca[1] = 0xee;
+    test->srca[2] = 0xee;
+    test->srca[3] = 0xee;
+    test->srca[4] = 0xee;
+    test->srca[5] = 0xee;
+
+    test->type = 1;
+
+    kernel::rtl8139.send_packet((uint64_t)test, sizeof(ethheader));
+
+    return 0;
+}
+
 } // namespace commands
 
 } // namespace shell
