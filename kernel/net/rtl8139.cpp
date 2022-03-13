@@ -47,14 +47,17 @@ rtl8139::start()
     this->setconfig<uintptr_t>(rtl8139_config::RECVBUFF, (uintptr_t)buffer);
 
     /** Set IMR + ISR */
-    this->setconfig<uint32_t>(rtl8139_config::IMR, 0x0005);
+    // this->setconfig<uint32_t>(rtl8139_config::IMR, 0x0005);
+    this->setconfig<uint16_t>(rtl8139_config::IMR, 0b101);
+    this->setconfig<uint16_t>(rtl8139_config::ISR, 0);
 
     /** Set RCR */
-    this->setconfig<uint32_t>(rtl8139_config::RCR, 0xf | (1 << 7));
+    this->setconfig<uint32_t>(rtl8139_config::RCR, 0b10001111);
 
     /** Set RE & TE */
     this->setconfig<uint8_t>(rtl8139_config::CR, 0x0c);
 
+    /** */
     this->tx_cur = 0;
 
     // kernel::idtr.add_handle(static_cast<interrupts::vector_e>(32 + a), interrupts::ethernet);
