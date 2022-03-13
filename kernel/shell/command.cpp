@@ -388,6 +388,7 @@ printpfa(int argc, char **argv)
 int
 checknet(int argc, char **argv)
 {
+
     auto hdr  = kernel::rtl8139.device->header;
     auto cmd  = kernel::rtl8139.device->header->command;
     auto addr = kernel::rtl8139.mem_addr;
@@ -398,7 +399,6 @@ checknet(int argc, char **argv)
     auto imr  = kernel::rtl8139.getconfig<uint16_t>(net::rtl8139_config::IMR);
     auto isr  = kernel::rtl8139.getconfig<uint16_t>(net::rtl8139_config::ISR);
     auto rcr  = kernel::rtl8139.getconfig<uint32_t>(net::rtl8139_config::RCR);
-    // auto rete    = kernel::rtl8139.getconfig<uint8_t>(net::rtl8139_config::CR);
 
     auto m0 = kernel::rtl8139.getconfig<uint8_t>(net::rtl8139_config::MAC0);
     auto m1 = kernel::rtl8139.getconfig<uint8_t>(net::rtl8139_config::MAC1);
@@ -415,7 +415,6 @@ checknet(int argc, char **argv)
     kernel::tty.fmt("IMR        (0x3c):  %i", imr);
     kernel::tty.fmt("ISR        (0x3e):  %i", isr);
     kernel::tty.fmt("RCR:       (0x44):  %i", rcr);
-    // kernel::tty.fmt("RE + TE:   (0x37):  %i", rete);
 
     kernel::tty.fmt("M0:                 %i", m0);
     kernel::tty.fmt("M1:                 %i", m1);
@@ -440,9 +439,7 @@ sendpacket(int argc, char **argv)
 
     auto test = (ethheader *)kernel::allocator.request_page();
 
-    kernel::tty.fmt("ETH Header Addr: %p (%i bytes)", test, sizeof(ethheader));
-
-    kernel::tty.println("> ");
+    kernel::tty.print("> ");
 
     char text[10];
     kernel::keyboard.scanf(text, 10);
@@ -454,12 +451,12 @@ sendpacket(int argc, char **argv)
     test->dsta[4] = 0xee;
     test->dsta[5] = 0x00;
 
-    test->srca[0] = 0xee;
-    test->srca[1] = 0xee;
-    test->srca[2] = 0xee;
-    test->srca[3] = 0xee;
+    test->srca[0] = 0xca;
+    test->srca[1] = 0xfe;
+    test->srca[2] = 0xc0;
+    test->srca[3] = 0xff;
     test->srca[4] = 0xee;
-    test->srca[5] = 0xee;
+    test->srca[5] = 0x00;
 
     test->type = 0x0800;
 
@@ -474,9 +471,14 @@ sendpacket(int argc, char **argv)
     test->payload[8] = text[8];
     test->payload[9] = text[9];
 
-    kernel::tty.fmt("%i tx_cur", kernel::rtl8139.tx_cur);
     kernel::rtl8139.send_packet((uint64_t)test, sizeof(ethheader));
 
+    return 0;
+}
+int
+clearnet(int argc, char **argv)
+{
+    kernel::rtl8139.setconfig<uint16_t>(net::rtl8139_config::ISR, 0b100);
     return 0;
 }
 

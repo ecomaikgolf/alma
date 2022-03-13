@@ -28,6 +28,7 @@ int uefimmap(int, char **);
 int printpfa(int, char **);
 int checknet(int, char **);
 int sendpacket(int, char **);
+int clearnet(int, char **);
 
 } // namespace commands
 
@@ -51,6 +52,7 @@ static const command kernel_commands[] = {
     { "printpfa"   , &commands::printpfa},
     { "checknet"   , &commands::checknet},
     { "sendpacket" , &commands::sendpacket},
+    { "clearnet"   , &commands::clearnet},
     { nullptr , nullptr }
 };
 // clang-format on

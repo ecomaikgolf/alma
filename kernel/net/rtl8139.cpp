@@ -57,17 +57,18 @@ rtl8139::start()
     /** Set RE & TE */
     this->setconfig<uint8_t>(rtl8139_config::CR, 0x0c);
 
-    /** */
     this->tx_cur = 0;
 
-    // kernel::idtr.add_handle(static_cast<interrupts::vector_e>(32 + a), interrupts::ethernet);
+    uint32_t int_line = ((pci::header_t0 *)this->device->header_ext)->int_line;
+    kernel::idtr.add_handle(static_cast<interrupts::vector_e>(32 + int_line), interrupts::ethernet);
 }
 
 void
 rtl8139::send_packet(uint32_t addr, uint64_t size)
 {
+    // max size = 1792
     this->setconfig<uint32_t>(this->TSAD_array[tx_cur], addr);
-    this->setconfig<uint32_t>(this->TSD_array[tx_cur], addr);
+    this->setconfig<uint32_t>(this->TSD_array[tx_cur], size);
 
     tx_cur++;
     /* Circular */

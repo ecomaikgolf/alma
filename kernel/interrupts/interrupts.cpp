@@ -27,7 +27,7 @@ keyboard(frame *)
 __attribute__((interrupt)) void
 ethernet(frame *)
 {
-    kernel::tty.println("Ethernet datagram received");
+    kernel::tty.println("Datagram interrupt launched");
 }
 
 } // namespace interrupts
