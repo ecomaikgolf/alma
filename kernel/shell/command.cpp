@@ -127,19 +127,19 @@ getmac(int argc, char **argv)
             uint64_t mmio_addr      = (ext_hdr->BAR[1] & 0xfffffff0);
 
             char auxstr[16];
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 6; i++) {
                 uint8_t aux = *((uint8_t *)mmio_addr + i);
                 hstr(aux, auxstr);
                 uint8_t endstr      = strlen(auxstr);
                 mac_addr[i * 3]     = auxstr[endstr - 2];
                 mac_addr[i * 3 + 1] = auxstr[endstr - 1];
-                if (i != 4)
+                if (i != 5)
                     mac_addr[i * 3 + 2] = ':';
             }
             break;
         }
     }
-    mac_addr[14] = '\0';
+    mac_addr[17] = '\0';
     kernel::tty.println(mac_addr);
 
     return 0;
@@ -388,6 +388,7 @@ printpfa(int argc, char **argv)
 int
 startnet(int argc, char **argv)
 {
+    kernel::tty.println("Running kernel::rtl8139.start()");
     kernel::rtl8139.start();
     return 0;
 }
@@ -399,12 +400,13 @@ checknet(int argc, char **argv)
     auto cmd  = kernel::rtl8139.device->header->command;
     auto addr = kernel::rtl8139.mem_addr;
 
-    auto cf1     = kernel::rtl8139.getconfig<uint8_t>(net::rtl8139_config::CONFIG1);
-    auto cr      = kernel::rtl8139.getconfig<uint8_t>(net::rtl8139_config::CR);
-    auto buff    = kernel::rtl8139.getconfig<uint32_t>(net::rtl8139_config::RECVBUFF);
-    auto imcrisr = kernel::rtl8139.getconfig<uint32_t>(net::rtl8139_config::IMR);
-    auto rcr     = kernel::rtl8139.getconfig<uint32_t>(net::rtl8139_config::RCR);
-    auto rete    = kernel::rtl8139.getconfig<uint8_t>(net::rtl8139_config::CR);
+    auto cf1  = kernel::rtl8139.getconfig<uint8_t>(net::rtl8139_config::CONFIG1);
+    auto cr   = kernel::rtl8139.getconfig<uint8_t>(net::rtl8139_config::CR);
+    auto buff = kernel::rtl8139.getconfig<uint32_t>(net::rtl8139_config::RECVBUFF);
+    auto imr  = kernel::rtl8139.getconfig<uint16_t>(net::rtl8139_config::IMR);
+    auto isr  = kernel::rtl8139.getconfig<uint16_t>(net::rtl8139_config::ISR);
+    auto rcr  = kernel::rtl8139.getconfig<uint32_t>(net::rtl8139_config::RCR);
+    // auto rete    = kernel::rtl8139.getconfig<uint8_t>(net::rtl8139_config::CR);
 
     auto m0 = kernel::rtl8139.getconfig<uint8_t>(net::rtl8139_config::MAC0);
     auto m1 = kernel::rtl8139.getconfig<uint8_t>(net::rtl8139_config::MAC1);
@@ -413,20 +415,22 @@ checknet(int argc, char **argv)
     auto m4 = kernel::rtl8139.getconfig<uint8_t>(net::rtl8139_config::MAC4);
     auto m5 = kernel::rtl8139.getconfig<uint8_t>(net::rtl8139_config::MAC5);
 
-    kernel::tty.fmt("mem_addr: %p", addr);
-    kernel::tty.fmt("command:  %i", cmd);
-    kernel::tty.fmt("cf1:      %i", cf1);
-    kernel::tty.fmt("buff:     %p", buff);
-    kernel::tty.fmt("imcr:     %i", imcrisr);
-    kernel::tty.fmt("rcr:      %i", rcr);
-    kernel::tty.fmt("rete:     %i", rete);
+    kernel::tty.fmt("BAR[1] & 0xf..f0 :  %p", addr);
+    kernel::tty.fmt("pci_dev->command :  %i", cmd);
+    kernel::tty.fmt("CF1        (0x52):  %i", cf1);
+    kernel::tty.fmt("CR         (0x37):  %i", cr);
+    kernel::tty.fmt("BUFF       (0x30):  %p", buff);
+    kernel::tty.fmt("IMR        (0x3c):  %i", imr);
+    kernel::tty.fmt("ISR        (0x3e):  %i", isr);
+    kernel::tty.fmt("RCR:       (0x44):  %i", rcr);
+    // kernel::tty.fmt("RE + TE:   (0x37):  %i", rete);
 
-    kernel::tty.fmt("m0:       %i", m0);
-    kernel::tty.fmt("m1:       %i", m1);
-    kernel::tty.fmt("m2:       %i", m2);
-    kernel::tty.fmt("m3:       %i", m3);
-    kernel::tty.fmt("m4:       %i", m4);
-    kernel::tty.fmt("m5:       %i", m5);
+    kernel::tty.fmt("M0:                 %i", m0);
+    kernel::tty.fmt("M1:                 %i", m1);
+    kernel::tty.fmt("M2:                 %i", m2);
+    kernel::tty.fmt("M3:                 %i", m3);
+    kernel::tty.fmt("M4:                 %i", m4);
+    kernel::tty.fmt("M5:                 %i", m5);
 
     return 0;
 };
@@ -439,9 +443,13 @@ sendpacket(int argc, char **argv)
         unsigned char dsta[6];
         unsigned char srca[6];
         uint16_t type;
-    };
+        unsigned char payload[10];
+    } __attribute__((packed));
 
-    auto test     = (ethheader *)kernel::allocator.request_page();
+    auto test = (ethheader *)kernel::allocator.request_page();
+
+    kernel::tty.fmt("ETH Header Addr: %p (%i bytes)", test, sizeof(ethheader));
+
     test->dsta[0] = 0xca;
     test->dsta[1] = 0xfe;
     test->dsta[2] = 0xc0;
@@ -457,6 +465,15 @@ sendpacket(int argc, char **argv)
     test->srca[5] = 0xee;
 
     test->type = 1;
+
+    test->payload[0] = 'H';
+    test->payload[1] = 'o';
+    test->payload[2] = 'l';
+    test->payload[3] = 'a';
+    test->payload[4] = '!';
+    test->payload[5] = '!';
+    test->payload[6] = '!';
+    test->payload[7] = '\0';
 
     kernel::rtl8139.send_packet((uint64_t)test, sizeof(ethheader));
 
