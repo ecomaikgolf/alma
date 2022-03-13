@@ -23,7 +23,7 @@ set(QEMU_CPU -cpu qemu64)
 set(QEMU_MACH -machine q35)
 set(QEMU_RAM -m 256M)
 set(QEMU_BIOS -bios ${TOOLCHAINDIR}/build/uefi/bios.bin)
-set(QEMU_NET -nic user,model=rtl8139,mac=ca:fe:c0:ff:ee:00 -netdev user,id=u1 -device e1000,netdev=u1 -object filter-dump,id=f1,netdev=u1,file=dump.dat)
+set(QEMU_NET -netdev user,id=user.0 -device rtl8139,netdev=user.0,mac=ca:fe:c0:ff:ee:00 -object filter-dump,id=f1,netdev=user.0,file=log.pcap)
 set(QEMU_BOOT -boot d -cdrom ${CMAKE_BINARY_DIR}/alma.iso)
 set(QEMU_DBG -s -S)
 
