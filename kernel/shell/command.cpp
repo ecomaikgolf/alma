@@ -386,14 +386,6 @@ printpfa(int argc, char **argv)
 }
 
 int
-startnet(int argc, char **argv)
-{
-    kernel::tty.println("Running kernel::rtl8139.start()");
-    kernel::rtl8139.start();
-    return 0;
-}
-
-int
 checknet(int argc, char **argv)
 {
     auto hdr  = kernel::rtl8139.device->header;
@@ -450,6 +442,11 @@ sendpacket(int argc, char **argv)
 
     kernel::tty.fmt("ETH Header Addr: %p (%i bytes)", test, sizeof(ethheader));
 
+    kernel::tty.println("> ");
+
+    char text[10];
+    kernel::keyboard.scanf(text, 10);
+
     test->dsta[0] = 0xca;
     test->dsta[1] = 0xfe;
     test->dsta[2] = 0xc0;
@@ -464,17 +461,20 @@ sendpacket(int argc, char **argv)
     test->srca[4] = 0xee;
     test->srca[5] = 0xee;
 
-    test->type = 1;
+    test->type = 0x0800;
 
-    test->payload[0] = 'H';
-    test->payload[1] = 'o';
-    test->payload[2] = 'l';
-    test->payload[3] = 'a';
-    test->payload[4] = '!';
-    test->payload[5] = '!';
-    test->payload[6] = '!';
-    test->payload[7] = '\0';
+    test->payload[0] = text[0];
+    test->payload[1] = text[1];
+    test->payload[2] = text[2];
+    test->payload[3] = text[3];
+    test->payload[4] = text[4];
+    test->payload[5] = text[5];
+    test->payload[6] = text[6];
+    test->payload[7] = text[7];
+    test->payload[8] = text[8];
+    test->payload[9] = text[9];
 
+    kernel::tty.fmt("%i tx_cur", kernel::rtl8139.tx_cur);
     kernel::rtl8139.send_packet((uint64_t)test, sizeof(ethheader));
 
     return 0;

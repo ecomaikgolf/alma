@@ -27,7 +27,6 @@ int printmem(int, char **);
 int uefimmap(int, char **);
 int printpfa(int, char **);
 int checknet(int, char **);
-int startnet(int, char **);
 int sendpacket(int, char **);
 
 } // namespace commands
@@ -51,7 +50,6 @@ static const command kernel_commands[] = {
     { "uefimmap"   , &commands::uefimmap},
     { "printpfa"   , &commands::printpfa},
     { "checknet"   , &commands::checknet},
-    { "startnet"   , &commands::startnet},
     { "sendpacket" , &commands::sendpacket},
     { nullptr , nullptr }
 };

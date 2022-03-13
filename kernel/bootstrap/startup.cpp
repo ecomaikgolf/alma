@@ -183,7 +183,7 @@ rtl8139()
         }
     }
 
-    // kernel::rtl8139.start();
+    kernel::rtl8139.start();
 }
 
 } // namespace bootstrap
