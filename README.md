@@ -3,109 +3,119 @@
 </p>
 
 <p align="center">
-  <i>alma is a toy kernel written in C/C++ for x86_64 machines with the mere purpose of learning OS development</i>
+  <i>alma is a toy kernel written in C++ for x86_64 machines with the mere purpose of learning OS development</i>
 </p>
 
 # alma
 
 > 6. f. Sustancia o parte principal de cualquier cosa.
 
-<p align="center">
-  <img width="800" height="500" src="https://ls.ecomaikgolf.com/alma/img/screen.png">
-</p>
-
 ## Features
 
-- project
-	- configuration
-		- cmake 
-		- `cmake -B build`
-	- build
-		- `make -C build`
-		- out of source builds
-	- run & debug
-		- `make -C build run`
-		- `make -C build debug`
-	- documentation
-		- inner workings (bachelor's final project)
-		- code (doxygen + comments)
-	- build releases
-		- https://ls.ecomaikgolf.com/alma/builds/
-	- git
-		- more or less clean management
-	- toolchain
-		- compilation from sources
-			- binutils
-				- x86_64-elf target
-			- gcc
-				- disable red zone patch
-				- only c/c++ compiler
-				- disable std/runtime things
-				- x86_64-elf target
-			- edk2
-				- release build
-			- posix-uefi
-				- independent from posix-uefi Makefile
-		- easy toolchain instalation
-			- 1: dependencies & `make -C toolchain`
-			- 2: preconfigured alma build VM
-		- git submodules (easy toolchain updating)
-- uefi shell
-	- bootloader run script (deprecated)
-- bootloader
-	- C + posix-uefi
-		- commented code (doxygen)
-		- compilation independent from posix-uefi's makefile (cmake)
-	- loads kernel
-	- parses and verifies (some) ELF headers
-	- graphics output protocol from UEFI
-	- framebuffer
-	- uefi memory map
-	- PSF1 fonts
-	- obtain the RSDP (Root System Descriptor Pointer)
-	- manually call kernel .ctors functions
-	- exit UEFI boot services
-	- jumps to kernel
-- kernel
-	- C++/NASM-ASM
-		- commented code (doxygen)
-		- structured (folders and namespaces)
-	- Call C++ global constructors before starting the kernel
-	- screen/tty
-		- print pixels
-		- print letters with a PSF1 font
-		- colors
-		- printf
-	- pagination
-		- page frame allocator
-			- request, reserve, lock... pages (bitset)
-		- virtual memory
-			- CPU's MMU virt-phys translation
-			- 512-ary tree (4 levels)
-	- segmentation
-		- dummy global descriptor table (I use paging)
-	- interrupts
-		- interrupt descriptor table
-		- register (vector, interrupt routine)
-		- call interrupt routines on interrupts
-	- keyboard
-		- PS2 keyboard support
-		- capital letters
-		- functional Lshift, Lalt, Lctrl 
-		- only 8byte chars
-	- acpi
-		- get the RSDP from UEFI
-		- get/query acpi tables
-		- get the MCFG
-	- pci/pcie
-		- enumerate dev/bus/func (iterating)
-		- Access PCIe Enhanced Configuration Access Mechanism (ECAM)
-	- networking
-		- emulate Realtek RTL8139 network chip (qemu)
-		- get the MAC through MMIO
-	- dynamic memory
-		- simple memory allocator
-		- `malloc()`, `free()`
+  <table>
+    <tr>
+      <th>alma build system</th>
+    </tr>
+    <tbody>
+      <tr>
+        <td>
+          <ul>
+            <li>Setup toolchain
+              <ul>
+                <li>apt install ...</li>
+                <li>make -C toolchain</li>
+                <li>alma build vm</li>
+              </ul>
+            </li>
+            <li>Configure with cmake
+              <ul>
+                <li>Out of source builds</li>
+                <li>Recompile only what is needed</li>
+              </ul>
+            </li>
+            <li>Build with make or ninja
+              <ul>
+                <li>default target (build iso)</li>
+                <li>target run (qemu)</li>
+                <li>target debug (remote gdb)</li>
+                <li>target doc (doxygen)</li>
+              </ul>
+            </li>
+            <li>Speedup with ccache if found</li>
+          </ul>
+        </td>
+        <td><img src=
+        "https://ls.ecomaikgolf.com/alma/img/alma_build.gif"></td>
+      </tr>
+    </tbody>
+  </table>
+  <table>
+    <tr>
+      <th>alma bootloader</th>
+    </tr>
+    <tbody>
+      <tr>
+        <td>
+          <ul>
+            <li>Deprecated
+              <ul>
+                <li>alma uses stivale2</li>
+                <li>ships with the limine botloader &nbsp;</li>
+              </ul>
+            </li>
+            <li>posix-uefi</li>
+            <li>Load ELF
+              <ul>
+                <li>Parse headers</li>
+                <li>Load segments</li>
+              </ul>
+            </li>
+            <li>Initialization tasks</li>
+            <ul>
+              <li>GOP</li>
+              <li>Memory Map</li>
+              <li>RSDP</li>
+              <li>PSF1</li>
+            </ul>
+            <li>Kernel launch</li>
+            <ul>
+              <li>Call ctors</li>
+              <li>Exit UEFI Services</li>
+              <li>Jump to entry point</li>
+            </ul>
+          </ul>
+        </td>
+        <td><img src=
+        "https://ls.ecomaikgolf.com/alma/img/alma_bootloader.gif"></td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+</html>
+
+
+
+
+
+
+| <div style="width:160px">alma bootloader</div> |  |
+|---------|-----------------------------------------------------|
+| <ul><li>Deprecated<ul><li>Now alma follows the stivale2 protocol</li><li>builds with limine/li></ul></li><li></li></ul> | ![](https://ls.ecomaikgolf.com/alma/img/alma_psf1.gif) |
+
+
+
+| Feature |  |
+|---------|-----------------------------------------------------|
+| PSF1 Font Rendering and Colors. println() and fmt(...) functions | ![](https://ls.ecomaikgolf.com/alma/img/alma_psf1.gif) |
+| PS2 Keyboard with mayus, symbols, delete, etc. scanf() function | ![](https://ls.ecomaikgolf.com/alma/img/alma_scanf.gif) |
+| Terminal Interface with scrolling | ![](https://ls.ecomaikgolf.com/alma/img/alma_scroll.gif) |
+| RTL8139 Network Chip Driver | ![](https://ls.ecomaikgolf.com/alma/img/alma_net.gif) |
+| Virtual Memory and Page Allocator | ![](https://ls.ecomaikgolf.com/alma/img/alma_virtmem.gif) |
+| Loading | ![](https://ls.ecomaikgolf.com/alma/img/screen.png) |
+| Loading | ![](https://ls.ecomaikgolf.com/alma/img/screen.png) |
+| Loading | ![](https://ls.ecomaikgolf.com/alma/img/screen.png) |
+
+
 
 ## Run
 
