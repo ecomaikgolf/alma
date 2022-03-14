@@ -62,12 +62,19 @@ _Note: GIF quality is vastly reduced and native executions look clear_
       <tr>
         <td>
           <ul>
+	    <li>Stivale2 specification </li>
+	    <li>Call ctors and dtors</li>
             <li>PSF1 Font Rendering 
               <ul>
                 <li>println & fmt</li>
-                <li>Colors</li>
+                <li>colors</li>
               </ul>
             </li>
+	    <li>Segmentation
+		  <ul>
+		   <li>Naive GDT</li>
+		 </ul>
+	    </li>
  	    <li>Paging
               <ul>
                 <li>Virtual Memory</li>
@@ -76,7 +83,7 @@ _Note: GIF quality is vastly reduced and native executions look clear_
 	    </li>
 	    <li>Keyboard
               <ul>
-                <li>PS2 Keyboard Support  &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp;</li>
+                <li>PS2 Keyboard Support  &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</li>
                 <li>symbols & mayus</li>
               </ul>
 	    </li>
@@ -85,24 +92,39 @@ _Note: GIF quality is vastly reduced and native executions look clear_
                 <li>RTL8139 Driver</li>
               </ul>
 	    </li>
+	   <li>ACPI
+              <ul>
+                <li>Query Tables</li>
+              </ul>
+	   </li>
 	   <li>PCI
               <ul>
+		<li>MCFG From ACPI</li>
                 <li>MMIO Configuration</li>
+		<li>Enumerate dev/bus/func </li>
               </ul>
 	    </li>
 	   <li>
 	      Interrupts
-	    </li>
+              <ul>
+		<li>Manage IDT</li>
+                <li>Register Interrupts</li>
+              </ul>
+	   </li>
 	   <li>
 	      Dynamic Memory
-	    </li>
-	  <li>
-		Global Constructors
- 	  </li>
+	      <ul>
+                <li>malloc</li>
+                <li>free</li>
+              </ul>
+	  </li>
+	  <li>WORK IN PROGRESS</li>
           </ul>
         </td>
-        <td><img src=
-        "https://ls.ecomaikgolf.com/alma/img/alma_virtmem.gif"></td>
+        <td>
+	<img src="https://ls.ecomaikgolf.com/alma/img/alma_virtmem.gif">
+	<img src="https://ls.ecomaikgolf.com/alma/img/alma_net.gif">
+	</td>
       </tr>
     </tbody>
   </table>
