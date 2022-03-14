@@ -213,6 +213,12 @@ _Note: posix-uefi build can be ommited if bootloader is not going to be build_
 3. `cmake -B build` or `cmake -B build -GNinja` 
 4. `make -C build run` or `ninja -C build run` 
 
+## Mirrors
+
+* Github: `git@github.com:ecomaikgolf/alma.git`, `https://github.com/ecomaikgolf/alma.git`
+* Gitlab: `git@gitlab.com:ecomaikgolf/os-dev.git`, `https://gitlab.com/ecomaikgolf/os-dev.git`
+* Selfhost: `git@ecomaikgolf.com:alma.git`
+
 ## Bugs
 
 Please explain them to me: ![me 𝒂𝒕 ecomaikgolf ꓒσ𝗍 c0m](https://ecomaikgolf.com/contact.html) 
