@@ -17,6 +17,7 @@ _Note: GIF quality is vastly reduced and native executions look clear_
   <table>
     <tr>
       <th>alma build system</th>
+      <th></th>
     </tr>
     <tbody>
       <tr>
@@ -55,6 +56,7 @@ _Note: GIF quality is vastly reduced and native executions look clear_
   <table>
     <tr>
       <th>alma kernel</th>
+      <th></th>
     </tr>
     <tbody>
       <tr>
@@ -108,6 +110,7 @@ _Note: GIF quality is vastly reduced and native executions look clear_
   <table>
     <tr>
       <th>alma bootloader</th>
+      <th></th>
     </tr>
     <tbody>
       <tr>
