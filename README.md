@@ -12,6 +12,8 @@
 
 ## Features
 
+_Note: GIF quality is vastly reduced and native executions look clear_
+
   <table>
     <tr>
       <th>alma build system</th>
@@ -49,6 +51,60 @@
       </tr>
     </tbody>
   </table>
+  
+  <table>
+    <tr>
+      <th>alma kernel</th>
+    </tr>
+    <tbody>
+      <tr>
+        <td>
+          <ul>
+            <li>PSF1 Font Rendering 
+              <ul>
+                <li>println & fmt</li>
+                <li>Colors</li>
+              </ul>
+            </li>
+ 	    <li>Paging
+              <ul>
+                <li>Virtual Memory</li>
+                <li>Page Allocation</li>
+              </ul>
+	    </li>
+	    <li>Keyboard
+              <ul>
+                <li>PS2 Keyboard Support  &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp;</li>
+                <li>symbols & mayus</li>
+              </ul>
+	    </li>
+	    <li>Networking
+              <ul>
+                <li>RTL8139 Driver</li>
+              </ul>
+	    </li>
+	   <li>PCI
+              <ul>
+                <li>MMIO Configuration</li>
+              </ul>
+	    </li>
+	   <li>
+	      Interrupts
+	    </li>
+	   <li>
+	      Dynamic Memory
+	    </li>
+	  <li>
+		Global Constructors
+ 	  </li>
+          </ul>
+        </td>
+        <td><img src=
+        "https://ls.ecomaikgolf.com/alma/img/alma_virtmem.gif"></td>
+      </tr>
+    </tbody>
+  </table>
+  
   <table>
     <tr>
       <th>alma bootloader</th>
@@ -90,133 +146,85 @@
       </tr>
     </tbody>
   </table>
-</body>
-</html>
-
-
-
-
-
-
-| <div style="width:160px">alma bootloader</div> |  |
-|---------|-----------------------------------------------------|
-| <ul><li>Deprecated<ul><li>Now alma follows the stivale2 protocol</li><li>builds with limine/li></ul></li><li></li></ul> | ![](https://ls.ecomaikgolf.com/alma/img/alma_psf1.gif) |
-
-
-
-| Feature |  |
-|---------|-----------------------------------------------------|
-| PSF1 Font Rendering and Colors. println() and fmt(...) functions | ![](https://ls.ecomaikgolf.com/alma/img/alma_psf1.gif) |
-| PS2 Keyboard with mayus, symbols, delete, etc. scanf() function | ![](https://ls.ecomaikgolf.com/alma/img/alma_scanf.gif) |
-| Terminal Interface with scrolling | ![](https://ls.ecomaikgolf.com/alma/img/alma_scroll.gif) |
-| RTL8139 Network Chip Driver | ![](https://ls.ecomaikgolf.com/alma/img/alma_net.gif) |
-| Virtual Memory and Page Allocator | ![](https://ls.ecomaikgolf.com/alma/img/alma_virtmem.gif) |
-| Loading | ![](https://ls.ecomaikgolf.com/alma/img/screen.png) |
-| Loading | ![](https://ls.ecomaikgolf.com/alma/img/screen.png) |
-| Loading | ![](https://ls.ecomaikgolf.com/alma/img/screen.png) |
-
-
 
 ## Run
 
-0. Install dependencies (listed below)
-1. Find build to test https://ls.ecomaikgolf.com/alma/builds/
-2. Download a build with wget:
+1. Install qemu:
 
+  **Ubuntu**:
 ```bash
-wget https://ls.ecomaikgolf.com/alma/builds/20211012-e906c4c.tar.gz # <-- Change build version!
-tar xf 20211012-e906c4c.tar.gz
-cd 20211012-e906c4c
+apt install qemu-system-x86 qemu-system-gui
 ```
 
-3. Download precompiled edk2 Ovmf UEFI
+  **Arch Linux**:
+```bash
+pacman -S qemu qemu-arch-extra
+```
+
+2. Find a build to test https://ls.ecomaikgolf.com/alma/builds/
+
+3. Download a build with wget:
 
 ```bash
-wget https://ls.ecomaikgolf.com/alma/builds/bios.bin
+wget https://ls.ecomaikgolf.com/alma/builds/CHANGEME.tar.gz
+tar xf CHANGEME.tar.gz
+cd CHANGEME
 ```
 
 4. Run
 
 ```bash
-make
+qemu-system-x86_64 -machine q35 -cpu qemu64 -m 256M -bios bios.bin -netdev user,id=user.0 -device rtl8139,netdev=user.0,mac=ca:fe:c0:ff:ee:00 -object filter-dump,id=f1,netdev=user.0,file=log.pcap -boot d -cdrom alma.iso
 ```
-
-### Run Dependencies
-
-* `qemu-system-x86`
-
-Ubuntu: `apt install qemu-system-x86 qemu-system-gui`
-
-Arch-Linux: `pacman -S qemu qemu-arch-extra`
 
 ## Build
 
-### Virtual Machine
+### Virtual Machine (Method 1)
 
-Get the "Alma Build VM" (.ova 5.9G), a Xubuntu 20.04 virtualbox VM ready to 
-compile.
-
-**Download (@gcloud.ua.es):** https://drive.google.com/file/d/1neuuBo7Ja4Czmwre1SWPkwGSF8MV98s3/view?usp=sharing
+1. Download the alma build vm ![.ova](https://drive.google.com/file/d/1neuuBo7Ja4Czmwre1SWPkwGSF8MV98s3/view?usp=sharing) (a 5.9GB Xubuntu 20.04 virtualbox VM ready to compile)
 
 <p align="center">
   <img width="800" height="400" src="https://ls.ecomaikgolf.com/alma/img/alma-build-vm.png">
 </p>
 
-Features:
-* already compiled toolchain
-* systemwide ccache
-* preconfigured "neutral" IDE (vscodium)
-* one click functionalities
-	* compile
-	* run
-	* update
-	* clean
+2. Compile with the "Build Alma" icon
+3. Run with the "Run Alma" icon
+3. Update (pull) with the "Update Alma" icon
 
-### Manual
+### Manual (Method 2)
 
-Tested on `Ubuntu 20.04` 
+_Note: Instructions tested on `Ubuntu 20.04`_
 
-1. Install dependencies (listed below)
-2. `make -C toolchain/`
-3. `cmake -B build`
-4. `make -C build run`
-
-#### Build Dependencies
-
-* nasm
-* iasl
-* cmake
-* qemu-system-x86
-* qemu-system-gui
-* uuid-dev
-* python
-* python3-distutils
-* texinfo
-* bison
-* flex
-* mtools
-
-Remember to have: `make` `git` `bash` `build-essential`
-
-Ubuntu 20.04 (and similars) one-command dependencies installer:
+1. Install dependencies
 
 ```bash
 apt install nasm iasl cmake make qemu-system-x86 qemu-system-gui git uuid-dev python python3-distutils bash texinfo bison flex build-essential mtools
 ```
 
+2. `make -C toolchain/`
+
+_Note: EDKII build can be ommited by providing a binary release._
+
+_Note: posix-uefi build can be ommited if bootloader is not going to be build_
+
+3. `cmake -B build` or `cmake -B build -GNinja` 
+4. `make -C build run` or `ninja -C build run` 
+
 ## Bugs
 
 Please explain them to me: `me@ecomaikgolf.com`
+
+Take into acccount this is a Bachelor Final Project and has been developed under the pressure of a deadline among other subjects. Some things could be improved, for example, with better (and more complex) data structures, but it's not the goal of the project.
 
 ## FAQ
 
 > Q: Muh tons of dependencies
 > 
-> A: I have to compile binutils, gdb, edk2 and posix-uefi from source
+> A: I'm compiling binutils, gdb, edk2 and posix-uefi from source
 
 > Q: 5.9GB VM
 >
-> A: I can't do more. Xubuntu + "zeroed" free memory before exporting so it can compress it.
+> A: I can't do more. Xubuntu + "zeroed" free memory before exporting so it can be compressed.
 
 > Q: Frequently asked questions?
 >
@@ -238,8 +246,6 @@ _The list is longer but I can't put each site where I read something. This list 
 ## Author
 
 Ernesto Martínez García
-* me@ecomaikgolf.com _(C79F 01CE 017F 57A4 FBBB 4E22 33DD FB0A EB94 20CB)_
-* emg162@alu.ua.es 
-  [[verify](https://github.com/leereilly/swot/blob/master/lib/domains/es/ua.txt)]
+* ![me 𝒂𝒕 ecomaikgolf ꓒσ𝗍 c0m](https://ecomaikgolf.com/contact.html) `C79F 01CE 017F 57A4 FBBB 4E22 33DD FB0A EB94 20CB` 
 * https://ecomaikgolf.com/
 * https://twitter.com/ecomaikgolf
