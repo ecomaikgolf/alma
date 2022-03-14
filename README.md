@@ -212,7 +212,7 @@ _Note: posix-uefi build can be ommited if bootloader is not going to be build_
 
 ## Bugs
 
-Please explain them to me: `me@ecomaikgolf.com`
+Please explain them to me: ![me 𝒂𝒕 ecomaikgolf ꓒσ𝗍 c0m](https://ecomaikgolf.com/contact.html) 
 
 Take into acccount this is a Bachelor Final Project and has been developed under the pressure of a deadline among other subjects. Some things could be improved, for example, with better (and more complex) data structures, but it's not the goal of the project.
 
