@@ -4,3 +4,5 @@
 -/toolchain/font
 -/toolchain/gcc
 -/toolchain/posix-uefi
+-/.ccls-cache
+-/.cache

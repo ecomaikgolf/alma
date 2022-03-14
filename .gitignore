@@ -13,6 +13,7 @@ qemu-fs/Makefile
 
 # Clang
 .cache
+.ccls-cache
 compile_commands.json
 
 # Build files
