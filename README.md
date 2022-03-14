@@ -10,167 +10,180 @@
 
 > 6. f. Sustancia o parte principal de cualquier cosa.
 
+
+
 ## Features
 
 _Note: GIF quality is vastly reduced and native executions look clear_
 
-  <table>
-    <tr>
+<table>
+   <tr>
       <th>alma build system</th>
       <th></th>
-    </tr>
-    <tbody>
+   </tr>
+   <tbody>
       <tr>
-        <td>
-          <ul>
-            <li>Setup toolchain
-              <ul>
-                <li>apt install ...</li>
-                <li>make -C toolchain</li>
-                <li>alma build vm</li>
-              </ul>
-            </li>
-            <li>Configure with cmake
-              <ul>
-                <li>Out of source builds</li>
-                <li>Recompile only what is needed</li>
-              </ul>
-            </li>
-            <li>Build with make or ninja
-              <ul>
-                <li>default target (build iso)</li>
-                <li>target run (qemu)</li>
-                <li>target debug (remote gdb)</li>
-                <li>target doc (doxygen)</li>
-              </ul>
-            </li>
-            <li>Speedup with ccache if found</li>
-          </ul>
-        </td>
-        <td><img src=
-        "https://ls.ecomaikgolf.com/alma/img/alma_build.gif"></td>
+         <td>
+            <ul>
+               <li>
+                  Setup toolchain
+                  <ul>
+                     <li>apt install ...</li>
+                     <li>make -C toolchain</li>
+                     <li>alma build vm</li>
+                  </ul>
+               </li>
+               <li>
+                  Configure with cmake
+                  <ul>
+                     <li>Out of source builds</li>
+                     <li>Recompile only what is needed</li>
+                  </ul>
+               </li>
+               <li>
+                  Build with make or ninja
+                  <ul>
+                     <li>default target (build iso)</li>
+                     <li>target run (qemu)</li>
+                     <li>target debug (remote gdb)</li>
+                     <li>target doc (doxygen)</li>
+                  </ul>
+               </li>
+               <li>Speedup with ccache if found</li>
+            </ul>
+         </td>
+         <td><img src=
+            "https://ls.ecomaikgolf.com/alma/img/alma_build.gif"></td>
       </tr>
-    </tbody>
-  </table>
-  
-  <table>
-    <tr>
+   </tbody>
+</table>
+<table>
+   <tr>
       <th>alma kernel</th>
       <th></th>
-    </tr>
-    <tbody>
+   </tr>
+   <tbody>
       <tr>
-        <td>
-          <ul>
-	    <li>Stivale2 specification </li>
-	    <li>Call ctors and dtors</li>
-            <li>PSF1 Font Rendering 
-              <ul>
-                <li>println & fmt</li>
-                <li>colors</li>
-              </ul>
-            </li>
-	    <li>Segmentation
-		  <ul>
-		   <li>Naive GDT</li>
-		 </ul>
-	    </li>
- 	    <li>Paging
-              <ul>
-                <li>Virtual Memory</li>
-                <li>Page Allocation</li>
-              </ul>
-	    </li>
-	    <li>Keyboard
-              <ul>
-                <li>PS2 Keyboard Support  &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</li>
-                <li>symbols & mayus</li>
-              </ul>
-	    </li>
-	    <li>Networking
-              <ul>
-                <li>RTL8139 Driver</li>
-              </ul>
-	    </li>
-	   <li>ACPI
-              <ul>
-                <li>Query Tables</li>
-              </ul>
-	   </li>
-	   <li>PCI
-              <ul>
-		<li>MCFG From ACPI</li>
-                <li>MMIO Configuration</li>
-		<li>Enumerate dev/bus/func </li>
-              </ul>
-	    </li>
-	   <li>
-	      Interrupts
-              <ul>
-		<li>Manage IDT</li>
-                <li>Register Interrupts</li>
-              </ul>
-	   </li>
-	   <li>
-	      Dynamic Memory
-	      <ul>
-                <li>malloc</li>
-                <li>free</li>
-              </ul>
-	  </li>
-	  <li>WORK IN PROGRESS</li>
-          </ul>
-        </td>
-        <td>
-	<img src="https://ls.ecomaikgolf.com/alma/img/alma_virtmem.gif">
-	<img src="https://ls.ecomaikgolf.com/alma/img/alma_net.gif">
-	</td>
+         <td>
+            <ul>
+               <li>Stivale2 specification </li>
+               <li>Call ctors and dtors</li>
+               <li>
+                  PSF1 Font Rendering 
+                  <ul>
+                     <li>println & fmt</li>
+                     <li>colors</li>
+                     <li>text scroll</li>
+                  </ul>
+               </li>
+               <li>
+                  Segmentation
+                  <ul>
+                     <li>Naive GDT</li>
+                  </ul>
+               </li>
+               <li>
+                  Paging
+                  <ul>
+                     <li>Virtual Memory</li>
+                     <li>Page Allocation</li>
+                  </ul>
+               </li>
+               <li>
+                  Keyboard
+                  <ul>
+                     <li>PS2 Keyboard Support  </li>
+                     <li>symbols & mayus</li>
+                  </ul>
+               </li>
+               <li>
+                  Networking
+                  <ul>
+                     <li>RTL8139 Driver</li>
+                  </ul>
+               </li>
+               <li>
+                  ACPI
+                  <ul>
+                     <li>Query Tables</li>
+                  </ul>
+               </li>
+               <li>
+                  PCI
+                  <ul>
+                     <li>MCFG From ACPI</li>
+                     <li>MMIO Configuration</li>
+                     <li>Enumerate dev/bus/func </li>
+                  </ul>
+               </li>
+               <li>
+                  Interrupts
+                  <ul>
+                     <li>Manage IDT</li>
+                     <li>Register Interrupts</li>
+                  </ul>
+               </li>
+               <li>
+                  Dynamic Memory
+                  <ul>
+                     <li>malloc</li>
+                     <li>free</li>
+                  </ul>
+               </li>
+               <li>WORK IN PROGRESS &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</li>
+            </ul>
+         </td>
+         <td>
+            <img src="https://ls.ecomaikgolf.com/alma/img/alma_virtmem.gif">
+            <img src="https://ls.ecomaikgolf.com/alma/img/alma_net.gif">
+         </td>
       </tr>
-    </tbody>
-  </table>
-  
-  <table>
-    <tr>
+   </tbody>
+</table>
+<table>
+   <tr>
       <th>alma bootloader</th>
       <th></th>
-    </tr>
-    <tbody>
+   </tr>
+   <tbody>
       <tr>
-        <td>
-          <ul>
-            <li>Deprecated
-              <ul>
-                <li>alma uses stivale2</li>
-                <li>ships with the limine botloader &nbsp;</li>
-              </ul>
-            </li>
-            <li>posix-uefi</li>
-            <li>Load ELF
-              <ul>
-                <li>Parse headers</li>
-                <li>Load segments</li>
-              </ul>
-            </li>
-            <li>Initialization tasks</li>
+         <td>
             <ul>
-              <li>GOP</li>
-              <li>Memory Map</li>
-              <li>RSDP</li>
-              <li>PSF1</li>
+               <li>
+                  Deprecated
+                  <ul>
+                     <li>alma uses stivale2</li>
+                     <li>ships with the limine botloader &nbsp;</li>
+                  </ul>
+               </li>
+               <li>posix-uefi</li>
+               <li>
+                  Load ELF
+                  <ul>
+                     <li>Parse headers</li>
+                     <li>Load segments</li>
+                  </ul>
+               </li>
+               <li>Initialization tasks</li>
+               <ul>
+                  <li>GOP</li>
+                  <li>Memory Map</li>
+                  <li>RSDP</li>
+                  <li>PSF1</li>
+               </ul>
+               <li>Kernel launch</li>
+               <ul>
+                  <li>Call ctors</li>
+                  <li>Exit UEFI Services</li>
+                  <li>Jump to entry point</li>
+               </ul>
             </ul>
-            <li>Kernel launch</li>
-            <ul>
-              <li>Call ctors</li>
-              <li>Exit UEFI Services</li>
-              <li>Jump to entry point</li>
-            </ul>
-          </ul>
-        </td>
-        <td><img src=
-        "https://ls.ecomaikgolf.com/alma/img/alma_bootloader.gif"></td>
+         </td>
+         <td><img src=
+            "https://ls.ecomaikgolf.com/alma/img/alma_bootloader.gif"></td>
       </tr>
-    </tbody>
-  </table>
+   </tbody>
+</table>
 
 ## Run
 
