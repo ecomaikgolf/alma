@@ -10,8 +10,6 @@
 
 > 6. f. Sustancia o parte principal de cualquier cosa.
 
-
-
 ## Features
 
 _Note: GIF quality is vastly reduced and native executions look clear_
@@ -66,6 +64,7 @@ _Note: GIF quality is vastly reduced and native executions look clear_
       <tr>
          <td>
             <ul>
+               <li>Tested in real hardware</li>
                <li>Stivale2 specification </li>
                <li>Call ctors and dtors</li>
                <li>
