@@ -107,11 +107,11 @@ getpage(int argc, char **argv)
             kernel::tty.println("Not available");
             return 1;
         }
-        kernel::tty.fmt("0x%p", (uint64_t)ret);
+        kernel::tty.fmt("%p", (uint64_t)ret);
         return 0;
     }
 
-    kernel::tty.fmt("0x%p", (uint64_t)kernel::allocator.request_page());
+    kernel::tty.fmt("%p", (uint64_t)kernel::allocator.request_page());
     return 0;
 }
 
