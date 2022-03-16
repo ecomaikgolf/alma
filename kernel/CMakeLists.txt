@@ -82,13 +82,13 @@ set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -T ${LINKER_SCRIPT}")
 ###############
 
 # libc headers. to do just `#include "math.h"`
-set(LIBC_HEADER_DIR
-	libc
+set(LIB_HEADER_DIR
+	lib
 )
 
-# libstdc++ headers. to do just `#include "bitset.h"`
-set(LIBSTDCXX_HEADER_DIR
-	libstdc++
+# stivale2 headers
+set(STIVALE_HEADER_DIR
+	${TOOLCHAINDIR}/stivale
 )
 
 # kernel headers. to do `#include "paging/PFA.h"`
@@ -98,9 +98,8 @@ set(KERNEL_HEADER_DIR
 
 # merge all header directories
 set(INCLUDE_DIRECTORIES
-	${LIBC_HEADER_DIR}
-	${LIBSTDCXX_HEADER_DIR}
-	${TOOLCHAINDIR}/stivale
+	${LIB_HEADER_DIR}
+	${STIVALE_HEADER_DIR}
 	${KERNEL_HEADER_DIR}
 )
 
