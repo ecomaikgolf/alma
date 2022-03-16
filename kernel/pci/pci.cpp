@@ -18,8 +18,6 @@ enum_fun(uint64_t addr, uint64_t fun)
 
     uint64_t funaddr = addr + offset;
 
-    kernel::translator.map(funaddr, funaddr);
-
     pci::device_header *device = (pci::device_header *)funaddr;
 
     /* not valid */
@@ -70,16 +68,15 @@ enum_dev(uint64_t addr, uint64_t dev)
 
     uint64_t devaddr = addr + offset;
 
-    kernel::translator.map(devaddr, devaddr);
-
     pci::device_header *device = (pci::device_header *)devaddr;
 
     /* not valid */
     if (device->id == 0 || device->id == 0xffff)
         return;
 
-    for (uint64_t fun_i = 0; fun_i < 8; fun_i++)
+    for (uint64_t fun_i = 0; fun_i < 8; fun_i++) {
         enum_fun(devaddr, fun_i);
+    }
 }
 
 void
@@ -89,8 +86,6 @@ enum_bus(uint64_t addr, uint64_t bus)
     uint64_t offset = bus << 20;
 
     uint64_t busaddr = addr + offset;
-
-    kernel::translator.map(busaddr, busaddr);
 
     pci::device_header *device = (pci::device_header *)busaddr;
 
@@ -105,6 +100,9 @@ enum_bus(uint64_t addr, uint64_t bus)
 void
 enum_pci(acpi::sdt *mcfg)
 {
+    if (mcfg == nullptr)
+        return;
+
     if (!mcfg->check_signature(pci::MCFG_SIGN))
         return;
 
