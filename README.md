@@ -221,7 +221,7 @@ qemu-system-x86_64 -machine q35 -cpu qemu64 -m 256M -bios bios.bin -netdev user,
 1. Download the alma build vm ![.ova](https://drive.google.com/file/d/1neuuBo7Ja4Czmwre1SWPkwGSF8MV98s3/view?usp=sharing) (a 5.9GB Xubuntu 20.04 virtualbox VM ready to compile)
 
 <p align="center">
-  <img width="800" height="400" src="https://ls.ecomaikgolf.com/alma/img/alma-build-vm.png">
+  <img width="800" height="400" src="https://ls.ecomaikgolf.com/alma/img/alma_vm.png">
 </p>
 
 2. Compile with the "Build Alma" icon
