@@ -140,7 +140,9 @@ set(KERNEL_SOURCES
 	paging/BPFA.cpp
 	paging/PTM.cpp
 	screen/renderer.cpp
+	screen/fast_renderer.cpp
 	screen/fonts/psf1.cpp
+	screen/fonts/fast_psf1.cpp
 	uefi/memory.cpp
 	segmentation/gdt.asm
 	io/bus.cpp

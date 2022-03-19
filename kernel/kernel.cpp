@@ -68,7 +68,6 @@ _start(stivale2_struct *stivale2_struct)
 
     bootstrap::allocator(stivale2_struct);
     bootstrap::translator(stivale2_struct);
-    bootstrap::screen(stivale2_struct);
     bootstrap::gdt();
     bootstrap::interrupts();
     bootstrap::enable_virtualaddr();
@@ -78,6 +77,7 @@ _start(stivale2_struct *stivale2_struct)
     bootstrap::heap((void *)0x100000, 0x10);
     bootstrap::pci();
     bootstrap::rtl8139();
+    bootstrap::screen(stivale2_struct);
 
     kernel::internal::stivalehdr = *stivale2_struct;
 

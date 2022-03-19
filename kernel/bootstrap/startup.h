@@ -8,7 +8,7 @@
 
 #include "acpi/acpi.h"
 #include "interrupts/interrupts.h"
-#include "screen/fonts/psf1.h"
+#include "screen/fonts/fast_psf1.h"
 #include "screen/framebuffer.h"
 #include "segmentation/gdt.h"
 #include "shell/command.h"

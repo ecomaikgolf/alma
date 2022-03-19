@@ -33,9 +33,9 @@ screen(stivale2_struct *st)
     /* Lock the tty itself  */
     // kernel::allocator.lock_pages(&kernel::tty, sizeof(kernel::tty) / kernel::page_size + 1);
     /* Create the tty */
-    kernel::tty = screen::psf1_renderer(frame, font, 0, 0, screen::color_e::WHITE);
+    kernel::tty = screen::fast_psf1_renderer(frame, font, 0, 0, screen::color_e::WHITE);
     /* Clean the screen */
-    kernel::tty.clear();
+    // kernel::tty.clear();
 
     // uint64_t fbbase = (uint64_t)fb->base;
     // uint64_t fbsize = (uint64_t)fb->buffer_size + kernel::page_size;
