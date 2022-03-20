@@ -262,11 +262,8 @@ fast_renderer_i::fmt(const char *fmtstr, ...)
 void
 fast_renderer_i::update_video()
 {
-    /* First copy, from current to limit */
-    uint64_t size = this->video_memory.buffer_size;
-
-    uint64_t steps     = size / sizeof(uint64_t);
-    uint64_t remainder = size % sizeof(uint64_t);
+    uint64_t steps     = this->video_memory.buffer_size / sizeof(uint64_t);
+    uint64_t remainder = this->video_memory.buffer_size % sizeof(uint64_t);
 
     uint64_t *cache_64 = (uint64_t *)this->video_cache.actual;
     uint64_t *video_64 = (uint64_t *)this->video_memory.base;
