@@ -27,9 +27,12 @@ fast_psf1_renderer::fast_psf1_renderer(framebuffer video_memory,
 {
     this->video_memory = video_memory;
 
+    // TEMPORARY HOTFIX (until I fix malloc :( ) works on my machine^TM :D
+    static uint32_t arr[480000];
+
     /* Create the cache buffer */
     this->video_cache        = video_memory;
-    this->video_cache.base   = (unsigned int *)kernel::heap.malloc(video_memory.buffer_size);
+    this->video_cache.base   = &arr[0];
     this->video_cache.actual = this->video_cache.base;
     this->video_cache.limit =
       (unsigned int *)((uint8_t *)this->video_cache.base + this->video_memory.buffer_size);
@@ -91,6 +94,7 @@ fast_psf1_renderer::draw(const char character)
             /* Each Y from bitmap is a "flag number", check if corresponding
              * x bit is set */
             if ((*chr & (0b10000000 >> (x - this->x_offset)))) {
+
                 *(static_cast<unsigned int *>(this->video_cache.base + x +
                                               (y * this->video_cache.ppscl))) =
                   static_cast<unsigned int>(this->color);
