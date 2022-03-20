@@ -20,7 +20,7 @@ screen(stivale2_struct *st)
 
     screen::framebuffer frame;
     frame.base        = (unsigned int *)fb->framebuffer_addr;
-    frame.buffer_size = fb->framebuffer_width * fb->framebuffer_pitch;
+    frame.buffer_size = fb->framebuffer_height * fb->framebuffer_pitch;
     frame.ppscl       = (fb->framebuffer_pitch / sizeof(uint32_t));
     frame.width       = fb->framebuffer_width;
     frame.height      = fb->framebuffer_height;
