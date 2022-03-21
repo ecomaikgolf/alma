@@ -155,64 +155,31 @@ fast_renderer_i::clear()
         *cache_64++ = 0;
     }
 
-    this->x_offset = 0;
-    this->y_offset = 0;
+    this->video_cache.actual = this->video_cache.base;
+    this->x_offset           = 0;
+    this->y_offset           = 0;
 }
 
 void
 fast_renderer_i::scroll()
 {
-    uint32_t mrg = this->video_cache.ppscl * (this->glyph_y() * 4);
-    uint32_t dif = this->video_cache.buffer_size - mrg;
-    uint8_t *src = (uint8_t *)this->video_cache.base + mrg;
-    uint8_t *dst = (uint8_t *)this->video_cache.base;
+    uint64_t *ptr_64 = (uint64_t *)this->video_cache.base;
 
-    {
-        uint32_t jumps = dif / sizeof(uint64_t);
-        uint32_t rest  = dif % sizeof(uint64_t);
-
-        unsigned int i;
-        for (i = 0; i < jumps; i++)
-            *((uint64_t *)dst + i) = *((uint64_t *)src + i);
-
-        for (unsigned int j = 0; j < rest; j++)
-            *((uint8_t *)((uint64_t *)dst + i) + j) = *((uint8_t *)((uint64_t *)src + i) + j);
-    }
-
-    {
-        uint8_t *clr = ((uint8_t *)this->video_cache.base + this->video_cache.buffer_size) - mrg;
-
-        uint32_t jumps = mrg / sizeof(uint64_t);
-        uint32_t rest  = mrg % sizeof(uint64_t);
-
-        unsigned int i;
-        for (i = 0; i < jumps; i++)
-            *((uint64_t *)clr + i) = 0;
-
-        for (unsigned int j = 0; j < rest; j++)
-            *((uint8_t *)((uint64_t *)clr + i) + j) = 0;
-    }
-
-    /*
-    uint32_t size_clear = this->glyph_y() * this->video_cache.ppscl;
-
-    uint32_t steps     = size_clear / sizeof(uint64_t);
-    uint32_t remainder = size_clear % sizeof(uint64_t);
-
-    uint64_t *cache_64 = (uint64_t *)this->video_cache.actual;
-
-    for (uint64_t i = 0; i < steps; i++)
-        *cache_64++ = 0;
-
-    uint8_t *cache_8 = (uint8_t *)cache_64;
-
-    for (uint64_t i = 0; i < remainder; i++)
-        *cache_8++ = 0;
-
-    this->video_cache.actual += this->video_cache.ppscl * this->glyph_y();
+    this->video_cache.actual += (this->video_cache.ppscl * this->glyph_y());
     if (this->video_cache.actual >= this->video_cache.limit)
         this->video_cache.actual = this->video_cache.base;
-    */
+
+    uint32_t size  = this->video_cache.ppscl * this->glyph_y() * sizeof(uint32_t);
+    uint32_t jumps = size / sizeof(uint64_t);
+    uint32_t rest  = size % sizeof(uint64_t);
+
+    for (int i = 0; i < jumps; i++)
+        *ptr_64++ = 0;
+
+    uint8_t *ptr_8 = (uint8_t *)ptr_64;
+
+    for (int i = 0; i < rest; i++)
+        *ptr_8++ = 0;
 
     if (this->y_offset >= this->glyph_y())
         this->y_offset -= this->glyph_y();
@@ -297,20 +264,40 @@ fast_renderer_i::fmt(const char *fmtstr, ...)
 void
 fast_renderer_i::update_video()
 {
-    uint64_t steps     = this->video_memory.buffer_size / sizeof(uint64_t);
-    uint64_t remainder = this->video_memory.buffer_size % sizeof(uint64_t);
-
-    uint64_t *cache_64 = (uint64_t *)this->video_cache.actual;
     uint64_t *video_64 = (uint64_t *)this->video_memory.base;
+    uint8_t *video_8;
+    {
+        uint64_t size  = (uint8_t *)this->video_cache.limit - (uint8_t *)this->video_cache.actual;
+        uint64_t steps = size / sizeof(uint64_t);
+        uint64_t remainder = size % sizeof(uint64_t);
 
-    for (uint64_t i = 0; i < steps; i++)
-        *video_64++ = *cache_64++;
+        uint64_t *cache_64 = (uint64_t *)this->video_cache.actual;
 
-    uint8_t *cache_8 = (uint8_t *)cache_64;
-    uint8_t *video_8 = (uint8_t *)video_64;
+        for (uint64_t i = 0; i < steps; i++)
+            *video_64++ = *cache_64++;
 
-    for (uint64_t i = 0; i < remainder; i++)
-        *video_8++ = *cache_8++;
+        uint8_t *cache_8 = (uint8_t *)cache_64;
+        video_8          = (uint8_t *)video_64;
+
+        for (uint64_t i = 0; i < remainder; i++)
+            *video_8++ = *cache_8++;
+    }
+
+    {
+        uint64_t size  = (uint8_t *)this->video_cache.actual - (uint8_t *)this->video_cache.base;
+        uint64_t steps = size / sizeof(uint64_t);
+        uint64_t remainder = size % sizeof(uint64_t);
+
+        uint64_t *cache_64 = (uint64_t *)this->video_cache.base;
+
+        for (uint64_t i = 0; i < steps; i++)
+            *video_64++ = *cache_64++;
+
+        uint8_t *cache_8 = (uint8_t *)cache_64;
+        video_8          = (uint8_t *)video_64;
+        for (uint64_t i = 0; i < remainder; i++)
+            *video_8++ = *cache_8++;
+    }
 }
 
 void
@@ -325,11 +312,10 @@ fast_renderer_i::draw_pixel(uint32_t x, uint32_t y)
     /* Double copy, one in the cache and other in video memory, this is to avoid reading
      * from video_memory when scrolling, as reading from video_memory is WAY MORE
      * expensive than writing to it (in certain real hardware makes it unusable) */
-    *(static_cast<unsigned int *>(this->video_cache.base + x + (y * this->video_cache.ppscl))) =
-      static_cast<unsigned int>(this->color);
-
     *(static_cast<unsigned int *>(this->video_memory.base + x + (y * this->video_memory.ppscl))) =
       static_cast<unsigned int>(this->color);
+
+    *(this->get_pixel(x, y)) = static_cast<unsigned int>(this->color);
 }
 
 void
@@ -343,6 +329,17 @@ void
 fast_renderer_i::popColor()
 {
     this->color = this->alt_color;
+}
+
+uint32_t *
+fast_renderer_i::get_pixel(uint32_t x, uint32_t y)
+{
+    uint32_t *ptr = this->video_cache.actual + x + (y * this->video_cache.ppscl);
+
+    if (ptr >= this->video_cache.limit)
+        ptr = this->video_cache.base + (ptr - this->video_cache.limit);
+
+    return ptr;
 }
 
 } // namespace screen

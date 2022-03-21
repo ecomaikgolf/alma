@@ -42,6 +42,7 @@ class fast_renderer_i : public renderer_i
 
   protected:
     void draw_pixel(uint32_t, uint32_t);
+    uint32_t *get_pixel(uint32_t, uint32_t);
     void update_video();
     void update_line();
     /** Video Memory */

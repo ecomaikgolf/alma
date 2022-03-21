@@ -36,7 +36,7 @@ screen(stivale2_struct *st)
     /* Lock the tty itself  */
     // kernel::allocator.lock_pages(&kernel::tty, sizeof(kernel::tty) / kernel::page_size + 1);
     /* Create the tty */
-    kernel::tty = fonts::psf1<screen::simple_renderer_i>(frame, font, 0, 0, screen::color_e::WHITE);
+    kernel::tty = fonts::psf1<screen::fast_renderer_i>(frame, font, 0, 0, screen::color_e::WHITE);
     /* Clean the screen */
     // kernel::tty.clear();
 
