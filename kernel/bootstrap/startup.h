@@ -8,7 +8,7 @@
 
 #include "acpi/acpi.h"
 #include "interrupts/interrupts.h"
-#include "screen/fonts/fast_psf1.h"
+#include "screen/fonts/psf1.h"
 #include "screen/framebuffer.h"
 #include "segmentation/gdt.h"
 #include "shell/command.h"
@@ -24,7 +24,7 @@ namespace bootstrap {
 struct boot_args
 {
     screen::framebuffer *fb;
-    screen::fonts::psf1 *font;
+    screen::fonts::specification::psf1 *font;
     uefi::memory::map *map;
     acpi::rsdp_v2 *rsdp;
 };

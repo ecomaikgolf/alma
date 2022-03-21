@@ -141,8 +141,6 @@ set(KERNEL_SOURCES
 	paging/PTM.cpp
 	screen/simple_renderer_i.cpp
 	screen/fast_renderer_i.cpp
-	screen/fonts/simple_psf1.cpp
-	screen/fonts/fast_psf1.cpp
 	uefi/memory.cpp
 	segmentation/gdt.asm
 	io/bus.cpp

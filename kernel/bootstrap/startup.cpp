@@ -13,27 +13,30 @@ const uint16_t KEYBOARD_BUFF_SIZE = kernel::page_size;
 void
 screen(stivale2_struct *st)
 {
+    using namespace screen;
+
     auto *fb =
       (stivale2_struct_tag_framebuffer *)stivale2_get_tag(st, STIVALE2_STRUCT_TAG_FRAMEBUFFER_ID);
 
     auto *mod = (stivale2_struct_tag_modules *)stivale2_get_tag(st, STIVALE2_STRUCT_TAG_MODULES_ID);
 
-    screen::framebuffer frame;
+    framebuffer frame;
     frame.base        = (unsigned int *)fb->framebuffer_addr;
     frame.buffer_size = fb->framebuffer_height * fb->framebuffer_pitch;
     frame.ppscl       = (fb->framebuffer_pitch / sizeof(uint32_t));
     frame.width       = fb->framebuffer_width;
     frame.height      = fb->framebuffer_height;
 
-    screen::fonts::psf1 *font_ptr = (screen::fonts::psf1 *)stivale2_get_mod(mod, "font");
-    screen::fonts::psf1 font;
-    font.header = *(screen::fonts::psf1_header *)font_ptr;
-    font.buffer = (uint8_t *)font_ptr + sizeof(screen::fonts::psf1_header);
+    fonts::specification::psf1 *font_ptr =
+      (fonts::specification::psf1 *)stivale2_get_mod(mod, "font");
+    fonts::specification::psf1 font;
+    font.header = *(fonts::specification::psf1_header *)font_ptr;
+    font.buffer = (uint8_t *)font_ptr + sizeof(fonts::specification::psf1_header);
 
     /* Lock the tty itself  */
     // kernel::allocator.lock_pages(&kernel::tty, sizeof(kernel::tty) / kernel::page_size + 1);
     /* Create the tty */
-    kernel::tty = screen::fast_psf1(frame, font, 0, 0, screen::color_e::WHITE);
+    kernel::tty = fonts::psf1<screen::simple_renderer_i>(frame, font, 0, 0, screen::color_e::WHITE);
     /* Clean the screen */
     // kernel::tty.clear();
 

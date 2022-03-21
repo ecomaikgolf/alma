@@ -10,7 +10,9 @@
 #include "paging/BPFA.h"
 #include "paging/PTM.h"
 #include "pci/pci.h"
-#include "screen/fonts/fast_psf1.h"
+#include "screen/fast_renderer_i.h"
+#include "screen/fonts/psf1.h"
+#include "screen/simple_renderer_i.h"
 #include "segmentation/gdt.h"
 #include "shell/interpreter.h"
 #include <stdint.h>
@@ -33,7 +35,7 @@ const auto page_size = uefi::page_size;
 /* Variables */
 inline paging::allocator::BPFA allocator;
 inline paging::translator::PTM translator __attribute__((aligned(uefi::page_size)));
-inline screen::fast_psf1 tty;
+inline screen::fonts::psf1<screen::simple_renderer_i> tty;
 inline segmentation::gdt_ptr gdt;
 inline interrupts::idt_ptr idtr;
 inline io::PS2 keyboard;

@@ -17,7 +17,9 @@ simple_renderer_i::simple_renderer_i(framebuffer fb,
   , x_offset(init_x)
   , y_offset(init_y)
   , color(init_color)
-{}
+{
+    this->clear();
+}
 
 /**
  * Draw a character to the screen

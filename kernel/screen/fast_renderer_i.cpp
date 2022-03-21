@@ -135,25 +135,28 @@ fast_renderer_i::getColor()
 void
 fast_renderer_i::clear()
 {
-    uint32_t jumps = this->video_cache.buffer_size / sizeof(uint64_t);
-    uint32_t rest  = this->video_cache.buffer_size % sizeof(uint64_t);
+    uint32_t jumps = this->video_memory.buffer_size / sizeof(uint64_t);
+    uint32_t rest  = this->video_memory.buffer_size % sizeof(uint64_t);
 
     /* Fast clear, use big integer movements */
     unsigned int i;
-    for (i = 0; i < jumps; i++)
-        *((uint64_t *)this->video_cache.base + i) = static_cast<uint8_t>(screen::color_e::BLACK);
+    uint64_t *video_64 = (uint64_t *)this->video_memory.base;
+    uint64_t *cache_64 = (uint64_t *)this->video_cache.base;
+    for (i = 0; i < jumps; i++) {
+        *video_64++ = 0;
+        *cache_64++ = 0;
+    }
 
+    uint8_t *video_8 = (uint8_t *)video_64;
+    uint8_t *cache_8 = (uint8_t *)cache_64;
     /* for sizes < 64 bytes */
-    for (unsigned int j = 0; j < rest; j++)
-        *((uint8_t *)((uint64_t *)this->video_cache.base + i) + j) =
-          static_cast<uint8_t>(screen::color_e::BLACK);
+    for (unsigned int j = 0; j < rest; j++) {
+        *video_64++ = 0;
+        *cache_64++ = 0;
+    }
 
     this->x_offset = 0;
     this->y_offset = 0;
-
-    this->video_cache.actual = this->video_cache.base;
-
-    this->update_video();
 }
 
 void

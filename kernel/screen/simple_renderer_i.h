@@ -14,9 +14,9 @@
 namespace screen {
 
 /**
- * Interface to output to the screen
+ * interface to output to the screen
  */
-class simple_renderer_i : renderer_i
+class simple_renderer_i : public renderer_i
 {
   public:
     simple_renderer_i(framebuffer, unsigned int, unsigned int, color_e);
