@@ -9,7 +9,6 @@
 #include "io/bus.h"
 #include "kernel.h"
 #include "paging/PFA.h"
-#include "screen/renderer.h"
 #include "uefi/memory.h"
 
 namespace interrupts {

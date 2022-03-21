@@ -114,7 +114,7 @@ PS2::scanf(char *buffer, uint32_t maxsize)
             auto color_backup = kernel::tty.getColor();
             kernel::tty.setColor(screen::color_e::BLACK);
             for (uint32_t i = 0; i < last_text_size; i++)
-                kernel::tty.printchar((char)0xdb);
+                kernel::tty.put((char)0xdb);
             kernel::tty.set_x(x_backup);
             kernel::tty.set_y(y_backup);
             kernel::tty.setColor(color_backup);

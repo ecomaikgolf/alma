@@ -1,7 +1,6 @@
-
 #pragma once
+
 #include "io/bus.h"
-#include "screen/renderer.h"
 
 namespace interrupts {
 struct frame;

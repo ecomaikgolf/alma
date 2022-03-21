@@ -4,7 +4,7 @@
  * @author Ernesto Martínez García <me@ecomaikgolf.com>
  */
 
-#include "psf1.h"
+#include "screen/fonts/simple_psf1.h"
 
 namespace screen {
 
@@ -17,21 +17,17 @@ namespace screen {
  * @param y_offset Y **pixel** initial position
  * @param color hex color (enum)
  */
-psf1_renderer::psf1_renderer(framebuffer fb,
-                             fonts::psf1 font,
-                             unsigned int x_offset,
-                             unsigned int y_offset,
-                             color_e color)
-{
-    this->fb       = fb;
-    this->font     = font;
-    this->x_offset = x_offset;
-    this->y_offset = y_offset;
-    this->color    = color;
-}
+simple_psf1::simple_psf1(framebuffer fb,
+                         fonts::psf1 font,
+                         unsigned int x_offset,
+                         unsigned int y_offset,
+                         color_e color)
+  : simple_renderer_i(fb, x_offset, y_offset, color)
+  , font(font)
+{}
 
-psf1_renderer &
-psf1_renderer::operator=(psf1_renderer &&mov)
+simple_psf1 &
+simple_psf1::operator=(simple_psf1 &&mov)
 {
     this->font = mov.font;
     // mov.font       = nullptr;
@@ -54,7 +50,7 @@ psf1_renderer::operator=(psf1_renderer &&mov)
  * @param character Char to print
  */
 void
-psf1_renderer::draw(const char character)
+simple_psf1::draw(const char character)
 {
     /* Select character from glyph buffer (a character is composed by charsize
      * elements )*/
@@ -62,14 +58,12 @@ psf1_renderer::draw(const char character)
                 (static_cast<unsigned char>(character) * this->font.header.charsize);
 
     /* Iterate bitmap "rectangle" (with offset as base) */
-    for (unsigned long y = this->y_offset; y < this->y_offset + this->glyph_y(); y++) {
-        for (unsigned long x = this->x_offset; x < this->x_offset + this->glyph_x(); x++) {
+    for (uint32_t y = this->y_offset; y < this->y_offset + this->glyph_y(); y++) {
+        for (uint32_t x = this->x_offset; x < this->x_offset + this->glyph_x(); x++) {
             /* Each Y from bitmap is a "flag number", check if corresponding
              * x bit is set */
-            if ((*chr & (0b10000000 >> (x - this->x_offset)))) {
-                *(static_cast<unsigned int *>(this->fb.base + x + (y * this->fb.ppscl))) =
-                  static_cast<unsigned int>(this->color);
-            }
+            if ((*chr & (0b10000000 >> (x - this->x_offset))))
+                this->draw_pixel(x, y);
         }
         chr++; /* increase char to iterate over entire charsize elements */
     }

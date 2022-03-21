@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include "colors.h"
-#include "framebuffer.h"
+#include "screen/framebuffer.h"
+#include "screen/renderer_i.h"
 #include <stdarg.h>
 #include <stdint.h>
 
@@ -16,39 +16,31 @@ namespace screen {
 /**
  * Interface to output to the screen
  */
-class renderer_i
+class simple_renderer_i : renderer_i
 {
   public:
-    renderer_i() = default;
-    void fmt(const char *, ...);
-    void println(const char *);
-    void printcharln(char letter)
-    {
-        char aux[] = { letter, '\0' };
-        this->println(aux);
-    }
-    void print(const char *, int64_t n = -1);
-    void printchar(char letter)
-    {
-        char aux[] = { letter, '\0' };
-        this->print(aux);
-    };
-    void newline()
-    {
-        this->println("");
-    };
-    void clear();
-    void scroll();
+    simple_renderer_i(framebuffer, unsigned int, unsigned int, color_e);
+    simple_renderer_i()           = default;
     virtual void draw(const char) = 0;
     void put(const char);
+    void print(const char *, int64_t n = -1);
+    void println(const char *);
+    void fmt(const char *, ...);
+    void newline();
+    void clear();
+    void scroll();
     void setColor(color_e);
     color_e getColor();
+    void pushColor(color_e);
+    void popColor();
+
     unsigned int get_x();
     unsigned int get_y();
     void set_x(unsigned int);
     void set_y(unsigned int);
 
   protected:
+    void draw_pixel(uint32_t, uint32_t);
     /** Framebuffer to use */
     framebuffer fb;
     /** x PIXEL offset of next glyph */

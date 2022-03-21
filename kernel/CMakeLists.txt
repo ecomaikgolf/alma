@@ -139,9 +139,9 @@ set(KERNEL_SOURCES
 	paging/PFA.cpp
 	paging/BPFA.cpp
 	paging/PTM.cpp
-	screen/renderer.cpp
-	screen/fast_renderer.cpp
-	screen/fonts/psf1.cpp
+	screen/simple_renderer_i.cpp
+	screen/fast_renderer_i.cpp
+	screen/fonts/simple_psf1.cpp
 	screen/fonts/fast_psf1.cpp
 	uefi/memory.cpp
 	segmentation/gdt.asm

@@ -20,7 +20,6 @@
 #include "pci/pci.h"
 #include "screen/fonts/psf1.h"
 #include "screen/framebuffer.h"
-#include "screen/renderer.h"
 #include "segmentation/gdt.h"
 #include "shell/command.h"
 #include "stivale2.h"

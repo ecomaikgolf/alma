@@ -6,24 +6,24 @@
 
 #pragma once
 
-#include "screen/fast_renderer_i.h"
 #include "screen/fonts/psf1.h"
+#include "screen/simple_renderer_i.h"
 
 namespace screen {
 
 /**
  * Renderer with PSF1 fonts
  */
-class fast_psf1 : public fast_renderer_i
+class simple_psf1 : public simple_renderer_i
 {
   public:
-    fast_psf1(framebuffer,
-              fonts::psf1,
-              unsigned int x_offset = 0,
-              unsigned int y_offset = 0,
-              color_e color         = color_e::WHITE);
-    fast_psf1()        = default;
-    fast_psf1 &operator=(fast_psf1 &&);
+    simple_psf1(framebuffer,
+                fonts::psf1,
+                unsigned int x_offset = 0,
+                unsigned int y_offset = 0,
+                color_e color         = color_e::WHITE);
+    simple_psf1()        = default;
+    simple_psf1 &operator=(simple_psf1 &&);
 
     void draw(const char);
 
@@ -38,7 +38,6 @@ class fast_psf1 : public fast_renderer_i
     {
         return fonts::psf1::glyph_y;
     }
-
     /** PSF1 font to use */
     fonts::psf1 font;
 };
