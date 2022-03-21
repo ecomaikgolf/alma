@@ -164,6 +164,7 @@ void
 fast_renderer_i::scroll()
 {
     uint64_t *ptr_64 = (uint64_t *)this->video_cache.base;
+    uint64_t *ptr_64 = (uint64_t *)this->video_cache.actual;
 
     this->video_cache.actual += (this->video_cache.ppscl * this->glyph_y());
     if (this->video_cache.actual >= this->video_cache.limit)
@@ -312,6 +313,7 @@ fast_renderer_i::draw_pixel(uint32_t x, uint32_t y)
     /* Double copy, one in the cache and other in video memory, this is to avoid reading
      * from video_memory when scrolling, as reading from video_memory is WAY MORE
      * expensive than writing to it (in certain real hardware makes it unusable) */
+     * expensive than writing to it (in certain real hardware makes scrolling unusable) */
     *(static_cast<unsigned int *>(this->video_memory.base + x + (y * this->video_memory.ppscl))) =
       static_cast<unsigned int>(this->color);
 
