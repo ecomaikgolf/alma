@@ -245,11 +245,16 @@ simple_renderer_i::newline()
 
 void
 simple_renderer_i::pushColor(color_e color)
-{}
+{
+    this->alt_color = this->color;
+    this->color     = color;
+}
 
 void
 simple_renderer_i::popColor()
-{}
+{
+    this->color = this->alt_color;
+}
 
 void
 simple_renderer_i::draw_pixel(uint32_t x, uint32_t y)

@@ -58,6 +58,7 @@ class fast_renderer_i : renderer_i
     virtual unsigned int glyph_y() = 0;
     /** color of next glyph */
     color_e color;
+    color_e alt_color;
 };
 
 } // namespace screen
