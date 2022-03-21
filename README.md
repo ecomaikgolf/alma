@@ -68,11 +68,11 @@ _Note: GIF quality is vastly reduced and native executions look clear_
                <li>Stivale2 specification </li>
                <li>Call ctors and dtors</li>
                <li>
-                  PSF1 Font Rendering 
+                  Rendering 
                   <ul>
-                     <li>println & fmt</li>
-                     <li>colors</li>
-                     <li>text scroll</li>
+                     <li>simple rendering</li>
+                     <li>fast console rendering</li>
+                     <li>PSF1 fonts</li>
                   </ul>
                </li>
                <li>
