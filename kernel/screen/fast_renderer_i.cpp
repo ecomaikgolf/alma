@@ -169,7 +169,11 @@ fast_renderer_i::scroll()
     if (this->video_cache.actual >= this->video_cache.limit)
         this->video_cache.actual = this->video_cache.base;
 
-    uint32_t size  = this->video_cache.ppscl * this->glyph_y() * sizeof(uint32_t);
+    uint32_t size = this->video_cache.ppscl * this->glyph_y() * sizeof(uint32_t);
+
+    if ((uint32_t *)((uint8_t *)ptr_64 + size) > this->video_cache.limit)
+        ptr_64 = (uint64_t *)this->video_cache.limit;
+
     uint32_t jumps = size / sizeof(uint64_t);
     uint32_t rest  = size % sizeof(uint64_t);
 

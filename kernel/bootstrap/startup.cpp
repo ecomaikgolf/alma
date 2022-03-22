@@ -21,12 +21,10 @@ screen(stivale2_struct *st)
     auto *mod = (stivale2_struct_tag_modules *)stivale2_get_tag(st, STIVALE2_STRUCT_TAG_MODULES_ID);
 
     framebuffer frame;
-    frame.base  = (unsigned int *)fb->framebuffer_addr;
-    frame.ppscl = (fb->framebuffer_pitch / sizeof(uint32_t));
-    frame.width = fb->framebuffer_width;
-    frame.width -= frame.width % 8;
-    frame.height = fb->framebuffer_height;
-    frame.height -= frame.height % 16;
+    frame.base        = (unsigned int *)fb->framebuffer_addr;
+    frame.ppscl       = (fb->framebuffer_pitch / sizeof(uint32_t));
+    frame.width       = fb->framebuffer_width;
+    frame.height      = fb->framebuffer_height;
     frame.buffer_size = frame.height * frame.ppscl * sizeof(uint32_t);
 
     fonts::specification::psf1 *font_ptr =
