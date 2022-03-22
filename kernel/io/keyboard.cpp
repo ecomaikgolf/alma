@@ -106,33 +106,31 @@ PS2::scanf(char *buffer, uint32_t maxsize)
     uint32_t last_text_size = 0;
     while (1) {
         if (kernel::keyboard.update()) {
-            /* User ends scanf with enter */
             if (this->buffer_count > 0 && this->buffer[this->buffer_count - 1] == '\n') {
+                /* User ends scanf with enter */
                 kernel::tty.newline();
                 break;
             } else if (this->buffer_count > last_text_size) {
+                /* User enters new character(s) */
                 auto new_chars             = this->buffer_count - last_text_size;
                 buffer[this->buffer_count] = '\0';
                 kernel::tty.print(&this->buffer[last_text_size]);
             } else if (this->buffer_count < last_text_size) {
+                /* User removes character(s) */
                 auto del_chars = last_text_size - this->buffer_count;
-                auto chars     = kernel::tty.get_x();
-                auto new_x     = kernel::tty.get_x() - (del_chars * 8);
+                int new_x      = kernel::tty.get_x() - (del_chars * kernel::tty.glyph_x());
                 if (new_x < 0) [[unlikely]] {
-                    kernel::tty.set_x(800 - abs(new_x));
-                    kernel::tty.set_y(kernel::tty.get_y() - 16);
+                    kernel::tty.set_x(kernel::tty.get_width() - abs(new_x));
+                    kernel::tty.set_y(kernel::tty.get_y() - kernel::tty.glyph_y());
                 } else [[likely]] {
                     kernel::tty.set_x(new_x);
                 }
-                auto x_backup     = kernel::tty.get_x();
-                auto y_backup     = kernel::tty.get_y();
-                auto color_backup = kernel::tty.getColor();
+                kernel::tty.pushCoords(kernel::tty.get_x(), kernel::tty.get_y());
                 kernel::tty.pushColor(screen::color_e::BLACK);
                 for (uint32_t i = 0; i < del_chars; i++)
-                    kernel::tty.put((char)0xdb);
+                    kernel::tty.put((char)0xdb); // Full color character
                 kernel::tty.popColor();
-                kernel::tty.set_x(x_backup);
-                kernel::tty.set_y(y_backup);
+                kernel::tty.popCoords();
             }
             last_text_size = this->buffer_count;
         }
