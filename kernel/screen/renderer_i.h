@@ -28,6 +28,14 @@ class renderer_i
     virtual color_e getColor()                       = 0;
     virtual void pushColor(color_e)                  = 0;
     virtual void popColor()                          = 0;
+    virtual void pushCoords(uint32_t, uint32_t)      = 0;
+    virtual void popCoords()                         = 0;
+    virtual uint32_t get_x(uint32_t)                 = 0;
+    virtual uint32_t get_y()                         = 0;
+    virtual void set_x(uint32_t)                     = 0;
+    virtual void set_y(uint32_t)                     = 0;
+    virtual uint32_t get_width()                     = 0;
+    virtual uint32_t get_height()                    = 0;
 };
 
 } // namespace screen
