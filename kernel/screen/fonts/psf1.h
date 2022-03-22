@@ -88,7 +88,6 @@ class psf1 : public T
         }
     }
 
-  private:
     ///** renderer glyph x size */
     unsigned int glyph_x()
     {
@@ -99,6 +98,8 @@ class psf1 : public T
     {
         return fonts::specification::psf1::glyph_y;
     }
+
+  private:
     /** PSF1 font to use */
     fonts::specification::psf1 font;
 };

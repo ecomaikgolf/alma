@@ -265,4 +265,32 @@ simple_renderer_i::draw_pixel(uint32_t x, uint32_t y)
       static_cast<unsigned int>(this->color);
 }
 
+void
+simple_renderer_i::pushCoords(uint32_t x, uint32_t y)
+{
+    this->alt_x_offset = this->x_offset;
+    this->alt_y_offset = this->y_offset;
+    this->x_offset     = x;
+    this->y_offset     = y;
+}
+
+void
+simple_renderer_i::popCoords()
+{
+    this->x_offset = this->alt_x_offset;
+    this->y_offset = this->alt_y_offset;
+}
+
+uint32_t
+simple_renderer_i::get_width()
+{
+    return this->fb.width;
+}
+
+uint32_t
+simple_renderer_i::get_height()
+{
+    return this->fb.height;
+}
+
 } // namespace screen

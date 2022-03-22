@@ -191,26 +191,26 @@ fast_renderer_i::scroll()
     this->update_video();
 }
 
-unsigned int
+uint32_t
 fast_renderer_i::get_x()
 {
     return this->x_offset;
 }
 
-unsigned int
+uint32_t
 fast_renderer_i::get_y()
 {
     return this->y_offset;
 }
 
 void
-fast_renderer_i::set_x(unsigned int value)
+fast_renderer_i::set_x(uint32_t value)
 {
     this->x_offset = value;
 }
 
 void
-fast_renderer_i::set_y(unsigned int value)
+fast_renderer_i::set_y(uint32_t value)
 {
     this->y_offset = value;
 }
@@ -344,6 +344,34 @@ fast_renderer_i::get_pixel(uint32_t x, uint32_t y)
         ptr = this->video_cache.base + (ptr - this->video_cache.limit);
 
     return ptr;
+}
+
+void
+fast_renderer_i::pushCoords(uint32_t x, uint32_t y)
+{
+    this->alt_x_offset = this->x_offset;
+    this->alt_y_offset = this->y_offset;
+    this->x_offset     = x;
+    this->y_offset     = y;
+}
+
+void
+fast_renderer_i::popCoords()
+{
+    this->x_offset = this->alt_x_offset;
+    this->y_offset = this->alt_y_offset;
+}
+
+uint32_t
+fast_renderer_i::get_width()
+{
+    return this->video_memory.width;
+}
+
+uint32_t
+fast_renderer_i::get_height()
+{
+    return this->video_memory.height;
 }
 
 } // namespace screen

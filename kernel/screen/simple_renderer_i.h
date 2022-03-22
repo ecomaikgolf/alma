@@ -33,11 +33,18 @@ class simple_renderer_i : public renderer_i
     color_e getColor();
     void pushColor(color_e);
     void popColor();
-
-    unsigned int get_x();
-    unsigned int get_y();
-    void set_x(unsigned int);
-    void set_y(unsigned int);
+    uint32_t get_x();
+    uint32_t get_y();
+    void set_x(uint32_t);
+    void set_y(uint32_t);
+    void pushCoords(uint32_t, uint32_t);
+    void popCoords();
+    uint32_t get_width();
+    uint32_t get_height();
+    /** renderer glyph x size */
+    virtual unsigned int glyph_x() = 0;
+    /** renderer glyph y size */
+    virtual unsigned int glyph_y() = 0;
 
   protected:
     void draw_pixel(uint32_t, uint32_t);
@@ -45,12 +52,10 @@ class simple_renderer_i : public renderer_i
     framebuffer fb;
     /** x PIXEL offset of next glyph */
     unsigned int x_offset;
+    unsigned int alt_x_offset; // backup for push/pop
     /** y PIXEL offset of next glyph */
     unsigned int y_offset;
-    /** renderer glyph x size */
-    virtual unsigned int glyph_x() = 0;
-    /** renderer glyph y size */
-    virtual unsigned int glyph_y() = 0;
+    unsigned int alt_y_offset; // backup for push/pop
     /** color of next glyph */
     color_e color;
     color_e alt_color;
