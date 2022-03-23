@@ -269,6 +269,21 @@ BPFA_page::split(uint64_t addr, BPFA_page *newaddr)
     this->next          = newaddr;
 }
 
+void *
+BPFA::request_cont_page(uint32_t pages)
+{
+    auto it = this->get_first();
+    while (it != nullptr) {
+        if (it->pages >= pages) {
+            auto ret = it->addr;
+            this->lock_pages(it->addr, pages);
+            return (void *)ret;
+        }
+        it = it->next;
+    }
+    return nullptr;
+}
+
 } // namespace allocator
 
 } // namespace paging

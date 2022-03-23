@@ -42,6 +42,7 @@ class BPFA
     bool lock_page(void *);
     bool lock_pages(void *, uint64_t);
     void *request_page(void *ptr = nullptr);
+    void *request_cont_page(uint32_t);
 
     BPFA_page *get_first()
     {
