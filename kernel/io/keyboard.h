@@ -124,7 +124,16 @@ class PS2
         limit
     };
 
+    enum class read_mode
+    {
+        kernel,
+        scanf,
+    };
+
     buffer_mode buffer_handling;
+    volatile read_mode input_mode = read_mode::kernel;
+
+    void update_scanf();
 };
 
 } // namespace io

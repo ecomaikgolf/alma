@@ -19,6 +19,8 @@ PS2::process_scancode(uint8_t keycode)
 
         if (letter != 0x0) {
             this->add_char(letter);
+            if (this->input_mode == PS2::read_mode::scanf)
+                this->update_scanf();
             return;
         }
     }
@@ -41,9 +43,13 @@ PS2::process_scancode(uint8_t keycode)
         case 0xba:
             break;
         /* Del */
-        case 0x0e:
+        case 0x0e: {
             this->delete_char();
-            break;
+            if (this->input_mode == PS2::read_mode::scanf)
+                this->update_scanf();
+        }
+
+        break;
         case 0x8e:
             break;
     }
@@ -102,47 +108,53 @@ PS2::scanf(char *buffer, uint32_t maxsize)
     this->buffer_count    = 0;
     this->has_new_key     = false;
     this->buffer_handling = PS2::buffer_mode::limit;
+    this->input_mode      = read_mode::scanf;
 
-    uint32_t last_text_size = 0;
-    while (1) {
-        if (kernel::keyboard.update()) {
-            if (this->buffer_count > 0 && this->buffer[this->buffer_count - 1] == '\n') {
-                /* User ends scanf with enter */
-                kernel::tty.newline();
-                break;
-            } else if (this->buffer_count > last_text_size) {
-                /* User enters new character(s) */
-                auto new_chars             = this->buffer_count - last_text_size;
-                buffer[this->buffer_count] = '\0';
-                kernel::tty.print(&this->buffer[last_text_size]);
-            } else if (this->buffer_count < last_text_size) {
-                /* User removes character(s) */
-                auto del_chars = last_text_size - this->buffer_count;
-                int new_x      = kernel::tty.get_x() - (del_chars * kernel::tty.glyph_x());
-                if (new_x < 0) [[unlikely]] {
-                    kernel::tty.set_x(kernel::tty.get_width() - abs(new_x));
-                    kernel::tty.set_y(kernel::tty.get_y() - kernel::tty.glyph_y());
-                } else [[likely]] {
-                    kernel::tty.set_x(new_x);
-                }
-                kernel::tty.pushCoords(kernel::tty.get_x(), kernel::tty.get_y());
-                kernel::tty.pushColor(screen::color_e::BLACK);
-                for (uint32_t i = 0; i < del_chars; i++)
-                    kernel::tty.put((char)0xdb); // Full color character
-                kernel::tty.popColor();
-                kernel::tty.popCoords();
-            }
-            last_text_size = this->buffer_count;
-        }
+    while (this->input_mode == read_mode::scanf) {
     }
 
     this->buffer[this->buffer_count] = '\0';
+    kernel::tty.newline();
 
     this->buffer          = buffer_backup;
     this->buffer_maxsize  = maxsize_backup;
     this->buffer_count    = count_backup;
     this->has_new_key     = has_new_key_backup;
     this->buffer_handling = mode_backup;
+}
+
+void
+PS2::update_scanf()
+{
+    static uint32_t last_text_size = 0;
+    if (this->buffer_count > 0 && this->buffer[this->buffer_count - 1] == '\n') {
+        /* User ends scanf with enter */
+        this->input_mode = read_mode::kernel;
+        last_text_size   = 0;
+        return;
+    } else if (this->buffer_count > last_text_size) {
+        /* User enters new character(s) */
+        auto new_chars             = this->buffer_count - last_text_size;
+        buffer[this->buffer_count] = '\0';
+        kernel::tty.print(&this->buffer[last_text_size]);
+    } else if (this->buffer_count < last_text_size) {
+        /* User removes character(s) */
+        auto del_chars = last_text_size - this->buffer_count;
+        int new_x      = kernel::tty.get_x() - (del_chars * kernel::tty.glyph_x());
+        if (new_x < 0) [[unlikely]] {
+            kernel::tty.set_x(kernel::tty.get_width() - abs(new_x));
+            kernel::tty.set_y(kernel::tty.get_y() - kernel::tty.glyph_y());
+        } else [[likely]] {
+            kernel::tty.set_x(new_x);
+        }
+        kernel::tty.pushCoords(kernel::tty.get_x(), kernel::tty.get_y());
+        kernel::tty.pushColor(screen::color_e::BLACK);
+        for (uint32_t i = 0; i < del_chars; i++)
+            kernel::tty.put((char)0xdb); // Full color character
+        kernel::tty.popColor();
+        kernel::tty.popCoords();
+    }
+    last_text_size = this->buffer_count;
 }
 
 void
