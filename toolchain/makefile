@@ -95,6 +95,7 @@ gcc-build:
 	mkdir build; \
 	cd build; \
 	export PATH=$(BUILD_DIR_TOOLCHAIN)/bin/:$$PATH; \
+	export PATH=$(BUILD_DIR_TOOLCHAIN)/libexec/gcc/x86_64-elf/11.2.1/:$$PATH; \
 	../configure --target=x86_64-elf --prefix="$(BUILD_DIR_TOOLCHAIN)" --disable-nls --enable-languages=c,c++ --without-headers; \
 	make -j$(THREADS) all-gcc; \
 	make -j$(THREADS) all-target-libgcc CFLAGS_FOR_TARGET='-g -O2 -mcmodel=kernel -mno-red-zone'|| true; \
