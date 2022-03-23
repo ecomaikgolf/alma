@@ -6,6 +6,7 @@
 
 #include "screen/fast_renderer_i.h"
 #include "colors.h"
+#include "kernel.h"
 #include "lib/math.h"
 #include "lib/stdlib.h"
 
@@ -22,12 +23,10 @@ fast_renderer_i::fast_renderer_i(framebuffer video_memory,
   , y_offset(init_y)
   , color(init_color)
 {
-    // TEMPORARY HOTFIX (until I fix malloc :( ) works on my machine^TM :D
-    static uint32_t arr[480000];
-
     /* Create the cache buffer */
-    this->video_cache        = video_memory;
-    this->video_cache.base   = &arr[0];
+    this->video_cache      = video_memory;
+    this->video_cache.base = (uint32_t *)kernel::allocator.request_cont_page(
+      this->video_memory.buffer_size / kernel::page_size + 1);
     this->video_cache.actual = this->video_cache.base;
     this->video_cache.limit =
       (unsigned int *)((uint8_t *)this->video_cache.base + this->video_memory.buffer_size);
@@ -172,7 +171,7 @@ fast_renderer_i::scroll()
     uint32_t size = this->video_cache.ppscl * this->glyph_y() * sizeof(uint32_t);
 
     if ((uint32_t *)((uint8_t *)ptr_64 + size) > this->video_cache.limit)
-        ptr_64 = (uint64_t *)this->video_cache.limit;
+        size = ((uint8_t *)this->video_cache.limit - (uint8_t *)ptr_64);
 
     uint32_t jumps = size / sizeof(uint64_t);
     uint32_t rest  = size % sizeof(uint64_t);
