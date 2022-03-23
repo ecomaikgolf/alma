@@ -248,9 +248,8 @@ apt install nasm iasl cmake make qemu-system-x86 qemu-system-gui git uuid-dev py
 
 2. `make -C toolchain/`
 
-_Note: EDKII build can be ommited by providing a binary release._
-
-_Note: posix-uefi build can be ommited if bootloader is not going to be build_
+* EDKII build can be manually disabled if a compiled binary is provided or not using UEFI
+* posix-uefi build can be manually disabled if bootloader is not going to be built (default behaviour)
 
 3. `cmake -B build` or `cmake -B build -GNinja` 
 4. `make -C build run` or `ninja -C build run` 
