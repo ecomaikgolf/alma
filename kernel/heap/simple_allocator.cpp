@@ -11,6 +11,11 @@ namespace heap {
 
 simple_allocator::simple_allocator(void *heap_address, uint64_t pages)
 {
+    if (!kernel::allocator.lock_pages(heap_address, pages)) {
+        kernel::tty.println("fatal error");
+        return;
+    }
+
     /* for each page, allocate and map them */
     void *iter = heap_address;
     for (uint64_t i = 0; i < pages; i++) {
