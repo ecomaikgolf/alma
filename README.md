@@ -214,6 +214,14 @@ cd CHANGEME
 qemu-system-x86_64 -machine q35 -cpu qemu64 -m 256M -bios bios.bin -netdev user,id=user.0 -device rtl8139,netdev=user.0,mac=ca:fe:c0:ff:ee:00 -object filter-dump,id=f1,netdev=user.0,file=log.pcap -boot d -cdrom alma.iso
 ```
 
+If you want to run it in real hardware, flash it to a USB device:
+
+```bash
+sudo dd bs=4M if=alma.iso of=/dev/CHANGEME conv=fdatasync status=progress
+```
+
+Remember that you must have certain hardware for it to work (PS2 keyboard, RTL8139 NIC, PCIe...). Even with that, running in real hardware is a dark dark place... things can go wrong.
+
 ## Build
 
 ### Virtual Machine (Method 1)
