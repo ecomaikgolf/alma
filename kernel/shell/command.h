@@ -29,6 +29,7 @@ int printpfa(int, char **);
 int checknet(int, char **);
 int sendpacket(int, char **);
 int clearnet(int, char **);
+int screen(int, char **);
 
 } // namespace commands
 
@@ -53,6 +54,7 @@ static const command kernel_commands[] = {
     { "checknet"   , &commands::checknet},
     { "sendpacket" , &commands::sendpacket},
     { "clearnet"   , &commands::clearnet},
+    { "screen"     , &commands::screen},
     { nullptr , nullptr }
 };
 // clang-format on

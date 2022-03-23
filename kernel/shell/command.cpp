@@ -475,10 +475,18 @@ sendpacket(int argc, char **argv)
 
     return 0;
 }
+
 int
 clearnet(int argc, char **argv)
 {
     kernel::rtl8139.setconfig<uint16_t>(net::rtl8139_config::ISR, 0b100);
+    return 0;
+}
+
+int
+screen(int argc, char **argv)
+{
+    kernel::tty.fmt("%ix%i", kernel::tty.get_width(), kernel::tty.get_height());
     return 0;
 }
 
