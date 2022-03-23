@@ -60,7 +60,14 @@ class psf1 : public T
          color_e color         = color_e::WHITE)
       : T(fb, x_offset, y_offset, color)
       , font(font)
-    {}
+    {
+        this->video_cache.width -= this->video_cache.width % 8;
+        this->video_cache.height -= this->video_cache.height % 16;
+        this->video_cache.buffer_size =
+          this->video_cache.width * this->video_cache.height * sizeof(uint32_t);
+        this->video_cache.limit =
+          (uint32_t *)((uint8_t *)this->video_cache.base + this->video_cache.buffer_size);
+    }
     psf1()        = default;
     psf1 &operator=(psf1 &&rhs)
     {

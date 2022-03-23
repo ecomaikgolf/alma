@@ -170,6 +170,7 @@ fast_renderer_i::scroll()
 
     uint32_t size = this->video_cache.ppscl * this->glyph_y() * sizeof(uint32_t);
 
+    // It shouldn't happen as it's aligned but safety checks as it can lead to out of bounds writes
     if ((uint32_t *)((uint8_t *)ptr_64 + size) > this->video_cache.limit)
         size = ((uint8_t *)this->video_cache.limit - (uint8_t *)ptr_64);
 

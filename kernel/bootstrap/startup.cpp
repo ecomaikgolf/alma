@@ -25,7 +25,7 @@ screen(stivale2_struct *st)
     frame.ppscl       = (fb->framebuffer_pitch / sizeof(uint32_t));
     frame.width       = fb->framebuffer_width;
     frame.height      = fb->framebuffer_height;
-    frame.buffer_size = frame.height * frame.ppscl * sizeof(uint32_t);
+    frame.buffer_size = frame.ppscl * frame.height * sizeof(uint32_t);
 
     fonts::specification::psf1 *font_ptr =
       (fonts::specification::psf1 *)stivale2_get_mod(mod, "font");
