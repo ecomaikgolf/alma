@@ -226,7 +226,7 @@ Remember that you must have certain hardware for it to work (PS2 keyboard, RTL81
 
 ### Virtual Machine (Method 1)
 
-1. Download the alma build vm ![.ova](https://drive.google.com/file/d/1neuuBo7Ja4Czmwre1SWPkwGSF8MV98s3/view?usp=sharing) (a 5.9GB Xubuntu 20.04 virtualbox VM ready to compile)
+1. Download the alma build vm [.ova](https://drive.google.com/file/d/1ilYIGXWLiMP9ULE48gVu7FeTnDZqmqmw/view?usp=sharing) (a 6.31GB Xubuntu 20.04 virtualbox VM ready to compile)
 
 <p align="center">
   <img width="800" height="400" src="https://ls.ecomaikgolf.com/alma/img/alma_vm.png">
@@ -262,7 +262,7 @@ apt install nasm iasl cmake make qemu-system-x86 qemu-system-gui git uuid-dev py
 
 ## Bugs
 
-Please explain them to me: ![me 𝒂𝒕 ecomaikgolf ꓒσ𝗍 c0m](https://ecomaikgolf.com/contact.html) 
+Please explain them to me: [me 𝒂𝒕 ecomaikgolf ꓒσ𝗍 c0m](https://ecomaikgolf.com/contact.html) 
 
 Take into acccount this is a Bachelor Final Project and has been developed under the pressure of a deadline among other subjects. Some things could be improved, for example, with better (and more complex) data structures, but it's not the goal of the project.
 
@@ -296,6 +296,6 @@ _The list is longer but I can't put each site where I read something. This list 
 ## Author
 
 Ernesto Martínez García
-* ![me 𝒂𝒕 ecomaikgolf ꓒσ𝗍 c0m](https://ecomaikgolf.com/contact.html) `C79F 01CE 017F 57A4 FBBB 4E22 33DD FB0A EB94 20CB` 
+* [me 𝒂𝒕 ecomaikgolf ꓒσ𝗍 c0m](https://ecomaikgolf.com/contact.html) `C79F 01CE 017F 57A4 FBBB 4E22 33DD FB0A EB94 20CB` 
 * https://ecomaikgolf.com/
 * https://twitter.com/ecomaikgolf
