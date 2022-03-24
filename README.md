@@ -272,7 +272,7 @@ Take into acccount this is a Bachelor Final Project and has been developed under
 > 
 > A: I'm compiling binutils, gdb, edk2 and posix-uefi from source
 
-> Q: 5.9GB VM
+> Q: 6.31GB VM
 >
 > A: I can't do more. Xubuntu + "zeroed" free memory before exporting so it can be compressed.
 
