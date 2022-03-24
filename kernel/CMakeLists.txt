@@ -187,13 +187,13 @@ set_target_properties(kernel PROPERTIES
 ###############
 
 # build them with our toolchain
-set_property(SOURCE crti.s PROPERTY LANGUAGE CXX)
-set_property(SOURCE crtn.s PROPERTY LANGUAGE CXX)
+set_property(SOURCE crti.s PROPERTY LANGUAGE ASM)
+set_property(SOURCE crtn.s PROPERTY LANGUAGE ASM)
 
 # build crts
 add_library(crts OBJECT
-    crti.s
-    crtn.s
+    crti.asm
+    crtn.asm
 )
 
 # build crts first
