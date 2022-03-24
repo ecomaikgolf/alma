@@ -186,10 +186,6 @@ set_target_properties(kernel PROPERTIES
 # _init _fini #
 ###############
 
-# build them with our toolchain
-set_property(SOURCE crti.s PROPERTY LANGUAGE ASM)
-set_property(SOURCE crtn.s PROPERTY LANGUAGE ASM)
-
 # build crts
 add_library(crts OBJECT
     crti.asm
@@ -205,4 +201,4 @@ execute_process( COMMAND ${CMAKE_CXX_COMPILER} -print-file-name=crtend.o OUTPUT_
 
 # kernel linking (as it has to be done in specific order)
 # yes i know that i shouldn't be using a hardcoded build path :(
-set(CMAKE_CXX_LINK_EXECUTABLE "${CMAKE_LINKER} <LINK_FLAGS> ${CMAKE_BINARY_DIR}/kernel/CMakeFiles/crts.dir/crti.s.o ${CRTBEGIN_O} <OBJECTS> -o <TARGET> <LINK_LIBRARIES> ${CRTEND_O} ${CMAKE_BINARY_DIR}/kernel/CMakeFiles/crts.dir/crtn.s.o" )
+set(CMAKE_CXX_LINK_EXECUTABLE "${CMAKE_LINKER} <LINK_FLAGS> ${CMAKE_BINARY_DIR}/kernel/CMakeFiles/crts.dir/crti.asm.o ${CRTBEGIN_O} <OBJECTS> -o <TARGET> <LINK_LIBRARIES> ${CRTEND_O} ${CMAKE_BINARY_DIR}/kernel/CMakeFiles/crts.dir/crtn.asm.o" )
