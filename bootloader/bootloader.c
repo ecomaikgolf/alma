@@ -110,6 +110,7 @@ main(void)
     _start(&args);
 
     /* _start shouldn't return */
+    __asm__("hlt");
     while (1) {
     }
 
