@@ -57,7 +57,7 @@ main(void)
     /* Construct the Framebuffer */
     Framebuffer *fb = create_fb(gop);
 
-    if (gop == NULL) {
+    if (fb == NULL) {
         error("cannot construct the framebuffer");
         return FRAMEBUFFER_FAILURE;
     }
