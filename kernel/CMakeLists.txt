@@ -39,6 +39,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions") 	   # Disable exceptio
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -nostdlib") 		   # Disable std lib
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mno-red-zone") 	   # Disable red zone
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g") 	   			   # Debug builds
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -gdwarf-4") 	   			   # Debug builds
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mcmodel=kernel") 	   			   # Debug builds
 
 # Extra compiler options
