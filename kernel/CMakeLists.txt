@@ -17,11 +17,6 @@ if(CCACHE_FOUND)
 	set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
 endif(CCACHE_FOUND)
 
-# no debug build check
-if(CMAKE_BUILD_TYPE MATCHES "Debug")
-	message(AUTHOR_WARNING "README!!! cmake debug builds are known to break the kernel, if you want to debug plesase use -g manually")
-endif(CMAKE_BUILD_TYPE MATCHES "Debug")
-
 #############
 # Toolchain #
 #############
