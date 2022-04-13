@@ -1,3 +1,9 @@
+/**
+ * Advanced Configuration & Power Interface (ACPI) header file
+ *
+ * @author Ernesto Martínez García <me@ecomaikgolf.com>
+ */
+
 #pragma once
 
 #include <stdint.h>
@@ -64,8 +70,6 @@ struct rsdp_v2
 
     sdt *find_table(const char *);
     void print_acpi_tables();
-    void memmap_acpi_tables();
-
 } __attribute__((packed));
 
 } // namespace acpi

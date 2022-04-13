@@ -158,8 +158,8 @@ acpi(stivale2_struct *st)
 
     auto *rsdp   = (stivale2_struct_tag_rsdp *)stivale2_get_tag(st, STIVALE2_STRUCT_TAG_RSDP_ID);
     kernel::rsdp = *(acpi::rsdp_v2 *)rsdp->rsdp;
-    kernel::rsdp.memmap_acpi_tables();
-    // kernel::rsdp.print_acpi_tables();
+    // kernel::rsdp.memmap_acpi_tables();
+    //  kernel::rsdp.print_acpi_tables();
 };
 
 void

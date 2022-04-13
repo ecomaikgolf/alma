@@ -1,3 +1,9 @@
+/**
+ * Advanced Configuration & Power Interface (ACPI) source file
+ *
+ * @author Ernesto Martínez García <me@ecomaikgolf.com>
+ */
+
 #include "acpi/acpi.h"
 #include "kernel.h"
 #include "lib/string.h"
@@ -6,7 +12,7 @@
 namespace acpi {
 
 /**
- * Print system ACPI tables with kernel::tty
+ * Print system ACPI tables
  *
  * @arg rsdp Root System Description Pointer, from UEFI with boot_args
  */
@@ -27,25 +33,11 @@ rsdp_v2::print_acpi_tables()
 }
 
 /**
- * Secure ACPI tables by:
- * - Reserving it's memory
- * - Maping the address
+ * Find a certain table by it's signature
  *
- * @arg rsdp Root System Description Pointer, from UEFI with boot_args
+ * @arg signature Table signature
+ * @return pointer to the table (or null if not found)
  */
-void
-rsdp_v2::memmap_acpi_tables()
-{
-    acpi::sdt *xsdt = (acpi::sdt *)this->xsdt;
-
-    /* reserve pages */
-    // kernel::allocator.lock_pages((void *)xsdt, xsdt->length / kernel::page_size + 1);
-
-    /* map pages */
-    // for (uint64_t i = 0; i < xsdt->length / kernel::page_size + 1; i += kernel::page_size)
-    //     kernel::translator.map((uint64_t)((uint8_t *)xsdt + i), (uint64_t)((uint8_t *)xsdt + i));
-}
-
 sdt *
 rsdp_v2::find_table(const char *signature)
 {
@@ -64,6 +56,12 @@ rsdp_v2::find_table(const char *signature)
     return nullptr;
 }
 
+/**
+ * Check if signature is valid
+ *
+ * @arg signature correct signature
+ * @return true/false if correct or not
+ */
 bool
 sdt::check_signature(const char *signature)
 {
