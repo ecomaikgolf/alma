@@ -19,7 +19,7 @@
 namespace bootstrap {
 
 /**
- * Struct to be received from the bootloader
+ * Old data structure for receiving bootloader data
  */
 struct boot_args
 {

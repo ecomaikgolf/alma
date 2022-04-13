@@ -1,3 +1,9 @@
+/**
+ * Startup functions of the kernel
+ *
+ * @author Ernesto Martínez García <me@ecomaikgolf.com>
+ */
+
 #include "bootstrap/startup.h"
 #include "bootstrap/stivale_hdrs.h"
 #include "io/bus.h"
@@ -8,6 +14,7 @@
 
 namespace bootstrap {
 
+/** kernel default keyboard buffer size */
 const uint16_t KEYBOARD_BUFF_SIZE = kernel::page_size;
 
 void
@@ -15,11 +22,12 @@ screen(stivale2_struct *st)
 {
     using namespace screen;
 
+    /* Stivale pointers to the framebuffer & modules */
     auto *fb =
       (stivale2_struct_tag_framebuffer *)stivale2_get_tag(st, STIVALE2_STRUCT_TAG_FRAMEBUFFER_ID);
-
     auto *mod = (stivale2_struct_tag_modules *)stivale2_get_tag(st, STIVALE2_STRUCT_TAG_MODULES_ID);
 
+    /* Create a copy of our framebuffer struct from the data provided by stivale (other format) */
     framebuffer frame;
     frame.base        = (unsigned int *)fb->framebuffer_addr;
     frame.ppscl       = (fb->framebuffer_pitch / sizeof(uint32_t));
@@ -27,47 +35,34 @@ screen(stivale2_struct *st)
     frame.height      = fb->framebuffer_height;
     frame.buffer_size = frame.ppscl * frame.height * sizeof(uint32_t);
 
+    /* Get the font module from stivale */
     fonts::specification::psf1 *font_ptr =
       (fonts::specification::psf1 *)stivale2_get_mod(mod, "font");
+
+    /* Create the font */
     fonts::specification::psf1 font;
     font.header = *(fonts::specification::psf1_header *)font_ptr;
     font.buffer = (uint8_t *)font_ptr + sizeof(fonts::specification::psf1_header);
 
-    /* Lock the tty itself  */
-    // kernel::allocator.lock_pages(&kernel::tty, sizeof(kernel::tty) / kernel::page_size + 1);
     /* Create the tty */
     kernel::tty = fonts::psf1<screen::fast_renderer_i>(frame, font, 0, 0, screen::color_e::WHITE);
-    /* Clean the screen */
-    // kernel::tty.clear();
-
-    // uint64_t fbbase = (uint64_t)fb->base;
-    // uint64_t fbsize = (uint64_t)fb->buffer_size + kernel::page_size;
-    ///* Map screen's memory */
-    // for (uint64_t i = fbbase; i < fbbase + fbsize; i += kernel::page_size)
-    //     kernel::translator.map(i, i);
 }
 
 void
 allocator(stivale2_struct *st)
 {
+    /* stivale pointer to the memory map */
     auto *map = (stivale2_struct_tag_memmap *)stivale2_get_tag(st, STIVALE2_STRUCT_TAG_MEMMAP_ID);
 
     /* Construct the allocator with the UEFI mem map */
     kernel::allocator = paging::allocator::BPFA(map);
-    /* Lock kernel memory */
-    // kernel::allocator.lock_pages(kernel::_start_addr, kernel::_size_npages);
-    /* Lock the allocator itself  */
-    // kernel::allocator.lock_pages(&kernel::allocator,
-    //                              sizeof(kernel::allocator) / kernel::page_size + 1);
 }
 
 void
 gdt()
 {
     using namespace segmentation;
-    /* Lock the GDT */
-    kernel::allocator.lock_pages((uint64_t)&kernel::gdt,
-                                 sizeof(kernel::gdt) / kernel::page_size + 1);
+
     /* Create an empty GDT */
     kernel::gdt.size   = sizeof(table) - 1;
     kernel::gdt.offset = (uint64_t)&table;
@@ -78,33 +73,25 @@ gdt()
 void
 translator(stivale2_struct *st)
 {
+    /*
+     * As I'm using limine now I can't create a PGDT from scratch (as limine maps some important
+     * addreses) so what I have to do is take the limine's one and edit it, instead of creating a
+     * empty one.
+     */
 
+    /* Obtain the actual PGDT addr */
     uint64_t mapaddr;
     asm volatile("mov %%cr3, %0" : [Var] "=r"(mapaddr));
     paging::translator::PGDT_wrapper *newpgdt = (paging::translator::PGDT_wrapper *)mapaddr;
+
+    /* Provide it to the translator */
     kernel::translator.set_PGDT(newpgdt);
-
-    // auto *map = (stivale2_struct_tag_memmap *)stivale2_get_tag(st,
-    // STIVALE2_STRUCT_TAG_MEMMAP_ID);
-
-    ///* Locks the PTM */
-    // kernel::allocator.lock_pages(&kernel::translator,
-    //                              sizeof(kernel::translator) / kernel::page_size + 1);
-
-    ///* Map virtual memory to physical memory (same address for the kernel) */
-    // size_t usable_mem_size = uefi::memory::get_memsize(map);
-    // for (uint64_t i = 0; i < usable_mem_size; i += kernel::page_size)
-    //     kernel::translator.map(i, i);
-
-    // asm("mov %0, %%cr3" : : "r"(kernel::translator.get_PGDT()));
 }
 
 void
 interrupts()
 {
-    /* Locks the IDT */
-    kernel::allocator.lock_pages((uint64_t)&kernel::idtr,
-                                 sizeof(kernel::idtr) / kernel::page_size + 1);
+    /* Reserve memory for the interrupt array */
     kernel::idtr.set_ptr((uint64_t)kernel::allocator.request_page());
 
     /* Load the interrupt handlers */
@@ -144,9 +131,11 @@ enable_interrupts()
 void
 keyboard()
 {
-    auto buffer = kernel::allocator.request_page();
+    /* Reserve keyboard buffer memory */
     auto size   = KEYBOARD_BUFF_SIZE;
+    auto buffer = kernel::allocator.request_cont_page(size / kernel::page_size + 1);
 
+    /* Bootstrap the keyboard and enable it */
     kernel::keyboard.set_buffer(static_cast<char *>(buffer));
     kernel::keyboard.set_maxsize(size);
     io::PS2::enable_keyboard();
@@ -155,23 +144,24 @@ keyboard()
 void
 acpi(stivale2_struct *st)
 {
-
+    /* Find and set the rsdp */
     auto *rsdp   = (stivale2_struct_tag_rsdp *)stivale2_get_tag(st, STIVALE2_STRUCT_TAG_RSDP_ID);
     kernel::rsdp = *(acpi::rsdp_v2 *)rsdp->rsdp;
-    // kernel::rsdp.memmap_acpi_tables();
-    //  kernel::rsdp.print_acpi_tables();
 };
 
 void
 pci()
 {
+    /* Find and set the MCFG table */
     acpi::sdt *mcfg_ptr = (acpi::sdt *)kernel::rsdp.find_table("MCFG");
+    /* Enumerate all installed PCI devices */
     pci::enum_pci(mcfg_ptr);
 }
 
 void
 heap(void *start_addr, size_t size)
 {
+    /* Create the heap */
     heap::simple_allocator aux(start_addr, size);
     kernel::heap = aux;
 }
@@ -179,6 +169,7 @@ heap(void *start_addr, size_t size)
 void
 rtl8139()
 {
+    /* From the PCI devices linked list, find the RTL8139 and bootstrap it */
     for (pci::pci_device *i = kernel::devices; i != nullptr; i = i->next) {
         if (i->header->id == 0x8139 && i->header->header_type == 0x0) {
             kernel::rtl8139 = net::rtl8139(i);

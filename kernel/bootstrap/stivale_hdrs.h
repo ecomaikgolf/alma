@@ -1,3 +1,8 @@
+/**
+ * Stivale helper code
+ *
+ * @author wiki.osdev.org
+ */
 #pragma once
 
 #include "lib/string.h"
