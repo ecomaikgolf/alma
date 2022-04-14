@@ -1,3 +1,9 @@
+/**
+ * Interrupt Functions
+ *
+ * @author Ernesto Martínez García <me@ecomaikgolf.com>
+ */
+
 #include "interrupts.h"
 #include "io/keyboard.h"
 #include "kernel.h"
@@ -5,28 +11,32 @@
 
 namespace interrupts {
 
+/**
+ * Reserved special interrupt
+ */
 __attribute__((interrupt)) void
 reserved(frame *)
 {
     kernel::tty.println("Hola desde las interrupciones!");
 }
 
+/**
+ * Keyboard handling interrupt
+ */
 __attribute__((interrupt)) void
 keyboard(frame *)
 {
     uint8_t status = io::inb(io::port::PS2);
-    io::outb(io::PIC1_COMMAND, 0x20); // return correct receive
+    /* Return correct receive */
+    io::outb(io::PIC1_COMMAND, 0x20);
     kernel::keyboard.process_scancode(status);
-
-    // char aux[256];
-    // hstr(status, aux);
-    // kernel::tty.println(aux);
 }
 
+/**
+ * Ethernet packet handling interrupt
+ */
 __attribute__((interrupt)) void
 ethernet(frame *)
-{
-    kernel::tty.println("Datagram interrupt launched");
-}
+{}
 
 } // namespace interrupts

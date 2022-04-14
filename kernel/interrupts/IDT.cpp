@@ -13,16 +13,29 @@
 
 namespace interrupts {
 
+/**
+ * Default IDT constructor
+ *
+ * Length defaulted to 4095
+ */
 idt_ptr::idt_ptr()
   : lenght(0x0fff)
 {}
 
+/**
+ * Set buffer pointer
+ */
 void
 idt_ptr::set_ptr(uint64_t ptr)
 {
     this->ptr = ptr;
 }
 
+/**
+ * Remap PIC
+ *
+ * Initialisation task for the interrupt module
+ */
 void
 idt_ptr::remap_pic(uint8_t ICW2_PIC1, uint8_t ICW2_PIC2)
 {
@@ -66,6 +79,11 @@ idt_ptr::remap_pic(uint8_t ICW2_PIC1, uint8_t ICW2_PIC2)
     io::io_wait();
 }
 
+/**
+ * Add a new interrupt
+ *
+ * Map (handler - function), if interrupt "code" arrives, call handler
+ */
 void
 idt_ptr::add_handle(interrupts::vector_e code, void (*handler)(frame *))
 {
@@ -79,6 +97,9 @@ idt_ptr::add_handle(interrupts::vector_e code, void (*handler)(frame *))
                           static_cast<uint8_t>(interrupts::status_e::enabled);
 }
 
+/**
+ * Set offset to the IDT from a 64bit address
+ */
 void
 idt_entry::set_offset(uint64_t offset)
 {
@@ -89,6 +110,9 @@ idt_entry::set_offset(uint64_t offset)
     this->offset_low    = aux->offset_low;
 }
 
+/**
+ * Get offset of the IDT as 64bit address
+ */
 uint64_t
 idt_entry::get_offset()
 {
