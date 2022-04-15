@@ -11,20 +11,29 @@
 
 namespace io {
 
+/**
+ * Process a PS2 keycode
+ *
+ * Manages some modkeys, mayus, 8bit chars. Pushes chars into a kernel buffer (circular mode)
+ */
 void
 PS2::process_scancode(uint8_t keycode)
 {
+    /* keycode received inside char map */
     if (keycode < PS2_SCANCODE_SIZE) {
         char letter = PS2_SCANCODES[keycode][static_cast<int>(this->state)];
 
         if (letter != 0x0) {
+            /* User entered a char */
             this->add_char(letter);
+            /* Special hardwire to scanf buffer to improve performance */
             if (this->input_mode == PS2::read_mode::scanf)
                 this->update_scanf();
             return;
-        }
+        } // else unsuported char OR modkey
     }
 
+    /* Handle modkeys */
     switch (keycode) {
         /* L Shift */
         case 0x2a:
@@ -45,6 +54,7 @@ PS2::process_scancode(uint8_t keycode)
         /* Del */
         case 0x0e: {
             this->delete_char();
+            /* Special hardwire to scanf buffer to improve performance */
             if (this->input_mode == PS2::read_mode::scanf)
                 this->update_scanf();
         }
@@ -55,6 +65,11 @@ PS2::process_scancode(uint8_t keycode)
     }
 }
 
+/**
+ * Delete N chars from the keyboard buffer
+ *
+ * default = 1
+ */
 void
 PS2::delete_char(uint16_t n)
 {
@@ -64,6 +79,9 @@ PS2::delete_char(uint16_t n)
     this->has_new_key  = true;
 }
 
+/**
+ * Add a new char to the keyboard buffer
+ */
 void
 PS2::add_char(char letter)
 {
@@ -83,6 +101,9 @@ PS2::add_char(char letter)
     this->has_new_key                = true;
 }
 
+/**
+ * Check for keyboard buffe rupdates
+ */
 bool
 PS2::update()
 {
@@ -91,12 +112,18 @@ PS2::update()
     return temp;
 }
 
+/**
+ * Ordinary scanf function
+ *
+ * Substitutes the keyboard buffer in order to improve performance and avoid unnecessary copies
+ */
 void
 PS2::scanf(char *buffer, uint32_t maxsize)
 {
     if (buffer == nullptr || maxsize <= 0)
         return;
 
+    // TODO: Reformat with a copy constructor (we don't copy everything) or a function
     auto buffer_backup      = this->buffer;
     auto count_backup       = this->buffer_count;
     auto maxsize_backup     = this->buffer_maxsize;
@@ -110,12 +137,14 @@ PS2::scanf(char *buffer, uint32_t maxsize)
     this->buffer_handling = PS2::buffer_mode::limit;
     this->input_mode      = read_mode::scanf;
 
+    /* Wait until user finished introducing text */
     while (this->input_mode == read_mode::scanf) {
     }
 
     this->buffer[this->buffer_count] = '\0';
     kernel::tty.newline();
 
+    /* Restore kernel buffer */
     this->buffer          = buffer_backup;
     this->buffer_maxsize  = maxsize_backup;
     this->buffer_count    = count_backup;
@@ -123,6 +152,12 @@ PS2::scanf(char *buffer, uint32_t maxsize)
     this->buffer_handling = mode_backup;
 }
 
+/**
+ * Scanf under the hood
+ *
+ * Responsible to manage the screen while executing scanf(). This function ins called from
+ * process_scancode() directly from the interrupt to improve performance
+ */
 void
 PS2::update_scanf()
 {
@@ -157,6 +192,9 @@ PS2::update_scanf()
     last_text_size = this->buffer_count;
 }
 
+/**
+ * Enables the keyboard by mapping the PS2 interrupt with the keyboard interrupt function
+ */
 void
 PS2::enable_keyboard()
 {

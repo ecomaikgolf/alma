@@ -1,9 +1,18 @@
+/**
+ * Auxiliary functions to comunicate with I/O ports
+ *
+ * @author Ernesto Martínez García <me@ecomaikgolf.com>
+ */
+
 #pragma once
 
 #include <stdint.h>
 
 namespace io {
 
+/**
+ * Hardcoded ports enum
+ */
 enum class port
 {
     PS2 = 0x60,

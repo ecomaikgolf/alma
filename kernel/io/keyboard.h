@@ -1,10 +1,10 @@
-#pragma once
-
 /**
  * PS2 Keyboard
  *
  * @author Ernesto Martínez García <me@ecomaikgolf.com>
  */
+
+#pragma once
 
 #include <stdint.h>
 
