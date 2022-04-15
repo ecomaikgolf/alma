@@ -1,4 +1,12 @@
 /**
+ * log
+ *
+ * @author Ernesto Martínez García <me@ecomaikgolf.com>
+ */
+
+#include "lib/math.h"
+
+/**
  * absolute value function
  *
  * https://isocpp.org/wiki/faq/templates#separate-template-fn-defn-from-decl

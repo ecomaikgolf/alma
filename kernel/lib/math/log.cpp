@@ -1,4 +1,12 @@
 /**
+ * log
+ *
+ * @author Ernesto Martínez García <me@ecomaikgolf.com>
+ */
+
+#include "lib/math.h"
+
+/**
  * log10(n) integer result (quite bad but a hotfix)
  * https://helloacm.com/fast-integer-log10/
  */

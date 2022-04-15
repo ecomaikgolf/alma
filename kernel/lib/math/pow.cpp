@@ -1,4 +1,12 @@
 /**
+ * pow
+ *
+ * @author Ernesto Martínez García <me@ecomaikgolf.com>
+ */
+
+#include "lib/math.h"
+
+/**
  * pow function
  */
 unsigned int

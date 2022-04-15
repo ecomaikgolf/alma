@@ -1,3 +1,9 @@
+/**
+ * strcmp
+ *
+ * @author Ernesto Martínez García <me@ecomaikgolf.com>
+ */
+
 #include "lib/math.h"
 #include "lib/string.h"
 
