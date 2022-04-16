@@ -1,8 +1,17 @@
+/**
+ * RTL8139 Network Chip Driver
+ *
+ * @author Ernesto Martínez García <me@ecomaikgolf.com>
+ */
+
 #include "net/rtl8139.h"
 #include "kernel.h"
 
 namespace net {
 
+/**
+ * Construct the network device from it's PCI device
+ */
 rtl8139::rtl8139(pci::pci_device *device)
 {
     this->device            = device;
@@ -11,6 +20,9 @@ rtl8139::rtl8139(pci::pci_device *device)
     kernel::translator.map(this->mem_addr, this->mem_addr);
 }
 
+/**
+ * Move operator
+ */
 rtl8139 *
 rtl8139::operator=(rtl8139 &&rhs)
 {
@@ -20,6 +32,9 @@ rtl8139::operator=(rtl8139 &&rhs)
     return this;
 }
 
+/**
+ * Bootstrap the RTL8139 network chip
+ */
 void
 rtl8139::start()
 {
@@ -35,15 +50,7 @@ rtl8139::start()
     }
 
     /** Set receive buffer */
-    void *buffer = kernel::allocator.request_page();
-    kernel::allocator.request_page();
-    kernel::allocator.request_page();
-    kernel::allocator.request_page();
-    kernel::allocator.request_page();
-    kernel::allocator.request_page();
-    kernel::allocator.request_page();
-    kernel::allocator.request_page();
-    kernel::allocator.request_page();
+    void *buffer = kernel::allocator.request_cont_page(9);
     this->setconfig<uintptr_t>(rtl8139_config::RECVBUFF, (uintptr_t)buffer);
 
     /** Set IMR + ISR */
@@ -63,6 +70,9 @@ rtl8139::start()
     kernel::idtr.add_handle(static_cast<interrupts::vector_e>(32 + int_line), interrupts::ethernet);
 }
 
+/**
+ * Send a packet
+ */
 void
 rtl8139::send_packet(uint32_t addr, uint64_t size)
 {
