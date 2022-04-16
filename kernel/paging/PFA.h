@@ -1,6 +1,8 @@
 /**
  * Kernel's Page Frame Allocator
  *
+ * Based on poncho OSDev series allocator
+ *
  * @author Ernesto Martínez García <me@ecomaikgolf.com>
  */
 

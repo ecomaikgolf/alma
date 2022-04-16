@@ -1,3 +1,10 @@
+/**
+ * Kernel "Better" Page Frame Allocator
+ *
+ * Linked list of pages
+ *
+ * @author Ernesto Martínez García <me@ecomaikgolf.com>
+ */
 
 #pragma once
 
@@ -8,6 +15,11 @@ namespace paging {
 
 namespace allocator {
 
+/**
+ * Better Page Frame Allocator Page Class
+ *
+ * Represents a page (linked list node)
+ */
 struct BPFA_page
 {
     BPFA_page(BPFA_page *next, BPFA_page *prev, uint64_t addr, uint64_t pages, bool free)
@@ -27,6 +39,11 @@ struct BPFA_page
     void split(uint64_t, BPFA_page *);
 };
 
+/**
+ * Better Page Frame Allocator Class
+ *
+ * Represents the allocator
+ */
 class BPFA
 {
   public:

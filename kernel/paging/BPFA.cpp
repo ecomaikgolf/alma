@@ -1,3 +1,9 @@
+/**
+ * Kernel "Better" Page Frame Allocator
+ *
+ * @author Ernesto Martínez García <me@ecomaikgolf.com>
+ */
+
 #include "paging/BPFA.h"
 #include "kernel.h"
 
@@ -5,6 +11,11 @@ namespace paging {
 
 namespace allocator {
 
+/**
+ * Construct the BPFA from the EFI memory map provided by stivale
+ *
+ * Only use "Free" pages (doesn't support reclaiming bootloader used pages)
+ */
 BPFA::BPFA(stivale2_struct_tag_memmap *map)
 {
     if (map == NULL)
@@ -63,6 +74,11 @@ BPFA::operator=(BPFA &&rval)
     return *this;
 }
 
+/**
+ * Lock a page
+ *
+ * Like reserving a page, mark it as used
+ */
 bool
 BPFA::lock_page(uint64_t addr)
 {
@@ -97,6 +113,9 @@ BPFA::lock_page(uint64_t addr)
     return false;
 }
 
+/**
+ * Lock a contiguous pages
+ */
 bool
 BPFA::lock_pages(uint64_t addr, uint64_t pages)
 {
@@ -113,6 +132,11 @@ BPFA::lock_pages(uint64_t addr, uint64_t pages)
     return true;
 }
 
+/**
+ * Free a page
+ *
+ * From locked to free
+ */
 bool
 BPFA::free_page(uint64_t addr)
 {
@@ -141,6 +165,9 @@ BPFA::free_page(uint64_t addr)
     return true;
 }
 
+/**
+ * Free contiguous pages
+ */
 bool
 BPFA::free_pages(uint64_t addr, uint64_t pages)
 {
@@ -177,6 +204,11 @@ BPFA::lock_pages(void *addr, uint64_t pages)
     return this->lock_pages((uint64_t)addr, pages);
 }
 
+/**
+ * Request a free page
+ *
+ * Get one free, lock it and return it's address
+ */
 void *
 BPFA::request_page(void *ptr)
 {
@@ -194,6 +226,9 @@ BPFA::request_page(void *ptr)
     return retval;
 }
 
+/**
+ * Get the largest memory chunk from the EFI map
+ */
 stivale2_mmap_entry
 BPFA::get_largest_segment(stivale2_struct_tag_memmap *map)
 {
@@ -207,6 +242,9 @@ BPFA::get_largest_segment(stivale2_struct_tag_memmap *map)
     return map->memmap[largest_segment];
 }
 
+/**
+ * Get total free pages
+ */
 uint64_t
 BPFA::get_total_pages(stivale2_struct_tag_memmap *map)
 {
@@ -219,6 +257,9 @@ BPFA::get_total_pages(stivale2_struct_tag_memmap *map)
     return total_pages;
 }
 
+/**
+ * Create a node and return it
+ */
 BPFA_page *
 BPFA::new_node()
 {
@@ -239,6 +280,9 @@ BPFA::new_node()
     }
 }
 
+/**
+ * Remove a node
+ */
 void
 BPFA_page::remove_node()
 {
@@ -251,6 +295,11 @@ BPFA_page::remove_node()
         this->prev->next = this->next;
 }
 
+/**
+ * Split a page node in two (split by addr)
+ *
+ * New node is newaddr
+ */
 void
 BPFA_page::split(uint64_t addr, BPFA_page *newaddr)
 {
@@ -269,6 +318,9 @@ BPFA_page::split(uint64_t addr, BPFA_page *newaddr)
     this->next          = newaddr;
 }
 
+/**
+ * Request contiguous pages
+ */
 void *
 BPFA::request_cont_page(uint32_t pages)
 {
