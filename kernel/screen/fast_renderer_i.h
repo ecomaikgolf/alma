@@ -1,5 +1,5 @@
 /**
- * Class to output to the screen
+ * Class to output to the screen (faster)
  *
  * @author Ernesto Martínez García <me@ecomaikgolf.com>
  */
@@ -14,7 +14,7 @@
 namespace screen {
 
 /**
- * Interface to output to the screen
+ * Interface to output to the screen (faster)
  */
 class fast_renderer_i : public renderer_i
 {

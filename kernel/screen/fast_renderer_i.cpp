@@ -1,5 +1,5 @@
 /**
- * Class to output to the screen
+ * Class to output to the screen (faster)
  *
  * @author Ernesto Martínez García <me@ecomaikgolf.com>
  */
@@ -14,6 +14,11 @@
 
 namespace screen {
 
+/**
+ * Create the fast renderer
+ *
+ * Build a copy of the framebuffer as a cache memory (faster read as it's RAM)
+ */
 fast_renderer_i::fast_renderer_i(framebuffer video_memory,
                                  unsigned int init_x,
                                  unsigned int init_y,
@@ -159,6 +164,9 @@ fast_renderer_i::clear()
     this->y_offset           = 0;
 }
 
+/**
+ * Scroll the screen by 1 line (font glyph_y() pixels)
+ */
 void
 fast_renderer_i::scroll()
 {
@@ -215,6 +223,9 @@ fast_renderer_i::set_y(uint32_t value)
     this->y_offset = value;
 }
 
+/**
+ * Common fmt function (vaargs support)
+ */
 void
 fast_renderer_i::fmt(const char *fmtstr, ...)
 {
@@ -265,6 +276,9 @@ fast_renderer_i::fmt(const char *fmtstr, ...)
     this->newline();
 }
 
+/**
+ * Update the framebuffer from the cache
+ */
 void
 fast_renderer_i::update_video()
 {

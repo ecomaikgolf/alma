@@ -1,6 +1,9 @@
 /**
  * Renderer interface
+ *
+ * @author Ernesto Martínez García <me@ecomaikgolf.com>
  */
+
 #pragma once
 
 #include "screen/colors.h"

@@ -1,5 +1,3 @@
-#pragma once
-
 /**
  * Font definitions
  *

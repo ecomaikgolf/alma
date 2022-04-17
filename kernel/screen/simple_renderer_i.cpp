@@ -127,6 +127,9 @@ simple_renderer_i::clear()
     this->y_offset = 0;
 }
 
+/**
+ * Scroll the screen by 1 line (font glyph_y() pixels)
+ */
 void
 simple_renderer_i::scroll()
 {
