@@ -51,7 +51,7 @@ _Note: GIF quality is vastly reduced and native executions look clear_
             </ul>
          </td>
          <td><img src=
-            "https://ls.ecomaikgolf.com/alma/img/alma_build.gif"></td>
+            "/docs/img/alma_build.gif"></td>
       </tr>
    </tbody>
 </table>
@@ -133,8 +133,8 @@ _Note: GIF quality is vastly reduced and native executions look clear_
             </ul>
          </td>
          <td>
-            <img src="https://ls.ecomaikgolf.com/alma/img/alma_virtmem.gif">
-            <img src="https://ls.ecomaikgolf.com/alma/img/alma_net.gif">
+            <img src="/docs/img/alma_virtmem.gif">
+            <img src="/docs/img/alma_net.gif">
          </td>
       </tr>
    </tbody>
@@ -179,7 +179,7 @@ _Note: GIF quality is vastly reduced and native executions look clear_
             </ul>
          </td>
          <td><img src=
-            "https://ls.ecomaikgolf.com/alma/img/alma_bootloader.gif"></td>
+            "/docs/img/alma_bootloader.gif"></td>
       </tr>
    </tbody>
 </table>
@@ -229,7 +229,7 @@ Remember that you must have certain hardware for it to work (PS2 keyboard, RTL81
 1. Download the alma build vm [.ova](https://drive.google.com/file/d/1ilYIGXWLiMP9ULE48gVu7FeTnDZqmqmw/view?usp=sharing) (a 6.31GB Xubuntu 20.04 virtualbox VM ready to compile)
 
 <p align="center">
-  <img width="800" height="400" src="https://ls.ecomaikgolf.com/alma/img/alma_vm.png">
+  <img width="800" height="400" src="/docs/img/alma_vm.gif">
 </p>
 
 2. Compile with the "Build Alma" icon
