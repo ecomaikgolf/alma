@@ -10,6 +10,7 @@
 
 namespace pci {
 
+/** MCFG table signature */
 const char MCFG_SIGN[] = { 'M', 'C', 'F', 'G' };
 
 struct device_config
@@ -21,6 +22,9 @@ struct device_config
     uint32_t reserved;
 } __attribute__((packed));
 
+/**
+ * PCI device header
+ */
 struct device_header
 {
     /* manufacturer */
@@ -38,6 +42,9 @@ struct device_header
     /* More parameters needed */
 } __attribute__((packed));
 
+/**
+ * PCI device header extended 0
+ */
 struct header_t0
 {
     uint8_t BIST;
@@ -56,6 +63,9 @@ struct header_t0
     uint8_t max_lat;
 } __attribute__((packed));
 
+/**
+ * PCI device header extended 1
+ */
 struct header_t1
 {
     uint8_t BIST;
@@ -84,6 +94,9 @@ struct header_t1
     uint16_t bridge_crtl;
 } __attribute__((packed));
 
+/**
+ * PCI device header extended 2
+ */
 struct header_t2
 {
     uint8_t BIST;
@@ -111,6 +124,9 @@ struct header_t2
     uint32_t legacy_addr;
 } __attribute__((packed));
 
+/**
+ * PCI device linked list for the kernel
+ */
 struct pci_device
 {
     device_header *header;
