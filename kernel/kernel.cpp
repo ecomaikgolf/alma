@@ -5,22 +5,14 @@
  */
 
 #include "kernel.h"
-#include "acpi/acpi.h"
 #include "bootstrap/startup.h"
 #include "bootstrap/stivale_hdrs.h"
 #include "float.h"
-#include "interrupts/IDT.h"
 #include "interrupts/interrupts.h"
-#include "io/keyboard.h"
 #include "lib/stdlib.h"
 #include "lib/string.h"
-#include "paging/BPFA.h"
 #include "paging/PFA.h"
-#include "paging/PTM.h"
-#include "pci/pci.h"
-#include "screen/fonts/psf1.h"
 #include "screen/framebuffer.h"
-#include "segmentation/gdt.h"
 #include "shell/command.h"
 #include "stivale2.h"
 #include <stddef.h>
