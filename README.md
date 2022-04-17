@@ -229,7 +229,7 @@ Remember that you must have certain hardware for it to work (PS2 keyboard, RTL81
 1. Download the alma build vm [.ova](https://drive.google.com/file/d/1ilYIGXWLiMP9ULE48gVu7FeTnDZqmqmw/view?usp=sharing) (a 6.31GB Xubuntu 20.04 virtualbox VM ready to compile)
 
 <p align="center">
-  <img width="800" height="400" src="/docs/img/alma_vm.gif">
+  <img width="800" height="400" src="/docs/img/alma_vm.png">
 </p>
 
 2. Compile with the "Build Alma" icon
