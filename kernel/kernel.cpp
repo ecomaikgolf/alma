@@ -73,9 +73,9 @@ _start(stivale2_struct *stivale2_struct)
 
     /* Bootstrap the kernel (order is important) */
     bootstrap::allocator(stivale2_struct);
-    bootstrap::heap(0x10);
     bootstrap::translator(stivale2_struct);
     bootstrap::enable_virtualaddr();
+    bootstrap::heap(0x10);
     bootstrap::screen(stivale2_struct);
     bootstrap::gdt();
     bootstrap::interrupts();
