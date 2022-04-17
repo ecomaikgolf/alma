@@ -1,3 +1,9 @@
+/**
+ * Peripheral Component Interconnect (PCI) module
+ *
+ * @author Ernesto Martínez García <me@ecomaikgolf.com>
+ */
+
 #pragma once
 
 #include "acpi/acpi.h"

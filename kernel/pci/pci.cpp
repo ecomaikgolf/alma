@@ -1,15 +1,25 @@
+/**
+ * Peripheral Component Interconnect (PCI) module
+ *
+ * @author Ernesto Martínez García <me@ecomaikgolf.com>
+ */
+
 #include "pci.h"
 #include "kernel.h"
 #include "lib/stdlib.h"
 
 namespace pci {
 
+/** Auxiliary variables to get the PCI device device/function/bus */
 static uint64_t startaddr;
 static uint64_t _bus;
 static uint64_t startbus;
 static uint64_t _device;
 static uint64_t _function;
 
+/**
+ * Enumerate functions (PCI) and construct the kernel PCI linked list
+ */
 void
 enum_fun(uint64_t addr, uint64_t fun)
 {
@@ -25,6 +35,8 @@ enum_fun(uint64_t addr, uint64_t fun)
         return;
 
     static pci_device *prev = nullptr;
+
+    /** Create the linked list of PCI device in the kernel */
 
     pci::pci_device *dev = (pci::pci_device *)kernel::heap.malloc(sizeof(pci::pci_device));
 
@@ -42,24 +54,11 @@ enum_fun(uint64_t addr, uint64_t fun)
         prev->next = dev;
 
     prev = dev;
-
-    // if (device->id == 0x8139) {
-    //     if (dev->header.header_type == 0x0) {
-    //         pci::header_t0 *test = (pci::header_t0 *)dev->header_ext;
-    //         uint64_t asd         = (test->BAR[1] & 0xfffffff0);
-    //         kernel::translator.map(asd, asd);
-    //         char auxstr[256];
-    //         kernel::tty.println("MAC Address: ");
-    //         for (int i = 0; i < 6; i++) {
-    //             uint8_t aux = *((uint8_t *)asd + i);
-    //             hstr(aux, auxstr);
-    //             kernel::tty.print("    ");
-    //             kernel::tty.println(auxstr);
-    //         }
-    //     }
-    // }
 }
 
+/**
+ * Enumerate devices (PCI)
+ */
 void
 enum_dev(uint64_t addr, uint64_t dev)
 {
@@ -79,6 +78,9 @@ enum_dev(uint64_t addr, uint64_t dev)
     }
 }
 
+/**
+ * Enumerate bus (PCI)
+ */
 void
 enum_bus(uint64_t addr, uint64_t bus)
 {
@@ -97,6 +99,9 @@ enum_bus(uint64_t addr, uint64_t bus)
         enum_dev(busaddr, dev_i);
 }
 
+/**
+ * Enumerate PCI devices
+ */
 void
 enum_pci(acpi::sdt *mcfg)
 {
