@@ -73,17 +73,17 @@ _start(stivale2_struct *stivale2_struct)
 
     /* Bootstrap the kernel (order is important) */
     bootstrap::allocator(stivale2_struct);
+    bootstrap::heap(0x10);
     bootstrap::translator(stivale2_struct);
+    bootstrap::enable_virtualaddr();
+    bootstrap::screen(stivale2_struct);
     bootstrap::gdt();
     bootstrap::interrupts();
-    bootstrap::enable_virtualaddr();
     bootstrap::enable_interrupts();
     bootstrap::keyboard();
     bootstrap::acpi(stivale2_struct);
-    bootstrap::heap((void *)0x100000, 0x10);
     bootstrap::pci();
     bootstrap::rtl8139();
-    bootstrap::screen(stivale2_struct);
 
     /* Welcome the user */
     kernel::tty.println("welcome to the alma kernel");
