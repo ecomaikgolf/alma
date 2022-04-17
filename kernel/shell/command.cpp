@@ -1,3 +1,9 @@
+/**
+ * Commands of the kernel
+ *
+ * @author Ernesto Martínez García <me@ecomaikgolf.com>
+ */
+
 #include "shell/command.h"
 #include "bootstrap/stivale_hdrs.h"
 #include "kernel.h"
@@ -36,29 +42,21 @@ echo(int argc, char **argv)
 }
 
 int
-whoami(int argc, char **argv)
-{
-    kernel::tty.println("chad");
-    return 0;
-}
-
-int
 shell(int argc, char **argv)
 {
     shell::interpreter inter(shell::kernel_commands);
 
     while (true) {
-        kernel::tty.setColor(screen::color_e::GREEN);
+        kernel::tty.pushColor(screen::color_e::GREEN);
         kernel::tty.print("$ ");
-        kernel::tty.setColor(screen::color_e::WHITE);
+        kernel::tty.popColor();
         kernel::keyboard.scanf(inter.get_buffer(), inter.BUFFER_SIZE);
         auto ret = inter.process(inter.get_buffer());
         if (ret == 127) {
-            kernel::tty.setColor(screen::color_e::RED);
+            kernel::tty.pushColor(screen::color_e::RED);
             kernel::tty.println("Command not found");
-            kernel::tty.setColor(screen::color_e::WHITE);
+            kernel::tty.popColor();
         }
-        // kernel::tty.newline();
     }
 
     return 0;
@@ -77,21 +75,13 @@ pci(int argc, char **argv)
     char buffer[256];
     for (pci::pci_device *i = kernel::devices; i != nullptr; i = i->next) {
         hstr(i->header->vendor, buffer);
-        kernel::tty.print("* ");
-        kernel::tty.print(buffer);
-        kernel::tty.print(" - ");
-        hstr(i->header->id, buffer);
-        kernel::tty.print(buffer);
-        kernel::tty.print(" (");
-        str(i->device, buffer);
-        kernel::tty.print(buffer);
-        kernel::tty.print(", ");
-        str(i->bus, buffer);
-        kernel::tty.print(buffer);
-        kernel::tty.print(", ");
-        str(i->function, buffer);
-        kernel::tty.print(buffer);
-        kernel::tty.println(")");
+        kernel::tty.fmt("* %p - (%p, %p, %p)",
+                        i->header->vendor,
+                        i->header->id,
+                        i->device,
+                        i->bus,
+                        i->header,
+                        i->function);
     }
 
     return 0;
@@ -152,10 +142,7 @@ getphys(int argc, char **argv)
     using namespace paging::translator;
 
     if (argc <= 1) {
-        // Y need print formatting :( ...
-        kernel::tty.print("Usage: ");
-        kernel::tty.print(argv[0]);
-        kernel::tty.println(" virtaddr");
+        kernel::tty.fmt("Usage: %s virtaddr", argv[0]);
         return 1;
     }
 
@@ -183,9 +170,7 @@ getphys(int argc, char **argv)
 
     uint64_t phys = (uint64_t)PTD->page_ppn << 12;
 
-    char aux[256];
-    hstr(phys, aux);
-    kernel::tty.println(aux);
+    kernel::tty.fmt("%p", phys);
 
     return 0;
 }
@@ -194,10 +179,7 @@ int
 map(int argc, char **argv)
 {
     if (argc <= 2) {
-        // Y need print formatting :( ...
-        kernel::tty.print("Usage: ");
-        kernel::tty.print(argv[0]);
-        kernel::tty.println(" virtaddr physaddr");
+        kernel::tty.fmt("Usage: %s virtaddr physaddr", argv[0]);
         return 1;
     }
 
@@ -215,7 +197,6 @@ int
 unmap(int argc, char **argv)
 {
     if (argc <= 1) {
-        // Y need print formatting :( ...
         kernel::tty.fmt("Usage: %s virtaddr", argv[0]);
         return 1;
     }
@@ -233,10 +214,7 @@ int
 set(int argc, char **argv)
 {
     if (argc <= 2) {
-        // Y need print formatting :( ...
-        kernel::tty.print("Usage: ");
-        kernel::tty.print(argv[0]);
-        kernel::tty.println(" addr true/false");
+        kernel::tty.fmt("Usage: %s addr true/false", argv[0]);
         return 1;
     }
 
@@ -260,10 +238,7 @@ int
 get(int argc, char **argv)
 {
     if (argc <= 1) {
-        // Y need print formatting :( ...
-        kernel::tty.print("Usage: ");
-        kernel::tty.print(argv[0]);
-        kernel::tty.println(" addr");
+        kernel::tty.fmt("Usage: %s addr", argv[0]);
         return 1;
     }
 
@@ -473,13 +448,6 @@ sendpacket(int argc, char **argv)
 
     kernel::rtl8139.send_packet((uint64_t)test, sizeof(ethheader));
 
-    return 0;
-}
-
-int
-clearnet(int argc, char **argv)
-{
-    kernel::rtl8139.setconfig<uint16_t>(net::rtl8139_config::ISR, 0b100);
     return 0;
 }
 

@@ -1,3 +1,9 @@
+/**
+ * Interpreter (parse string to execute commands)
+ *
+ * @author Ernesto Martínez García <me@ecomaikgolf.com>
+ */
+
 #include "shell/interpreter.h"
 #include "kernel.h"
 #include "lib/string.h"
@@ -5,6 +11,9 @@
 
 namespace shell {
 
+/**
+ * Process shell char string
+ */
 int
 interpreter::process(char *input)
 {
@@ -53,6 +62,11 @@ interpreter::process(char *input)
     return this->launch_command(argv[0], argc, argv);
 }
 
+/**
+ * Find a command and launch it
+ *
+ * Just find it in a array of <command string, function> (linear search)
+ */
 int
 interpreter::launch_command(char *command, int argc, char **argv)
 {

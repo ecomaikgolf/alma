@@ -1,3 +1,9 @@
+/**
+ * Commands of the kernel
+ *
+ * @author Ernesto Martínez García <me@ecomaikgolf.com>
+ */
+
 #pragma once
 
 namespace shell {
@@ -12,7 +18,6 @@ namespace commands {
 
 int help(int, char **);
 int echo(int, char **);
-int whoami(int, char **);
 int shell(int, char **);
 int clear(int, char **);
 int pci(int, char **);
@@ -28,7 +33,6 @@ int uefimmap(int, char **);
 int printpfa(int, char **);
 int checknet(int, char **);
 int sendpacket(int, char **);
-int clearnet(int, char **);
 int screen(int, char **);
 
 } // namespace commands
@@ -37,7 +41,6 @@ int screen(int, char **);
 static const command kernel_commands[] = {
     { "help"       , &commands::help},
     { "echo"       , &commands::echo },
-    { "whoami"     , &commands::whoami },
     { "shell"      , &commands::shell },
     { "clear"      , &commands::clear },
     { "pci"        , &commands::pci},
@@ -53,7 +56,6 @@ static const command kernel_commands[] = {
     { "printpfa"   , &commands::printpfa},
     { "checknet"   , &commands::checknet},
     { "sendpacket" , &commands::sendpacket},
-    { "clearnet"   , &commands::clearnet},
     { "screen"     , &commands::screen},
     { nullptr , nullptr }
 };

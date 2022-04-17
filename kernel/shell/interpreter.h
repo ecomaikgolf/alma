@@ -1,3 +1,9 @@
+/**
+ * Interpreter (parse string to execute commands)
+ *
+ * @author Ernesto Martínez García <me@ecomaikgolf.com>
+ */
+
 #pragma once
 
 #include "command.h"
