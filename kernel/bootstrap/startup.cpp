@@ -159,10 +159,10 @@ pci()
 }
 
 void
-heap(void *start_addr, size_t size)
+heap(size_t size)
 {
     /* Create the heap */
-    heap::simple_allocator aux(start_addr, size);
+    heap::simple_allocator aux(size);
     kernel::heap = aux;
 }
 

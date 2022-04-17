@@ -14,15 +14,18 @@ namespace heap {
  *
  * Can be on different chunks of physical memory (virtual memory mapping)
  */
-simple_allocator::simple_allocator(void *heap_address, uint64_t pages)
+simple_allocator::simple_allocator(uint64_t pages)
 {
-    if (!kernel::allocator.lock_pages(heap_address, pages)) {
+    auto aux = kernel::allocator.request_cont_page(pages);
+    if (aux == nullptr) {
         kernel::tty.println("fatal error");
         return;
     }
 
+    this->heap_address = aux;
+
     /* for each page, allocate and map them */
-    void *iter = heap_address;
+    void *iter = aux;
     for (uint64_t i = 0; i < pages; i++) {
         /* phys addr != virt addr*/
         kernel::translator.map((uint64_t)iter, (uint64_t)kernel::allocator.request_page());

@@ -18,7 +18,7 @@ class simple_allocator : allocator_i
       : heap_address(nullptr)
       , heap_lenght(0){};
 
-    simple_allocator(void *, uint64_t);
+    simple_allocator(uint64_t);
 
     simple_allocator &operator=(const simple_allocator &) = default;
 
