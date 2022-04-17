@@ -1,7 +1,7 @@
 /**
  * Simple Allocator
  *
- * From "absurponcho"
+ * From "absurponcho" work
  */
 
 #include "heap/simple_allocator.h"
@@ -9,6 +9,11 @@
 
 namespace heap {
 
+/**
+ * Construct the heap
+ *
+ * Can be on different chunks of physical memory (virtual memory mapping)
+ */
 simple_allocator::simple_allocator(void *heap_address, uint64_t pages)
 {
     if (!kernel::allocator.lock_pages(heap_address, pages)) {
@@ -40,6 +45,11 @@ simple_allocator::simple_allocator(void *heap_address, uint64_t pages)
     this->last_header = start_header;
 }
 
+/**
+ * Malloc function
+ *
+ * Similar to BPFA request page (more or less)
+ */
 void *
 simple_allocator::malloc(uint64_t size)
 {
@@ -80,6 +90,9 @@ simple_allocator::malloc(uint64_t size)
     return malloc(size);
 }
 
+/**
+ * Free function
+ */
 void
 simple_allocator::free(void *addr)
 {
@@ -91,6 +104,11 @@ simple_allocator::free(void *addr)
     this->combine_backward(header);
 }
 
+/**
+ * Increase heap size
+ *
+ * Get physical pages and map them to contiguous virtual addresses
+ */
 void
 simple_allocator::expand_heap(uint64_t size)
 {
@@ -119,6 +137,9 @@ simple_allocator::expand_heap(uint64_t size)
     this->combine_backward(header);
 }
 
+/**
+ * Split a heap node
+ */
 simple_allocator::heap_header *
 simple_allocator::heap_header::split(uint64_t size)
 {
@@ -151,6 +172,9 @@ simple_allocator::heap_header::split(uint64_t size)
     return header;
 }
 
+/**
+ * Merge forward a heap node
+ */
 void
 simple_allocator::combine_forward(heap_header *hdr)
 {
@@ -165,6 +189,9 @@ simple_allocator::combine_forward(heap_header *hdr)
     hdr->length = hdr->length + hdr->next->length + sizeof(heap_header);
 }
 
+/**
+ * Merge backwards a heap node
+ */
 void
 simple_allocator::combine_backward(heap_header *hdr)
 {

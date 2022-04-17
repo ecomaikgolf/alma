@@ -1,7 +1,7 @@
 /**
  * Simple Allocator
  *
- * From "absurponcho"
+ * From "absurponcho" work
  */
 
 #pragma once

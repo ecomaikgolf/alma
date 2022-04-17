@@ -1,5 +1,10 @@
 /**
  * Trivial allocator
+ *
+ * This is done to implement interface allocator_i.h and use malloc/free through the code. Then you
+ * can change the implementation to a proper allocator
+ *
+ * @author Ernesto Martínez García <me@ecomaikgolf.com>
  */
 
 #pragma once
@@ -12,7 +17,7 @@ namespace heap {
 /**
  * Trivial allocator
  *
- * @warning NAIVE IMPLEMENTATION, DOES NOT WORK ALWAYS
+ * @warning DEBUG IMPLEMENTATION
  *
  * We can request a big chunk on memory and get it separated with memory reserved in between. It has
  * to be patched with virtual memory mapping
