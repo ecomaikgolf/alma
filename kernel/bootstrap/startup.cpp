@@ -121,7 +121,7 @@ enable_virtualaddr()
 void
 enable_interrupts()
 {
-    /* Enable interrupts */
+    /* Load IDT */
     asm("lidt %0" : : "m"(kernel::idtr));
 
     /* Enable interrupts */
