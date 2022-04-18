@@ -55,6 +55,7 @@ class rtl8139
     void send_packet(uint32_t, uint64_t);
 
     // private:
+    static const auto PCI_ID     = 0x8139;
     rtl8139_config TSAD_array[4] = { TSAD0, TSAD1, TSAD2, TSAD3 };
     rtl8139_config TSD_array[4]  = { TSD0, TSD1, TSD2, TSD3 };
     uint8_t tx_cur               = 0; // used to cycle TSAD and TSD arrays

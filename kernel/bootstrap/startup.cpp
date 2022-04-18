@@ -170,7 +170,7 @@ rtl8139()
 {
     /* From the PCI devices linked list, find the RTL8139 and bootstrap it */
     for (pci::pci_device *i = kernel::devices; i != nullptr; i = i->next) {
-        if (i->header->id == 0x8139 && i->header->header_type == 0x0) {
+        if (i->header->id == kernel::rtl8139.PCI_ID && i->header->header_type == 0x0) {
             kernel::rtl8139 = net::rtl8139(i);
             kernel::rtl8139.start();
             return;
