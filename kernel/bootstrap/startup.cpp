@@ -162,8 +162,7 @@ void
 heap(size_t size)
 {
     /* Create the heap */
-    heap::simple_allocator aux(size);
-    kernel::heap = aux;
+    kernel::heap = heap::simple_allocator(size);
 }
 
 void
