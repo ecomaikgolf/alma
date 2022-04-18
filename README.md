@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="300" height="165" src="/docs/img/alma_logo.png">
+  <img width="200" height="105" src="/docs/img/alma_logo.png">
 </p>
 
 <p align="center">
