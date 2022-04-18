@@ -109,9 +109,6 @@ interrupts()
 
     io::outb(io::PIC1_DATA, 0b11111101); // enable IRQ1 from PIC1 (keyboard)
     io::outb(io::PIC2_DATA, 0b11111111); // mask all lines
-
-    /* Enable interrupts */
-    asm("sti");
 }
 
 void
@@ -126,6 +123,9 @@ enable_interrupts()
 {
     /* Enable interrupts */
     asm("lidt %0" : : "m"(kernel::idtr));
+
+    /* Enable interrupts */
+    asm("sti");
 }
 
 void
