@@ -24,14 +24,6 @@ simple_allocator::simple_allocator(uint64_t pages)
 
     this->heap_address = aux;
 
-    /* for each page, allocate and map them */
-    void *iter = aux;
-    for (uint64_t i = 0; i < pages; i++) {
-        /* phys addr != virt addr*/
-        kernel::translator.map((uint64_t)iter, (uint64_t)kernel::allocator.request_page());
-        iter = (uint8_t *)iter + kernel::page_size;
-    }
-
     /* calculate lenght of our heap */
     uint64_t length = pages * kernel::page_size;
 
