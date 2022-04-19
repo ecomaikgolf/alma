@@ -16,10 +16,18 @@ namespace heap {
  */
 simple_allocator::simple_allocator(uint64_t pages)
 {
-    auto aux = kernel::allocator.request_cont_page(pages);
+    auto aux = kernel::allocator.request_page();
     if (aux == nullptr) {
         kernel::tty.println("fatal error");
         return;
+    }
+
+    /* for each page, allocate and map them */
+    void *iter = aux;
+    for (uint64_t i = 0; i < pages - 1; i++) {
+        /* phys addr != virt addr*/
+        kernel::translator.map((uint64_t)iter, (uint64_t)kernel::allocator.request_page());
+        iter = (uint8_t *)iter + kernel::page_size;
     }
 
     this->heap_address = aux;
