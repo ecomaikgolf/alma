@@ -131,7 +131,6 @@ class PTM
   public:
     PTM();
     void map(uint64_t, uint64_t);
-    static void parse(uint64_t, address_t *);
     static const uint16_t page_size = 512;
 
     /**
