@@ -57,9 +57,8 @@ PS2::process_scancode(uint8_t keycode)
             /* Special hardwire to scanf buffer to improve performance */
             if (this->input_mode == PS2::read_mode::scanf)
                 this->update_scanf();
+            break;
         }
-
-        break;
         case 0x8e:
             break;
     }
