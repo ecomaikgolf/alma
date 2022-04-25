@@ -163,7 +163,7 @@ set(SOURCES
 ###############
 
 # Special compile options for interrupts
-set_source_files_properties(${INTERRUPT_SOURCES} PROPERTIES COMPILE_FLAGS "-mno-red-zone -mgeneral-regs-only -ffreestanding")
+set_source_files_properties(${INTERRUPT_SOURCES} PROPERTIES COMPILE_FLAGS "-mgeneral-regs-only ${COMPILE_FLAGS}")
 
 # Final executable
 add_executable(kernel ${SOURCES})
