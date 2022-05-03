@@ -48,7 +48,7 @@ rsdp_v2::find_table(const char *signature)
     for (int i = 0; i < entries; i++) {
         acpi::sdt *tbl =
           (acpi::sdt *)*(uint64_t *)((uint64_t)xsdt + sizeof(acpi::sdt) + (i * sizeof(uint64_t)));
-        if (strncmp(tbl->signature, signature, 4) == 0)
+        if (tbl->check_signature(signature))
             return tbl;
     }
 
