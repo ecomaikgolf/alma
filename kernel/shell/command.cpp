@@ -458,6 +458,13 @@ screen(int argc, char **argv)
     return 0;
 }
 
+int
+acpi(int argc, char **argv)
+{
+    kernel::rsdp.print_acpi_tables();
+    return 0;
+}
+
 } // namespace commands
 
 } // namespace shell

@@ -34,6 +34,7 @@ int printpfa(int, char **);
 int checknet(int, char **);
 int sendpacket(int, char **);
 int screen(int, char **);
+int acpi(int, char **);
 
 } // namespace commands
 
@@ -57,6 +58,7 @@ static const command kernel_commands[] = {
     { "checknet"   , &commands::checknet},
     { "sendpacket" , &commands::sendpacket},
     { "screen"     , &commands::screen},
+    { "acpi"       , &commands::acpi},
     { nullptr , nullptr }
 };
 // clang-format on
