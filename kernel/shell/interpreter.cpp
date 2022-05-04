@@ -59,7 +59,7 @@ interpreter::process(char *input)
     if (argc <= 0)
         return (argc != 0);
 
-    return this->launch_command(argv[0], argc, argv);
+    return this->launch_command(argc, argv);
 }
 
 /**
@@ -68,10 +68,10 @@ interpreter::process(char *input)
  * Just find it in a array of <command string, function> (linear search)
  */
 int
-interpreter::launch_command(char *command, int argc, char **argv)
+interpreter::launch_command(int argc, char **argv)
 {
     for (uint32_t i = 0; this->commands[i].name != nullptr; i++) {
-        if (strcmp(this->commands[i].name, command) == 0)
+        if (strcmp(this->commands[i].name, argv[0]) == 0)
             return this->commands[i].function(argc, argv);
     }
     /* Not found notification */

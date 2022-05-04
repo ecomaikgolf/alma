@@ -29,7 +29,7 @@ class interpreter
     }
 
     int process(char *);
-    int launch_command(char *, int, char **);
+    int launch_command(int, char **);
     static const auto BUFFER_SIZE = 256;
 
   private:
