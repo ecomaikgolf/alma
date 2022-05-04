@@ -406,41 +406,41 @@ sendpacket(int argc, char **argv)
         unsigned char payload[10];
     } __attribute__((packed));
 
-    auto test = (ethheader *)kernel::allocator.request_page();
+    auto buffer = (ethheader *)kernel::allocator.request_page();
 
     kernel::tty.print("> ");
 
-    char text[10];
-    kernel::keyboard.scanf(text, 10);
+    char text[256];
+    kernel::keyboard.scanf(text, 256);
 
-    test->dsta[0] = 0xca;
-    test->dsta[1] = 0xfe;
-    test->dsta[2] = 0xc0;
-    test->dsta[3] = 0xff;
-    test->dsta[4] = 0xee;
-    test->dsta[5] = 0x00;
+    buffer->dsta[0] = 0xca;
+    buffer->dsta[1] = 0xfe;
+    buffer->dsta[2] = 0xc0;
+    buffer->dsta[3] = 0xff;
+    buffer->dsta[4] = 0xee;
+    buffer->dsta[5] = 0x00;
 
-    test->srca[0] = 0xca;
-    test->srca[1] = 0xfe;
-    test->srca[2] = 0xc0;
-    test->srca[3] = 0xff;
-    test->srca[4] = 0xee;
-    test->srca[5] = 0x00;
+    buffer->srca[0] = 0xca;
+    buffer->srca[1] = 0xfe;
+    buffer->srca[2] = 0xc0;
+    buffer->srca[3] = 0xff;
+    buffer->srca[4] = 0xee;
+    buffer->srca[5] = 0x00;
 
-    test->type = 0x0800;
+    buffer->type = 0x0800;
 
-    test->payload[0] = text[0];
-    test->payload[1] = text[1];
-    test->payload[2] = text[2];
-    test->payload[3] = text[3];
-    test->payload[4] = text[4];
-    test->payload[5] = text[5];
-    test->payload[6] = text[6];
-    test->payload[7] = text[7];
-    test->payload[8] = text[8];
-    test->payload[9] = text[9];
+    buffer->payload[0] = text[0];
+    buffer->payload[1] = text[1];
+    buffer->payload[2] = text[2];
+    buffer->payload[3] = text[3];
+    buffer->payload[4] = text[4];
+    buffer->payload[5] = text[5];
+    buffer->payload[6] = text[6];
+    buffer->payload[7] = text[7];
+    buffer->payload[8] = text[8];
+    buffer->payload[9] = text[9];
 
-    kernel::rtl8139.send_packet((uint64_t)test, sizeof(ethheader));
+    kernel::rtl8139.send_packet((uint64_t)buffer, sizeof(ethheader));
 
     return 0;
 }
