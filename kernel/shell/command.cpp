@@ -75,13 +75,7 @@ pci(int argc, char **argv)
     char buffer[256];
     for (pci::pci_device *i = kernel::devices; i != nullptr; i = i->next) {
         hstr(i->header->vendor, buffer);
-        kernel::tty.fmt("* %p - (%p, %p, %p)",
-                        i->header->vendor,
-                        i->header->id,
-                        i->device,
-                        i->bus,
-                        i->header,
-                        i->function);
+        kernel::tty.fmt("* %p - %p", i->header->vendor, i->header->id);
     }
 
     return 0;
