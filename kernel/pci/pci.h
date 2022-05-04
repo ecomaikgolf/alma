@@ -158,16 +158,4 @@ struct BAR_io
     unsigned int addr : 30;
 };
 
-class device
-{
-    device(device_header *);
-    device_header header;
-    void *header_ext;
-
-    uint16_t segment;
-    uint8_t bus;
-    uint8_t dev;
-    uint8_t fun;
-};
-
 } // namespace pci

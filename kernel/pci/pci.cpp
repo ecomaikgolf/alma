@@ -128,10 +128,4 @@ enum_pci(acpi::sdt *mcfg)
     }
 }
 
-device::device(device_header *hdr)
-{
-    this->header     = *hdr;
-    this->header_ext = (hdr + sizeof(device_header));
-}
-
 } // namespace pci
