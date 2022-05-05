@@ -37,7 +37,7 @@ class bitset
     /**
      * Return buffer pointer
      */
-    inline uint8_t *get_buffer()
+    uint8_t *get_buffer()
     {
         return this->buffer;
     }
@@ -45,7 +45,7 @@ class bitset
     /**
      * Set buffer pointer
      */
-    inline void set_buffer(uint8_t *buffer)
+    void set_buffer(uint8_t *buffer)
     {
         this->buffer = buffer;
     }
@@ -53,7 +53,7 @@ class bitset
     /**
      * Return number of bits
      */
-    inline size_t get_size()
+    size_t get_size()
     {
         return this->size;
     }
@@ -63,7 +63,7 @@ class bitset
      *
      * @warning Not used to check correct access
      */
-    inline void set_size(size_t size)
+    void set_size(size_t size)
     {
         this->size = size;
     }
