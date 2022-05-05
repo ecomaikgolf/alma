@@ -120,6 +120,7 @@ set(LIB_SOURCES
 	lib/math/sqrt.cpp
 	lib/math/log.cpp
 	lib/ctype/toupper.cpp
+	lib/ctype/tolower.cpp
 	lib/bitset.cpp
 )
 
