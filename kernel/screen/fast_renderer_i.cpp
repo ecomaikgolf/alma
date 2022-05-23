@@ -36,6 +36,14 @@ fast_renderer_i::fast_renderer_i(framebuffer video_memory,
     this->video_cache.limit =
       (unsigned int *)((uint8_t *)this->video_cache.base + this->video_memory.buffer_size);
 
+    /* Align cache width/height to char size */
+    this->video_cache.width -= this->video_cache.width % 8;
+    this->video_cache.height -= this->video_cache.height % 16;
+    this->video_cache.buffer_size =
+      this->video_cache.width * this->video_cache.height * sizeof(uint32_t);
+    this->video_cache.limit =
+      (uint32_t *)((uint8_t *)this->video_cache.base + this->video_cache.buffer_size);
+
     /* Clear cache & video memory to 0 */
     uint64_t steps     = this->video_memory.buffer_size / sizeof(uint64_t);
     uint32_t remainder = this->video_memory.buffer_size % sizeof(uint64_t);
