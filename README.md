@@ -123,13 +123,12 @@ _Note: GIF quality is vastly reduced and native executions look clear_
                   </ul>
                </li>
                <li>
-                  Dynamic Memory
+                  Dynamic Memory &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                   <ul>
                      <li>malloc</li>
                      <li>free</li>
                   </ul>
                </li>
-               <li>WORK IN PROGRESS &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</li>
             </ul>
          </td>
          <td>
@@ -226,7 +225,7 @@ Remember that you must have certain hardware for it to work (PS2 keyboard, RTL81
 
 ### Virtual Machine (Method 1)
 
-1. Download the alma build vm [.ova](https://drive.google.com/file/d/1ilYIGXWLiMP9ULE48gVu7FeTnDZqmqmw/view?usp=sharing) (a 6.31GB Xubuntu 20.04 virtualbox VM ready to compile)
+1. Download the alma build vm [.ova](https://drive.google.com/file/d/1ip2HidddB_fMC8Du4VQKbizl_cyselMz/view?usp=sharing) (a 6.31GB Xubuntu 20.04 virtualbox VM ready to compile)
 
 <p align="center">
   <img width="800" height="400" src="/docs/img/alma_vm.png">
