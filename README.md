@@ -123,7 +123,7 @@ _Note: GIF quality is vastly reduced and native executions look clear_
                   </ul>
                </li>
                <li>
-                  Dynamic Memory &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                  Dynamic Memory
                   <ul>
                      <li>malloc</li>
                      <li>free</li>
