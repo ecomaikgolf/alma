@@ -218,7 +218,7 @@ set(int argc, char **argv)
     bool *data    = (bool *)addr;
     *data         = set;
 
-    kernel::tty.print("*(bool *)");
+    kernel::tty.print("*(bool *)0x");
     kernel::tty.print(argv[1]);
     if (*data)
         kernel::tty.println(" = true");
@@ -238,7 +238,7 @@ get(int argc, char **argv)
 
     uint64_t addr = strol(argv[1], 16);
     bool *data    = (bool *)addr;
-    kernel::tty.print("*(bool *)");
+    kernel::tty.print("*(bool *)0x");
     kernel::tty.print(argv[1]);
     if (*data)
         kernel::tty.println(" -> true");
